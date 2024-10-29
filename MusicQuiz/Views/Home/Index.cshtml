@@ -1,0 +1,21 @@
+﻿@model MusicQuiz.Models.MusicQuizViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<h2>@Model.Question</h2>
+<audio controls>
+    <source src="@Model.MusicFilePath" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<form method="post" action="/Quiz/Submit">
+    @foreach (var option in Model.Options)
+    {
+        <div>
+            <input type="radio" name="answer" value="@option" /> @option
+        </div>
+    }
+    <button type="submit">Submit</button>
+</form>
