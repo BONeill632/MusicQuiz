@@ -11,6 +11,6 @@ namespace MusicQuiz.Data
         {
         }
 
-        public DbSet<MyModel> MyModels { get; set; }
+        public DbSet<MyModel> MyModels { get; set; } = null!;
     }
 }

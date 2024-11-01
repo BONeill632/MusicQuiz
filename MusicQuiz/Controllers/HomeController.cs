@@ -18,6 +18,7 @@ namespace MusicQuiz.Controllers
             return View();
         }
 
+
         public IActionResult Privacy()
         {
             return View();
