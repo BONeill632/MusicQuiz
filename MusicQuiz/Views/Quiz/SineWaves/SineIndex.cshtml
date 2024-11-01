@@ -1,11 +1,15 @@
 ﻿@model MusicQuiz.Models.MusicQuizViewModel
 @{
-    ViewData["Title"] = "Quiz select";
+    ViewData["Title"] = "Difficulty select";
 }
+@section Scripts {
+    <script src="~/js/selectDifficulty.js"></script>
+}
+
 
 <h1>Select a difficulty</h1>
 
-<form method="post" action="/Quiz/NextPage">
+<form method="post" action="/Quiz/Start ">
     <div class="quiz-option" id="easy" onclick="selectOption('easy')">
         <p>Easy</p>
     </div>
@@ -19,17 +23,6 @@
     </div>
 
     <input type="hidden" id="selectedDifficulty" name="selectedDifficulty" value="" />
-    <button type="submit">Next</button>
+    <button type="submit">Confirm</button>
 </form>
 
-@section Scripts {
-    <script>
-        function selectOption(optionId) {
-            document.querySelectorAll('.quiz-option').forEach(div => {
-                div.classList.remove('selected');
-            });
-            document.getElementById(optionId).classList.add('selected');
-            document.getElementById('selectedDifficulty').value = optionId;
-        }
-    </script>
-}

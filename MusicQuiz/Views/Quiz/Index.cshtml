@@ -2,34 +2,21 @@
 @{
     ViewData["Title"] = "Quiz select";
 }
-
-<h1>Select a difficulty</h1>
-
-<form method="post" action="/Quiz/NextPage">
-    <div class="quiz-option" id="easy" onclick="selectOption('easy')">
-        <p>Easy</p>
-    </div>
-
-    <div class="quiz-option" id="medium" onclick="selectOption('medium')">
-        <p>Medium</p>
-    </div>
-
-    <div class="quiz-option" id="hard" onclick="selectOption('hard')">
-        <p>Hard</p>
-    </div>
-
-    <input type="hidden" id="selectedDifficulty" name="selectedDifficulty" value="" />
-    <button type="submit">Next</button>
-</form>
-
 @section Scripts {
-    <script>
-        function selectOption(optionId) {
-            document.querySelectorAll('.quiz-option').forEach(div => {
-                div.classList.remove('selected');
-            });
-            document.getElementById(optionId).classList.add('selected');
-            document.getElementById('selectedDifficulty').value = optionId;
-        }
-    </script>
+    <script src="~/js/selectTopic.js"></script>
 }
+
+<h1>Select a topic</h1>
+
+<form method="post" action="/Quiz/SelectDifficulty">
+    <ul>
+        @foreach (var topic in Model.Topics)
+        {
+                <div class="quiz-option" id="@topic.Topic" onclick="selectOption('@topic.Topic', 'quiz-option')">
+                    @topic.Description
+                </div>
+        }
+    </ul>
+    <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />
+    <button type="submit">Select</button>
+</form>

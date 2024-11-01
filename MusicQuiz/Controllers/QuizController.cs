@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Enums;
+using MusicQuiz.Extensions;
 using MusicQuiz.Models;
 using System.Diagnostics;
 
@@ -7,73 +8,76 @@ namespace MusicQuiz.Controllers
 {
     public class QuizController : Controller
     {
-
-        [HttpPost]
-        public IActionResult NextPage(string selectedDifficulty)
-        {
-            // Parse the selected difficulty
-            if (Enum.TryParse<DifficultyLevel>(selectedDifficulty, true, out var difficulty))
-            {
-                // Pass the selected difficulty to the next page
-                // You can use TempData, ViewData, or a ViewModel to pass the data
-                TempData["SelectedDifficulty"] = difficulty;
-                return RedirectToAction("NextPage");
-            }
-
-            // Handle invalid selection
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult NextPage()
-        {
-            // Retrieve the selected difficulty from TempData
-            var selectedDifficulty = TempData["SelectedDifficulty"];
-            return View(selectedDifficulty);
-        }
-
-
         /// <summary>
-        /// Index action method
+        /// Index action method for the Quiz
         /// </summary>
         /// <returns></returns>
         public IActionResult Index()
         {
-            var quiz = new MusicQuizViewModel
-            {
-                Question = "Identify the song",
-                MusicQuestionFilePath = Url.Content("~/Music/song.mp3"),
-                Options = new List<string> { "Song A", "Song B", "Song C", "Song D" },
-                CorrectAnswer = "Song A"
-            };
+            var quiz = new MusicQuizViewModel();
             return View(quiz);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selectedTopic"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult SelectDifficulty(string selectedTopic)
+        {
+            // Store the selected topic in TempData
+            TempData["SelectedTopic"] = selectedTopic;
+            return RedirectToAction("SelectDifficulty");
+        }
 
         /// <summary>
-        /// Check if answer is correct
+        /// 
         /// </summary>
-        /// <param name="answer"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public IActionResult Result(string answer)
+        [HttpGet]
+        public IActionResult SelectDifficulty(MusicQuizViewModel model, string selectedTopic)
         {
-            var quiz = new MusicQuizViewModel
+            // Retrieve the selected topic from TempData
+            if (TempData["SelectedTopic"] != null)
             {
-                Question = "Identify the song",
-                MusicQuestionFilePath = Url.Content("~/Music/Cornet A.wav"),
-                Options = new List<string> { "Song A", "Song B", "Song C", "Song D" },
-                CorrectAnswer = "Song A"
+                model.SelectedTopic = TempData["SelectedTopic"].ToString();
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Start(MusicQuizViewModel model)
+        {
+            // Showing the selected topic and difficulty
+            var newModel = new MusicQuizViewModel
+            {
+                SelectedTopic = model.SelectedTopic,
+                SelectedDifficulty = model.SelectedDifficulty,
+
+                // Load the quiz data based on the selected topic and difficulty
+                Question = "Identify the correct frequency",
+                //MusicQuestionFilePath = $"~/Music/{model.SelectedTopic}/1.25kHz.wav",
+                MusicQuestionFilePath = "/Music/SineWave/1.25kHz.wav",
+                Options = new List<string> { "1.25kHz", "800Hz", "1.5kHz", "2kHz" },
+                CorrectAnswer = "1.25kHz",
             };
 
-            if (answer == quiz.CorrectAnswer)
-            {
-                ViewBag.Result = "Correct!";
-            }
-            else
-            {
-                ViewBag.Result = "Incorrect!";
-            }
+            return View(newModel);
+        }
 
-            return View(quiz);
+        public IActionResult SubmitAnswer(string selectedOption, string correctAnswer)
+        {
+            bool isCorrect = selectedOption == correctAnswer;
+            ViewBag.IsCorrect = isCorrect;
+            return View("Result");
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Quiz answer";
+}
+
+@if (ViewBag.IsCorrect)
+{
+    <h1>Correct!</h1>
+}
+else
+{
+    <h1>Incorrect. Try again!</h1>
+}
+
+<a href="/Quiz/Index">Back to Quiz</a>

@@ -10,7 +10,5 @@ namespace MusicQuiz.Data
             : base(options)
         {
         }
-
-        public DbSet<MyModel> MyModels { get; set; } = null!;
     }
 }
