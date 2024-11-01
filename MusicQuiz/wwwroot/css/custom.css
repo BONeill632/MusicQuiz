@@ -1,0 +1,10 @@
+﻿.quiz-option {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.quiz-option.selected {
+    background-color: #d3d3d3;
+}

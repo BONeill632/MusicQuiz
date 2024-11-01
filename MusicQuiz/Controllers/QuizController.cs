@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicQuiz.Enums;
 using MusicQuiz.Models;
 using System.Diagnostics;
 
@@ -6,6 +7,31 @@ namespace MusicQuiz.Controllers
 {
     public class QuizController : Controller
     {
+
+        [HttpPost]
+        public IActionResult NextPage(string selectedDifficulty)
+        {
+            // Parse the selected difficulty
+            if (Enum.TryParse<DifficultyLevel>(selectedDifficulty, true, out var difficulty))
+            {
+                // Pass the selected difficulty to the next page
+                // You can use TempData, ViewData, or a ViewModel to pass the data
+                TempData["SelectedDifficulty"] = difficulty;
+                return RedirectToAction("NextPage");
+            }
+
+            // Handle invalid selection
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult NextPage()
+        {
+            // Retrieve the selected difficulty from TempData
+            var selectedDifficulty = TempData["SelectedDifficulty"];
+            return View(selectedDifficulty);
+        }
+
+
         /// <summary>
         /// Index action method
         /// </summary>
