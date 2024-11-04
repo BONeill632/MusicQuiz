@@ -1,0 +1,51 @@
+﻿@model MusicQuiz.Models.QuestionViewModel
+@{
+    ViewData["Title"] = "Quiz";
+    var currentQuestionIndex = ViewBag.CurrentQuestionIndex as int? ?? 0;
+    var totalQuestions = ViewBag.TotalQuestions as int? ?? 0;
+    var score = (ViewBag.Score as decimal? ?? 0).ToString("F2");
+    var answer = ViewBag.userAnswer as string;
+}
+@section Scripts {
+    <script src="~/js/quiz.js"></script>
+    <script src="~/js/selectDifficulty.js"></script>
+}
+
+<h1>Topic: @Model.SelectedTopic, Difficulty: @Model.SelectedDifficulty</h1>
+
+<h2>@Model.Question</h2>
+
+<audio controls>
+    <source src="@Model.MusicQuestionFilePath" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+
+<form method="post" action="@(currentQuestionIndex == totalQuestions - 1 ? "/Quiz/QuizResults" : "/Quiz/NextQuestion")">
+    <div>
+        @foreach (var option in Model.Options)
+        {
+            <div>
+                <input type="radio" id="@option" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "")>
+
+                <label for="@option">@option</label>
+            </div>
+        }
+    </div>
+    <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
+    @if (currentQuestionIndex == totalQuestions - 1)
+    {
+        <button type="submit">Complete</button>
+    }
+    else
+    {
+        <button type="submit">Next</button>
+    }
+</form>
+
+<div>
+    <form method="post" action="/Quiz/PreviousQuestion" style="display:inline;">
+        <button type="submit" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
+    </form>
+</div>
+
+<h3>Current Score: @score</h3>

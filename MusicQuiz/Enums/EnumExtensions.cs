@@ -7,11 +7,19 @@ namespace MusicQuiz.Extensions
     {
         public static string GetDescription(this Enum enumValue)
         {
-            var descriptionAttribute = enumValue.GetType()
-                .GetField(enumValue.ToString())
-                .GetCustomAttribute<DescriptionAttribute>();
+            if (enumValue is null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                var descriptionAttribute = enumValue.GetType()
+    .GetField(enumValue.ToString())
+    .GetCustomAttribute<DescriptionAttribute>();
 
-            return descriptionAttribute != null ? descriptionAttribute.Description : enumValue.ToString();
+                return descriptionAttribute != null ? descriptionAttribute.Description : enumValue.ToString();
+            }
+
         }
     }
 }

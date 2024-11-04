@@ -10,31 +10,6 @@ namespace MusicQuiz.Models
     public class MusicQuizViewModel
     {
         /// <summary>
-        /// Gets or sets the question
-        /// </summary>
-        public string Question { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the location of the question music file
-        /// </summary>
-        public string MusicQuestionFilePath { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the location of the template music file
-        /// </summary>
-        public string MusicTemplateFilePath { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the list of potential selectable options
-        /// </summary>
-        public List<string> Options { get; set; } = new List<string>();
-
-        /// <summary>
-        /// Gets or sets the correct answer
-        /// </summary>
-        public string CorrectAnswer { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets the list of topics from the enum page
         /// </summary>
         public List<TopicModel> Topics { get; set; }
@@ -42,7 +17,7 @@ namespace MusicQuiz.Models
         /// <summary>
         /// Gets or sets the selected topic
         /// </summary>
-        public string SelectedTopic { get; set; } = string.Empty;
+        public Topic SelectedTopic { get; set; }
 
         /// <summary>
         /// Gets or sets the list of difficulty levels
@@ -52,7 +27,9 @@ namespace MusicQuiz.Models
         /// <summary>
         /// Gets or sets the selected difficulty
         /// </summary>
-        public string SelectedDifficulty { get; set; } = string.Empty;
+        public DifficultyLevel SelectedDifficulty { get; set; }
+
+        public List<QuestionViewModel> QuizQuestions { get; set; } = new List<QuestionViewModel>();
 
         public MusicQuizViewModel()
         {

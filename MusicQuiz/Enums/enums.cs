@@ -11,19 +11,19 @@ namespace MusicQuiz.Enums
         /// Easy difficulty level.
         /// </summary>
         [Description("Easy")]
-        Easy,
+        Easy = 1,
 
         /// <summary>
         /// Medium difficulty level.
         /// </summary>
         [Description("Medium")]
-        Medium,
+        Medium = 2,
 
         /// <summary>
         /// Hard difficulty level.
         /// </summary>
         [Description("Hard")]
-        Hard
+        Hard = 3
     }
 
     public enum Topic
@@ -32,25 +32,25 @@ namespace MusicQuiz.Enums
         /// Sine wave frequency.
         /// </summary>
         [Description("Sine wave")]
-        SineWave,
+        SineWave = 1,
 
         /// <summary>
         /// Ensembles.
         /// </summary>
         [Description("Ensemble")]
-        Ensemble,
+        Ensemble = 2,
 
         /// <summary>
         /// Instrument.
         /// </summary>
         [Description("Instrument")]
-        Instrument,
+        Instrument = 3,
 
         /// <summary>
         /// Pink Noise.
         /// </summary>
         [Description("Pink noise")]
-        PinkNoise
+        PinkNoise = 4
     }
 
     public enum Instrument
@@ -59,25 +59,25 @@ namespace MusicQuiz.Enums
         /// Guitar.
         /// </summary>
         [Description("Guitar")]
-        Guitar,
+        Guitar = 1,
 
         /// <summary>
         /// Piano.
         /// </summary>
         [Description("Piano")]
-        Piano,
+        Piano = 2,
 
         /// <summary>
         /// Harp.
         /// </summary>
         [Description("Harp")]
-        Harp,
+        Harp = 3,
 
         /// <summary>
         /// Miramba.
         /// </summary>
         [Description("Miramba")]
-        Miramba,
+        Miramba = 4,
 
     }
 }

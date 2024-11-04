@@ -13,30 +13,38 @@ namespace MusicQuiz.Data.Migrations
                 columns: new[] { "Id", "CorrectAnswer", "DifficultyId", "Question", "QuestionMusicFilePath", "ReferenceMusicFilePath", "TopicId", "WrongAnswerOne", "WrongAnswerThree", "WrongAnswerTwo" },
                 values: new object[,]
                 {
-                    { 1, "1.25kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 2, "1.25kHz", 2, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 3, "1.25kHz", 3, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 4, "1.6kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 5, "1.6kHz", 2, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 6, "1.6kHz", 3, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 7, "100Hz", 1, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "/Music/SineWave/400Hz.wav", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 8, "100Hz", 2, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
-                    { 9, "100Hz", 3, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+                    { 1, "1.25kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "800Hz", "3kHz", "1.5kHz" },
+                    { 2, "1.25kHz", 2, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "1kHz", "2kHz", "1.5kHz" },
+                    { 3, "1.25kHz", 3, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "", 1, "1.25Hz", "1.75kHz", "1.5kHz" },
+
+                    { 4, "1.6kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "1kHz", "2.5kHz", "600Hz" },
+                    { 5, "1.6kHz", 2, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "1.2kHz", "2kHz", "1.8kHz" },
+                    { 6, "1.6kHz", 3, "Identify the correct frequency.", "/Music/SineWave/1.6kHz.wav", "", 1, "1.2kHz", "1.4kHz", "1.8kHz" },
+
+                    { 7, "100Hz", 1, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "/Music/SineWave/400Hz.wav", 1, "300Hz", "750Hz", "900Hz" },
+                    { 8, "100Hz", 2, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "", 1, "300Hz", "500Hz", "250Hz" },
+                    { 9, "100Hz", 3, "Identify the correct frequency.", "/Music/SineWave/100Hz.wav", "", 1, "150Hz", "200Hz", "250Hz" },
+
                     { 10, "10kHz", 1, "Identify the correct frequency.", "/Music/SineWave/10kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 11, "10kHz", 2, "Identify the correct frequency.", "/Music/SineWave/10kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 12, "10kHz", 3, "Identify the correct frequency.", "/Music/SineWave/10kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+
                     { 13, "12.5kHz", 1, "Identify the correct frequency.", "/Music/SineWave/12.5kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 14, "12.5kHz", 2, "Identify the correct frequency.", "/Music/SineWave/12.5kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 15, "12.5kHz", 3, "Identify the correct frequency.", "/Music/SineWave/12.5kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+
                     { 16, "125Hz", 1, "Identify the correct frequency.", "/Music/SineWave/125Hz.wav", "/Music/SineWave/400Hz.wav", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 17, "125Hz", 2, "Identify the correct frequency.", "/Music/SineWave/125Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 18, "125Hz", 3, "Identify the correct frequency.", "/Music/SineWave/125Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+
                     { 19, "160Hz", 1, "Identify the correct frequency.", "/Music/SineWave/160Hz.wav", "/Music/SineWave/400Hz.wav", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 20, "160Hz", 2, "Identify the correct frequency.", "/Music/SineWave/160Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 21, "160Hz", 3, "Identify the correct frequency.", "/Music/SineWave/160Hz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+
                     { 22, "16kHz", 1, "Identify the correct frequency.", "/Music/SineWave/16kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 23, "16kHz", 2, "Identify the correct frequency.", "/Music/SineWave/16kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 24, "16kHz", 3, "Identify the correct frequency.", "/Music/SineWave/16kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
+
                     { 25, "1kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 26, "1kHz", 2, "Identify the correct frequency.", "/Music/SineWave/1kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
                     { 27, "1kHz", 3, "Identify the correct frequency.", "/Music/SineWave/1kHz.wav", "", 1, "800Hz", "2kHz", "1.5kHz" },
