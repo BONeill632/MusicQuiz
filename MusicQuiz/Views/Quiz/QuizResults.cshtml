@@ -4,6 +4,7 @@
     var score = ViewBag.Score as decimal? ?? 0;
     var totalQuestions = ViewBag.TotalQuestions as int? ?? 0;
     var correctAnswers = ViewBag.CorrectAnswers as int? ?? 0;
+    var dateOfSubmission = ViewBag.DateOfSubmission as string;
 }
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -51,6 +52,7 @@
 <canvas id="scoreChart" width="400" height="400"></canvas>
 
 <h3>Question Details</h3>
+<h4>Date of submission: @dateOfSubmission</h4>
 <table class="table">
     <thead>
         <tr>

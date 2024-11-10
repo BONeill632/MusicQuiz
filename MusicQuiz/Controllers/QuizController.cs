@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Data;
 using MusicQuiz.Enums;
-using MusicQuiz.Extensions;
 using MusicQuiz.Models;
-using System.Diagnostics;
-
 using System.Text.Json;
 
 namespace MusicQuiz.Controllers
@@ -106,14 +101,22 @@ namespace MusicQuiz.Controllers
             var random = new Random();
             var selectedQuestions = questions.OrderBy(q => random.Next()).Take(10).ToList();
 
-            var questionViewModels = selectedQuestions.Select(q => new QuestionViewModel
+            var questionViewModels = selectedQuestions.Select(q =>
             {
-                SelectedTopic = model.SelectedTopic,
-                SelectedDifficulty = model.SelectedDifficulty,
-                Question = q.Question,
-                MusicQuestionFilePath = q.QuestionMusicFilePath,
-                Options = new List<string> { q.CorrectAnswer, q.WrongAnswerOne, q.WrongAnswerTwo, q.WrongAnswerThree },
-                CorrectAnswer = q.CorrectAnswer,
+                var options = new List<string> { q.CorrectAnswer, q.WrongAnswerOne, q.WrongAnswerTwo, q.WrongAnswerThree };
+                options = options.OrderBy(x => random.Next()).ToList();
+
+                return new QuestionViewModel
+                {
+                    SelectedTopic = model.SelectedTopic,
+                    SelectedDifficulty = model.SelectedDifficulty,
+                    Question = q.Question,
+                    MusicQuestionFilePath = q.QuestionMusicFilePath,
+                    MusicReferenceFilePath = q.ReferenceMusicFilePath,
+                    MusicReferenceName = Path.GetFileNameWithoutExtension(q.ReferenceMusicFilePath),
+                    Options = options,
+                    CorrectAnswer = q.CorrectAnswer,
+                };
             }).ToList();
 
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questionViewModels));
@@ -168,6 +171,29 @@ namespace MusicQuiz.Controllers
             }
 
             // Save the user's answer
+            SaveUserAnswer(questions, currentIndex, selectedOption);
+
+            // Move to the next question
+            currentIndex++;
+            if (currentIndex >= questions.Count)
+            {
+                return RedirectToAction("QuizResults");
+            }
+
+            HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
+
+            return RedirectToAction("ShowQuestion");
+        }
+
+
+        private void SaveUserAnswer(List<QuestionViewModel> questions, int currentIndex, string selectedOption)
+        {
+            // Set selectedOption to "Not answered" if the user doesn't choose a radio button
+            if (string.IsNullOrEmpty(selectedOption))
+            {
+                selectedOption = "Not answered";
+            }
+
             var currentQuestion = questions[currentIndex];
             var previousAnswer = currentQuestion.UserAnswer;
             currentQuestion.UserAnswer = selectedOption;
@@ -204,19 +230,7 @@ namespace MusicQuiz.Controllers
             HttpContext.Session.SetString("Score", score.ToString());
 
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
-
-            // Move to the next question
-            currentIndex++;
-            if (currentIndex >= questions.Count)
-            {
-                return RedirectToAction("QuizResults");
-            }
-
-            HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
-
-            return RedirectToAction("ShowQuestion");
         }
-
 
         /// <summary>
         /// Moves to the previous question.
@@ -251,31 +265,42 @@ namespace MusicQuiz.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        public IActionResult QuizResults()
+        public IActionResult QuizResults(string selectedAnswer)
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
             var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : new List<QuestionViewModel>();
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
             var scoreString = HttpContext.Session.GetString("Score");
+
+            // Retrieve the current question index
+            var currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
+
+            // Save the user's answer
+            SaveUserAnswer(questions, currentIndex, selectedAnswer);
+
             decimal score = 0;
             if (!string.IsNullOrEmpty(scoreString))
             {
                 decimal.TryParse(scoreString, out score);
             }
 
+
             var model = new QuizResultsViewModel
             {
                 TotalQuestions = questions.Count,
                 CorrectAnswers = correctAnswers,
                 Score = score,
-                Questions = questions
+                Questions = questions,
+                DateOfSubmission = DateTime.Now
             };
 
             ViewBag.Score = score;
             ViewBag.TotalQuestions = questions.Count;
             ViewBag.CorrectAnswers = correctAnswers;
+            ViewBag.DateOfSubmission = model.DateOfSubmission.ToString("dd/MM/yyyy HH:mm:ss");
 
             return View(model);
         }
+
     }
 }

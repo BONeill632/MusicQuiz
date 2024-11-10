@@ -32,7 +32,12 @@ namespace MusicQuiz.Models
         /// <summary>
         /// Gets or sets the location of the template music file
         /// </summary>
-        public string MusicTemplateFilePath { get; set; } = string.Empty;
+        public string MusicReferenceFilePath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the location of the template music file
+        /// </summary>
+        public string MusicReferenceName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the list of potential selectable options
@@ -53,6 +58,6 @@ namespace MusicQuiz.Models
         /// This is used when going between next & previous to stop the
         /// quesiton being submitted more than once
         /// </summary>
-        public bool IsAnswered { get; set; } // Add this property
+        public bool IsAnswered { get; set; }
     }
 }

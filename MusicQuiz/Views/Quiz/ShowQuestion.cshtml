@@ -13,12 +13,25 @@
 
 <h1>Topic: @Model.SelectedTopic, Difficulty: @Model.SelectedDifficulty</h1>
 
-<h2>@Model.Question</h2>
+<h2>Question @(currentQuestionIndex + 1)</h2>
 
-<audio controls>
-    <source src="@Model.MusicQuestionFilePath" type="audio/wav">
-    Your browser does not support the audio element.
-</audio>
+@if(Model.SelectedTopic == MusicQuiz.Enums.Topic.SineWave && Model.SelectedDifficulty == MusicQuiz.Enums.DifficultyLevel.Easy && !string.IsNullOrEmpty(Model.MusicReferenceFilePath))
+{
+    <div>
+        <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
+        <audio controls>
+            <source src="@Model.MusicReferenceFilePath" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+}
+
+<div>
+    <audio controls>
+        <source src="@Model.MusicQuestionFilePath" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+</div>
 
 <form method="post" action="@(currentQuestionIndex == totalQuestions - 1 ? "/Quiz/QuizResults" : "/Quiz/NextQuestion")">
     <div>

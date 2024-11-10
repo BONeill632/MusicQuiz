@@ -21,5 +21,10 @@ namespace MusicQuiz.Models
         /// 
         /// </summary>
         public List<QuestionViewModel>? Questions { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime DateOfSubmission { get; set; }
     }
 }
