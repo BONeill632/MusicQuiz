@@ -227,6 +227,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MusicQuiz.Application\MusicQuiz.Application.csproj" />
+	  <ProjectReference Include="..\MusicQuiz.Infrastructure\MusicQuiz.Infrastructure.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

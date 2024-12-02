@@ -1,8 +1,6 @@
 using MusicQuiz.Core.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace MusicQuiz.Core.Interfaces
+namespace MusicQuiz.Application.Interfaces
 {
     public interface IQuestionRepository
     {

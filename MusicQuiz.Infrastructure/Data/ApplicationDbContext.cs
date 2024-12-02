@@ -7,8 +7,9 @@ namespace MusicQuiz.Infrastructure.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
     {
-
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
+
+        public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

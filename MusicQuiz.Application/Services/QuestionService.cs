@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MusicQuiz.Core.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Application.Interfaces;
 

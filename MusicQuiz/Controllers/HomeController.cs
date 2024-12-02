@@ -7,6 +7,8 @@ namespace MusicQuiz.Web.Controllers
 {
     public class HomeController(ILogger<HomeController> logger) : Controller
     {
+        public ILogger<HomeController> Logger { get; } = logger;
+
         public IActionResult Index()
         {
             return View();

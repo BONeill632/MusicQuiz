@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Services;
 using Microsoft.Build.Locator;
-using MusicQuiz.Application.Data;
+using MusicQuiz.Infrastructure.Data;
 
 // Register MSBuild instance, needed for scaffolding the Identity pages
 var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";

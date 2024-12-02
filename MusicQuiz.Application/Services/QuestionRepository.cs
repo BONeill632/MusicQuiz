@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
-using MusicQuiz.Core.Interfaces;
 
-namespace MusicQuiz.Infrastructure.Data
+namespace MusicQuiz.Application.Services
 {
     public class QuestionRepository(ApplicationDbContext context) : IQuestionRepository
     {

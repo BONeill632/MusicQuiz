@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MusicQuiz.Application.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Enums;
+using MusicQuiz.Infrastructure.Data;
 using MusicQuiz.Models;
 using MusicQuiz.Web.Models;
 using System.Text.Json;
 
 namespace MusicQuiz.Web.Controllers
 {
-    public class QuizController(ApplicationDbContext context) : Controller
+    public class QuizController(ApplicationDbContext context,
+        IResultsService resultsService, UserManager<IdentityUser> userManager) : Controller
     {
+        /// <summary>
+        /// Get user ID
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> GetUserIdAsync()
+        {
+            var user = await userManager.GetUserAsync(User);
+            return user?.Id ?? "0";
+        }
+
         /// <summary>
         /// Index action method for the Quiz
         /// </summary>
@@ -123,7 +136,6 @@ namespace MusicQuiz.Web.Controllers
         /// Displays the current question.
         /// </summary>
         /// <returns></returns>
-        /// <summary>
         public IActionResult ShowQuestion()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
@@ -134,7 +146,7 @@ namespace MusicQuiz.Web.Controllers
             decimal score = 0;
             if (!string.IsNullOrEmpty(scoreString))
             {
-                //decimal.TryParse(scoreString, out score);
+                _ = decimal.TryParse(scoreString, out score);
             }
 
             if (questions == null || questions.Count == 0)
@@ -150,7 +162,6 @@ namespace MusicQuiz.Web.Controllers
 
             return View(model);
         }
-
 
         [HttpPost]
         public IActionResult NextQuestion(string selectedOption)
@@ -178,7 +189,6 @@ namespace MusicQuiz.Web.Controllers
 
             return RedirectToAction("ShowQuestion");
         }
-
 
         private void SaveUserAnswer(List<QuestionViewModel> questions, int currentIndex, string selectedOption)
         {
@@ -291,6 +301,11 @@ namespace MusicQuiz.Web.Controllers
             ViewBag.TotalQuestions = questions.Count;
             ViewBag.CorrectAnswers = correctAnswers;
             ViewBag.DateOfSubmission = model.DateOfSubmission.ToString("dd/MM/yyyy HH:mm:ss");
+
+            var userID = GetUserIdAsync().Result;
+
+            resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)questions.FirstOrDefault().SelectedDifficulty, (int)questions.FirstOrDefault().SelectedTopic, userID);
+
 
             return View(model);
         }

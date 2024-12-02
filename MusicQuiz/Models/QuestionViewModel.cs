@@ -1,6 +1,6 @@
 ﻿using MusicQuiz.Enums;
 
-namespace MusicQuiz.Models
+namespace MusicQuiz.Web.Models
 {
     /// <summary>
     /// This is the main model used for the list of questions
@@ -48,7 +48,7 @@ namespace MusicQuiz.Models
         public string CorrectAnswer { get; set; } = string.Empty;
 
         /// <summary>
-        /// 
+        /// Users answer
         /// </summary>
         public string UserAnswer { get; set; } = string.Empty;
 

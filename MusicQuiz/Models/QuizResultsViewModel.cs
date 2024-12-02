@@ -1,5 +1,3 @@
-using MusicQuiz.Models;
-
 namespace MusicQuiz.Web.Models
 {
     public class QuizResultsViewModel
