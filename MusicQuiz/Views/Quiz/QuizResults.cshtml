@@ -1,4 +1,4 @@
-﻿@model MusicQuiz.Models.QuizResultsViewModel
+﻿@model MusicQuiz.Web.Models.QuizResultsViewModel
 @{
     ViewData["Title"] = "Quiz Results";
     var score = ViewBag.Score as decimal? ?? 0;
@@ -9,40 +9,10 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var ctx = document.getElementById('scoreChart').getContext('2d');
-            var scoreChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Correct', 'Incorrect'],
-                    datasets: [{
-                        data: [@correctAnswers, @(totalQuestions - correctAnswers)],
-                        backgroundColor: ['#4CAF50', '#F44336']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    var label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    label += context.raw + ' (' + Math.round(context.raw / totalQuestions * 100) + '%)';
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
+        var correctAnswers = @correctAnswers;
+        var totalQuestions = @totalQuestions;
     </script>
+    <script src="~/js/quizResults.js"></script>
 }
 
 <h1>Quiz Results</h1>

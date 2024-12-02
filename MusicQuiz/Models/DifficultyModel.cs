@@ -1,6 +1,6 @@
 using MusicQuiz.Enums;
 
-namespace MusicQuiz.Models
+namespace MusicQuiz.Web.Models
 {
     public class DifficultyModel
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MusicQuiz.Migrations
+namespace MusicQuiz.Core.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -225,7 +225,7 @@ namespace MusicQuiz.Migrations
 
             migrationBuilder.InsertData(
                 table: "QuizQuestions",
-                columns: new[] { "Id", "CorrectAnswer", "DifficultyId", "Question", "QuestionMusicFilePath", "ReferenceMusicFilePath", "TopicId", "WrongAnswerOne", "WrongAnswerThree", "WrongAnswerTwo" },
+                columns: ["Id", "CorrectAnswer", "DifficultyId", "Question", "QuestionMusicFilePath", "ReferenceMusicFilePath", "TopicId", "WrongAnswerOne", "WrongAnswerThree", "WrongAnswerTwo"],
                 values: new object[,]
                 {
                     { 1, "1.25kHz", 1, "Identify the correct frequency.", "/Music/SineWave/1.25kHz.wav", "/Music/SineWave/1kHz.wav", 1, "800Hz", "3kHz", "1.5kHz" },

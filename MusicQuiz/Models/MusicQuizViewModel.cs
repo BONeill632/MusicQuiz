@@ -1,5 +1,5 @@
 ﻿using MusicQuiz.Enums;
-using MusicQuiz.Extensions;
+using MusicQuiz.Web.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace MusicQuiz.Models

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MusicQuiz.Data;
-using MusicQuiz.Services;
+using MusicQuiz.Application.Services;
 using Microsoft.Build.Locator;
+using MusicQuiz.Application.Data;
 
 // Register MSBuild instance, needed for scaffolding the Identity pages
 var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
@@ -47,7 +47,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.User.RequireUniqueEmail = true;
 })
-.AddRoles<IdentityRole>() // Add this line to include roles
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Configure application cookie
@@ -59,7 +59,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 // Register UserRoleService
-builder.Services.AddScoped<UserRoleService>(); // Add this line
+builder.Services.AddScoped<UserRoleService>();
 
 var app = builder.Build();
 
@@ -92,12 +92,12 @@ await InitializeRoles(app.Services);
 app.Run();
 
 // Method to create roles
-async Task InitializeRoles(IServiceProvider serviceProvider)
+static async Task InitializeRoles(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = { "Admin", "User" };
+    string[] roleNames = ["Admin", "User"];
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))

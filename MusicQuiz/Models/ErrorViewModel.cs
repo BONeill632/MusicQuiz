@@ -1,4 +1,4 @@
-namespace MusicQuiz.Models
+namespace MusicQuiz.Web.Models
 {
     public class ErrorViewModel
     {

@@ -1,20 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicQuiz.Data;
+using MusicQuiz.Application.Data;
 using MusicQuiz.Enums;
 using MusicQuiz.Models;
+using MusicQuiz.Web.Models;
 using System.Text.Json;
 
-namespace MusicQuiz.Controllers
+namespace MusicQuiz.Web.Controllers
 {
-    public class QuizController : Controller
+    public class QuizController(ApplicationDbContext context) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public QuizController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         /// <summary>
         /// Index action method for the Quiz
         /// </summary>
@@ -55,7 +49,7 @@ namespace MusicQuiz.Controllers
             // Retrieve the selected topic from TempData
             if (TempData["SelectedTopic"] != null)
             {
-                var selectedTopicString = TempData["SelectedTopic"].ToString();
+                var selectedTopicString = TempData["SelectedTopic"]?.ToString() ?? string.Empty;
                 if (!string.IsNullOrEmpty(selectedTopicString) && Enum.TryParse(typeof(Topic), selectedTopicString, out var selectedTopic))
                 {
                     model.SelectedTopic = (Topic)selectedTopic;
@@ -87,7 +81,7 @@ namespace MusicQuiz.Controllers
             }
 
             // Load the quiz data based on the selected topic and difficulty
-            var questions = _context.QuizQuestions
+            var questions = context.QuizQuestions
                 .Where(q => q.TopicId == (int)model.SelectedTopic && q.DifficultyId == (int)model.SelectedDifficulty)
                 .ToList();
 
@@ -104,7 +98,7 @@ namespace MusicQuiz.Controllers
             var questionViewModels = selectedQuestions.Select(q =>
             {
                 var options = new List<string> { q.CorrectAnswer, q.WrongAnswerOne, q.WrongAnswerTwo, q.WrongAnswerThree };
-                options = options.OrderBy(x => random.Next()).ToList();
+                options = [.. options.OrderBy(x => random.Next())];
 
                 return new QuestionViewModel
                 {
@@ -133,17 +127,17 @@ namespace MusicQuiz.Controllers
         public IActionResult ShowQuestion()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
-            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : new List<QuestionViewModel>();
+            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) ?? [] : [];
             var currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
             var answer = questions[currentIndex].UserAnswer;
             var scoreString = HttpContext.Session.GetString("Score");
             decimal score = 0;
             if (!string.IsNullOrEmpty(scoreString))
             {
-                decimal.TryParse(scoreString, out score);
+                //decimal.TryParse(scoreString, out score);
             }
 
-            if (questions == null || !questions.Any())
+            if (questions == null || questions.Count == 0)
             {
                 return View("NoQuestions");
             }
@@ -162,10 +156,10 @@ namespace MusicQuiz.Controllers
         public IActionResult NextQuestion(string selectedOption)
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
-            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : new List<QuestionViewModel>();
+            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : [];
             var currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
 
-            if (questions == null || !questions.Any())
+            if (questions == null || questions.Count == 0)
             {
                 return View("NoQuestions");
             }
@@ -226,7 +220,7 @@ namespace MusicQuiz.Controllers
             HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
 
             // Calculate the score
-            decimal score = Math.Round((correctAnswers / (decimal)questions.Count) * 100, 2);
+            decimal score = Math.Round(correctAnswers / (decimal)questions.Count * 100, 2);
             HttpContext.Session.SetString("Score", score.ToString());
 
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
@@ -240,10 +234,10 @@ namespace MusicQuiz.Controllers
         public IActionResult PreviousQuestion()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
-            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : new List<QuestionViewModel>();
+            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : [];
             var currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
 
-            if (questions == null || !questions.Any())
+            if (questions == null || questions.Count == 0)
             {
                 return View("NoQuestions");
             }
@@ -268,7 +262,7 @@ namespace MusicQuiz.Controllers
         public IActionResult QuizResults(string selectedAnswer)
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
-            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : new List<QuestionViewModel>();
+            var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) ?? [] : [];
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
             var scoreString = HttpContext.Session.GetString("Score");
 
@@ -281,9 +275,8 @@ namespace MusicQuiz.Controllers
             decimal score = 0;
             if (!string.IsNullOrEmpty(scoreString))
             {
-                decimal.TryParse(scoreString, out score);
+                score = decimal.TryParse(scoreString, out var parsedScore) ? parsedScore : 0;
             }
-
 
             var model = new QuizResultsViewModel
             {
@@ -301,6 +294,7 @@ namespace MusicQuiz.Controllers
 
             return View(model);
         }
+
 
     }
 }

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MusicQuiz.Models;
-using System.IO;
+using MusicQuiz.Core.Entities;
 
-namespace MusicQuiz.Data
+namespace MusicQuiz.Application.Data
 {
     public static class QuizQuestionEasySineSeedData
     {
@@ -39,7 +38,7 @@ namespace MusicQuiz.Data
                         WrongAnswerTwo = "1.5kHz",
                         WrongAnswerThree = "2kHz",
                         QuestionMusicFilePath = $"/Music/SineWave/{fileName}.wav",
-                        ReferenceMusicFilePath = !fileName.Contains("k") && difficultyId == 1 ? $"/Music/SineWave/400Hz.wav" : "",
+                        ReferenceMusicFilePath = !fileName.Contains('k') && difficultyId == 1 ? $"/Music/SineWave/400Hz.wav" : "",
                     });
                 }
             }

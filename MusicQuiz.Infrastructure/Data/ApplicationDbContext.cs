@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MusicQuiz.Core.Entities;
 
-namespace MusicQuiz.Data
+namespace MusicQuiz.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
     {
 
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

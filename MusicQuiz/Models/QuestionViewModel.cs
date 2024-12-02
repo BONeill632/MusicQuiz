@@ -1,6 +1,4 @@
 ﻿using MusicQuiz.Enums;
-using MusicQuiz.Extensions;
-using System.ComponentModel.DataAnnotations;
 
 namespace MusicQuiz.Models
 {
@@ -42,7 +40,7 @@ namespace MusicQuiz.Models
         /// <summary>
         /// Gets or sets the list of potential selectable options
         /// </summary>
-        public List<string> Options { get; set; } = new List<string>();
+        public List<string> Options { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the correct answer

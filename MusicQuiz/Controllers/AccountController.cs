@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using MusicQuiz.Services;
+using MusicQuiz.Application.Services;
 
-public class AccountController : Controller
+namespace MusicQuiz.Web.Controllers
 {
-    private readonly UserRoleService _userRoleService;
-
-    public AccountController(UserRoleService userRoleService)
+    public class AccountController(UserRoleService userRoleService) : Controller
     {
-        _userRoleService = userRoleService;
-    }
-
-    public async Task<IActionResult> AssignRole(string userEmail, string roleName)
-    {
-        await _userRoleService.AssignRoleToUserAsync(userEmail, roleName);
-        return RedirectToAction("Index");
+        public async Task<IActionResult> AssignRole(string userEmail, string roleName)
+        {
+            await userRoleService.AssignRoleToUserAsync(userEmail, roleName);
+            return RedirectToAction("Index");
+        }
     }
 }
