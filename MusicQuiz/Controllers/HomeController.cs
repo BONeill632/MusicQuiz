@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicQuiz.Models;
 using MusicQuiz.Web.Models;
 using System.Diagnostics;
 

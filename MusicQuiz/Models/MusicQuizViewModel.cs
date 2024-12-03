@@ -1,8 +1,6 @@
 ﻿using MusicQuiz.Enums;
-using MusicQuiz.Web.Models;
-using System.ComponentModel.DataAnnotations;
 
-namespace MusicQuiz.Models
+namespace MusicQuiz.Web.Models
 {
     /// <summary>
     /// This is the main model used for the music quiz
@@ -29,7 +27,7 @@ namespace MusicQuiz.Models
         /// </summary>
         public DifficultyLevel SelectedDifficulty { get; set; }
 
-        public List<QuestionViewModel> QuizQuestions { get; set; } = new List<QuestionViewModel>();
+        public List<QuestionViewModel> QuizQuestions { get; set; } = [];
 
         public MusicQuizViewModel()
         {

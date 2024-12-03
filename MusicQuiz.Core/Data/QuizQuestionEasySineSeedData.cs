@@ -17,7 +17,7 @@ namespace MusicQuiz.Infrastructure.Data
         /// Wrong answer data needs entered manually across all 75 answers
         /// </summary>
         /// <returns></returns>
-        private static List<QuizQuestion> GenerateSeedData()
+        public static List<QuizQuestion> GenerateSeedData()
         {
             var seedData = new List<QuizQuestion>();
             var files = Directory.GetFiles("wwwroot/Music/SineWave", "*.wav");

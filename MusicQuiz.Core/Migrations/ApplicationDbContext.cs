@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Core.Entities;
+using MusicQuiz.Infrastructure.Data;
 
-namespace MusicQuiz.Infrastructure.Data
+namespace MusicQuiz.Core.Migrations
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
     {

@@ -1,5 +1,6 @@
 using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
+using MusicQuiz.Core.Migrations;
 
 namespace MusicQuiz.Application.Services
 {
