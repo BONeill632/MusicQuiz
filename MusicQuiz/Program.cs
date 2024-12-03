@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Services;
 using Microsoft.Build.Locator;
-using MusicQuiz.Infrastructure.Data;
 using MusicQuiz.Core.Migrations;
+using MusicQuiz.Application.Interfaces; // Add this using directive
 
 // Register MSBuild instance, needed for scaffolding the Identity pages
 var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
@@ -62,6 +62,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Register UserRoleService
 builder.Services.AddScoped<UserRoleService>();
 
+// Register the ResultsService
+builder.Services.AddScoped<IResultsService, ResultsService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -98,7 +101,7 @@ static async Task InitializeRoles(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = ["Admin", "User"];
+    string[] roleNames = { "Admin", "User" };
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))

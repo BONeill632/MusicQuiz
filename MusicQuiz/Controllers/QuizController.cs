@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Enums;
-using MusicQuiz.Infrastructure.Data;
 using MusicQuiz.Web.Models;
 using System.Text.Json;
 
@@ -28,8 +27,21 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
+            ClearQuizSession();
+
             var quiz = new MusicQuizViewModel();
             return View(quiz);
+        }
+
+        /// <summary>
+        /// Clear the quiz session
+        /// </summary>
+        private void ClearQuizSession()
+        {
+            HttpContext.Session.Remove("QuizQuestions");
+            HttpContext.Session.Remove("CurrentQuestionIndex");
+            HttpContext.Session.Remove("Score");
+            HttpContext.Session.Remove("CorrectAnswers");
         }
 
         /// <summary>
@@ -306,6 +318,7 @@ namespace MusicQuiz.Web.Controllers
 
             resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)questions.FirstOrDefault().SelectedDifficulty, (int)questions.FirstOrDefault().SelectedTopic, userID);
 
+            ClearQuizSession();
 
             return View(model);
         }

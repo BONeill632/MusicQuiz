@@ -10,6 +10,8 @@ namespace MusicQuiz.Web.Controllers
 
         public IActionResult Index()
         {
+            ClearQuizSession();
+
             return View();
         }
 
@@ -22,6 +24,17 @@ namespace MusicQuiz.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        /// <summary>
+        /// Clear the quiz session
+        /// </summary>
+        private void ClearQuizSession()
+        {
+            HttpContext.Session.Remove("QuizQuestions");
+            HttpContext.Session.Remove("CurrentQuestionIndex");
+            HttpContext.Session.Remove("Score");
+            HttpContext.Session.Remove("CorrectAnswers");
         }
     }
 }
