@@ -212,7 +212,7 @@ namespace MusicQuiz.Web.Controllers
             }
 
             var currentQuestion = questions[currentIndex];
-            var previousAnswer = currentQuestion.UserAnswer;
+            var answer = currentQuestion.UserAnswer;
             currentQuestion.UserAnswer = selectedOption;
 
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
@@ -221,12 +221,15 @@ namespace MusicQuiz.Web.Controllers
             if (currentQuestion.IsAnswered)
             {
                 // If the question was previously answered, adjust the score based on the new answer
-                if (previousAnswer == currentQuestion.CorrectAnswer && selectedOption != currentQuestion.CorrectAnswer)
+                //Adjust the feedback
+                if (answer == currentQuestion.CorrectAnswer && selectedOption != currentQuestion.CorrectAnswer)
                 {
+                    currentQuestion.Feedback = "Try again. ✘";
                     correctAnswers--;
                 }
-                else if (previousAnswer != currentQuestion.CorrectAnswer && selectedOption == currentQuestion.CorrectAnswer)
+                else if (answer != currentQuestion.CorrectAnswer && selectedOption == currentQuestion.CorrectAnswer)
                 {
+                    currentQuestion.Feedback = "Correct! ✔";
                     correctAnswers++;
                 }
             }
@@ -235,6 +238,7 @@ namespace MusicQuiz.Web.Controllers
                 // If the question was not previously answered, update the score based on the new answer
                 if (selectedOption == currentQuestion.CorrectAnswer)
                 {
+                    currentQuestion.Feedback = "Correct! ✔";
                     correctAnswers++;
                 }
                 currentQuestion.IsAnswered = true;
@@ -279,7 +283,7 @@ namespace MusicQuiz.Web.Controllers
 
 
         /// <summary>
-        /// 
+        /// Show quiz results page (pie chart & list of questions)
         /// </summary>
         /// <returns></returns>
         public IActionResult QuizResults(string selectedAnswer)

@@ -30,3 +30,25 @@ body {
     width: 100%;
     height: auto;
 }
+
+/*Used for the correct/incorrect options
+    on the quiz practice page
+*/
+.option {
+    display: flex;
+    align-items: center;
+}
+
+    .option.correct {
+        border: 2px solid green;
+        padding: 10px;
+    }
+
+    .option.incorrect {
+        border: 2px solid red;
+        padding: 10px;
+    }
+
+.feedback-text {
+    margin-left: 10px;
+}

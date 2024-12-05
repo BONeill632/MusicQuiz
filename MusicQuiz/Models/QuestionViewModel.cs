@@ -57,5 +57,16 @@ namespace MusicQuiz.Web.Models
         /// quesiton being submitted more than once
         /// </summary>
         public bool IsAnswered { get; set; }
+
+        /// <summary>
+        /// This variable is to store whether the user has submitted the question or not
+        /// It also will display correct/incorrect if they are changing between questions
+        /// </summary>
+        public string? Feedback { get; set; }
+
+        /// <summary>
+        /// If is Assessment, feedback is turned off
+        /// </summary>
+        public bool IsAssessment { get; set; }
     }
 }

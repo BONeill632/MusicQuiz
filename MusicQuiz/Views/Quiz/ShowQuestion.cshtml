@@ -4,18 +4,20 @@
     var currentQuestionIndex = ViewBag.CurrentQuestionIndex as int? ?? 0;
     var totalQuestions = ViewBag.TotalQuestions as int? ?? 0;
     var score = (ViewBag.Score as decimal? ?? 0).ToString("F2");
-    var answer = ViewBag.userAnswer as string;
+    var answer = Model.UserAnswer;
+    var feedback = Model.Feedback;
 }
 @section Scripts {
     <script src="~/js/quiz.js"></script>
     <script src="~/js/selectDifficulty.js"></script>
+    <script src="~/js/submitAnswer.js"></script>
 }
 
 <h1>Topic: @Model.SelectedTopic, Difficulty: @Model.SelectedDifficulty</h1>
 
 <h2>Question @(currentQuestionIndex + 1)</h2>
 
-@if(Model.SelectedTopic == MusicQuiz.Enums.Topic.SineWave && Model.SelectedDifficulty == MusicQuiz.Enums.DifficultyLevel.Easy && !string.IsNullOrEmpty(Model.MusicReferenceFilePath))
+@if (Model.SelectedTopic == MusicQuiz.Enums.Topic.SineWave && Model.SelectedDifficulty == MusicQuiz.Enums.DifficultyLevel.Easy && !string.IsNullOrEmpty(Model.MusicReferenceFilePath))
 {
     <div>
         <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
@@ -37,22 +39,16 @@
     <div>
         @foreach (var option in Model.Options)
         {
-            <div>
+            <div class="option">
                 <input type="radio" id="@option" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "")>
-
                 <label for="@option">@option</label>
             </div>
         }
     </div>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
-    @if (currentQuestionIndex == totalQuestions - 1)
-    {
-        <button type="submit">Complete</button>
-    }
-    else
-    {
-        <button type="submit">Next</button>
-    }
+    <div id="feedback"></div>
+    <button type="button" onclick="submitAnswer()">Submit</button>
+    <button type="submit" id="nextButton" style="display:none;">@(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")</button>
 </form>
 
 <div>
