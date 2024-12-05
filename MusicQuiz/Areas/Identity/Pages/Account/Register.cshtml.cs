@@ -114,9 +114,9 @@ namespace MusicQuiz.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userStore.SetUserNameAsync((UserData)user, Input.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync((UserData)user, Input.Email, CancellationToken.None);
+                var result = await _userManager.CreateAsync((UserData)user, Input.Password);
 
                 if (result.Succeeded)
                 {
@@ -140,7 +140,7 @@ namespace MusicQuiz.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.SignInAsync((UserData)user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }

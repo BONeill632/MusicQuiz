@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace MusicQuiz.Web.Controllers
 {
     public class QuizController(ApplicationDbContext context,
-        IResultsService resultsService, UserManager<IdentityUser> userManager) : Controller
+        IResultsService resultsService, UserManager<UserData> userManager) : Controller
     {
         /// <summary>
         /// Get user ID
