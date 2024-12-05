@@ -6,17 +6,15 @@ using MusicQuiz.Infrastructure.Data;
 
 namespace MusicQuiz.Core.Migrations
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<UserData>(options)
     {
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
-
-        public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; }
+        public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Configure Identity tables to use the correct data types for MySQL
             builder.Entity<IdentityRole>(entity =>
             {
                 entity.Property(m => m.Id).HasMaxLength(128);
@@ -25,7 +23,7 @@ namespace MusicQuiz.Core.Migrations
                 entity.Property(m => m.ConcurrencyStamp).HasColumnType("longtext");
             });
 
-            builder.Entity<IdentityUser>(entity =>
+            builder.Entity<UserData>(entity =>
             {
                 entity.Property(m => m.Id).HasMaxLength(128);
                 entity.Property(m => m.UserName).HasMaxLength(256);
@@ -35,6 +33,9 @@ namespace MusicQuiz.Core.Migrations
                 entity.Property(m => m.ConcurrencyStamp).HasColumnType("longtext");
                 entity.Property(m => m.PasswordHash).HasColumnType("longtext");
                 entity.Property(m => m.SecurityStamp).HasColumnType("longtext");
+                entity.Property(m => m.FirstName).HasMaxLength(256);
+                entity.Property(m => m.LastName).HasMaxLength(256);
+                entity.Property(m => m.StudentID).HasMaxLength(256);
             });
 
             builder.Entity<IdentityUserLogin<string>>(entity =>
@@ -73,7 +74,6 @@ namespace MusicQuiz.Core.Migrations
                 entity.Property(m => m.ClaimType).HasColumnType("longtext");
                 entity.Property(m => m.ClaimValue).HasColumnType("longtext");
             });
-
 
             // Call the seed data configuration
             QuizQuestionEasySineSeedData.Seed(builder);

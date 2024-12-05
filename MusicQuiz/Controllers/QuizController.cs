@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Application.Interfaces;
+using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Enums;
 using MusicQuiz.Web.Models;

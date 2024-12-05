@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicQuiz.Core.Migrations;
 
@@ -11,9 +12,11 @@ using MusicQuiz.Core.Migrations;
 namespace MusicQuiz.Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241203230332_ExtraUserData")]
+    partial class ExtraUserData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,7 +213,7 @@ namespace MusicQuiz.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuizQuestions", (string)null);
+                    b.ToTable("QuizQuestions");
 
                     b.HasData(
                         new
@@ -1296,7 +1299,7 @@ namespace MusicQuiz.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersPracticeQuizResults", (string)null);
+                    b.ToTable("UsersPracticeQuizResults");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

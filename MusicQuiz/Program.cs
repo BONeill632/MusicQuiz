@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Services;
 using Microsoft.Build.Locator;
 using MusicQuiz.Core.Migrations;
-using MusicQuiz.Application.Interfaces; // Add this using directive
+using MusicQuiz.Application.Interfaces;
+using MusicQuiz.Core.Entities; // Add this using directive
 
 // Register MSBuild instance, needed for scaffolding the Identity pages
 var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
@@ -37,7 +38,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21))));
 
 // Add Identity services with roles
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<UserData>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -101,7 +102,7 @@ static async Task InitializeRoles(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = { "Admin", "User" };
+    string[] roleNames = ["Admin", "User"];
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))

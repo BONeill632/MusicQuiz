@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MusicQuiz.Core.Entities;
 
 namespace MusicQuiz.Application.Services
 {
-    public class UserRoleService(UserManager<IdentityUser> userManager)
+    public class UserRoleService(UserManager<UserData> userManager)
     {
         public async Task AssignRoleToUserAsync(string userEmail, string roleName)
         {

@@ -14,10 +14,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MusicQuiz.Core.Entities;
 
-namespace MusicQuiz.Areas.Identity.Pages.Account
+namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 {
-    public class LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger) : PageModel
+    public class LoginModel(SignInManager<UserData> signInManager, ILogger<LoginModel> logger) : PageModel
     {
 
         /// <summary>
