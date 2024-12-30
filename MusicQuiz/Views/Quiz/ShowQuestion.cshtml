@@ -5,8 +5,12 @@
     var totalQuestions = ViewBag.TotalQuestions as int? ?? 0;
     var score = (ViewBag.Score as decimal? ?? 0).ToString("F2");
     var answer = Model.UserAnswer;
-    var feedback = Model.Feedback;
+    var feedback = ViewBag.Feedback;
 }
+
+<!-- Add a hidden input field to store the feedback value -->
+<input type="hidden" id="feedback" value="@feedback" />
+
 @section Scripts {
     <script src="~/js/quiz.js"></script>
     <script src="~/js/selectDifficulty.js"></script>
@@ -46,7 +50,7 @@
         }
     </div>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
-    <div id="feedback"></div>
+    <div id="feedbackSection"></div>
     <button type="button" onclick="submitAnswer()">Submit</button>
     <button type="submit" id="nextButton" style="display:none;">@(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")</button>
 </form>

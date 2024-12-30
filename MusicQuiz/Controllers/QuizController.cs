@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace MusicQuiz.Web.Controllers
 {
     public class QuizController(ApplicationDbContext context,
-        IResultsService resultsService, UserManager<UserData> userManager) : Controller
+        IResultsService resultsService, UserManager<UserData> userManager) : BaseController
     {
         /// <summary>
         /// Get user ID
@@ -172,6 +172,7 @@ namespace MusicQuiz.Web.Controllers
             ViewBag.TotalQuestions = questions.Count;
             ViewBag.Score = score;
             ViewBag.userAnswer = answer;
+            ViewBag.Feedback = questions[currentIndex].Feedback;
 
             return View(model);
         }
@@ -241,6 +242,10 @@ namespace MusicQuiz.Web.Controllers
                     currentQuestion.Feedback = "Correct! ✔";
                     correctAnswers++;
                 }
+                else
+                {
+                    currentQuestion.Feedback = "Try again. ✘";
+                }
                 currentQuestion.IsAnswered = true;
             }
 
@@ -253,10 +258,6 @@ namespace MusicQuiz.Web.Controllers
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
 
-        /// <summary>
-        /// Moves to the previous question.
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
         public IActionResult PreviousQuestion()
         {
@@ -277,9 +278,11 @@ namespace MusicQuiz.Web.Controllers
             }
 
             HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
+            ViewBag.Feedback = questions[currentIndex].Feedback;
 
             return RedirectToAction("ShowQuestion");
         }
+
 
 
         /// <summary>

@@ -1,6 +1,6 @@
 namespace MusicQuiz.Web.Models
 {
-    public class ErrorViewModel
+    public class ErrorViewModel : BaseViewModel
     {
         public string? RequestId { get; set; }
 

@@ -5,7 +5,7 @@ namespace MusicQuiz.Web.Models
     /// <summary>
     /// This is the main model used for the music quiz
     /// </summary>
-    public class MusicQuizViewModel
+    public class MusicQuizViewModel : BaseViewModel
     {
         /// <summary>
         /// Gets or sets the list of topics from the enum page

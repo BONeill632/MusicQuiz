@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace MusicQuiz.Web.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger) : Controller
+    public class HomeController(ILogger<HomeController> logger) : BaseController
     {
         public ILogger<HomeController> Logger { get; } = logger;
 

@@ -1,6 +1,6 @@
 namespace MusicQuiz.Web.Models
 {
-    public class QuizResultsViewModel
+    public class QuizResultsViewModel : BaseViewModel
     {
         /// <summary>
         /// 

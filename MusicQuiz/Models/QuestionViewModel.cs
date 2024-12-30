@@ -5,7 +5,7 @@ namespace MusicQuiz.Web.Models
     /// <summary>
     /// This is the main model used for the list of questions
     /// </summary>
-    public class QuestionViewModel
+    public class QuestionViewModel : BaseViewModel
     {
         /// <summary>
         /// Gets or sets the selected topic
