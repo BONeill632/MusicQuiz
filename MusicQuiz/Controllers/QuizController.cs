@@ -90,8 +90,6 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-
-
         /// <summary>
         /// starting quiz
         /// </summary>
@@ -196,6 +194,7 @@ namespace MusicQuiz.Web.Controllers
             currentIndex++;
             if (currentIndex >= questions.Count)
             {
+                //Finishes Quiz
                 return RedirectToAction("QuizResults");
             }
 
@@ -283,24 +282,17 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("ShowQuestion");
         }
 
-
-
         /// <summary>
         /// Show quiz results page (pie chart & list of questions)
         /// </summary>
         /// <returns></returns>
-        public IActionResult QuizResults(string selectedAnswer)
+        public IActionResult QuizResults()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
             var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) ?? [] : [];
+
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
             var scoreString = HttpContext.Session.GetString("Score");
-
-            // Retrieve the current question index
-            var currentIndex = HttpContext.Session.GetInt32("CurrentQuestionIndex") ?? 0;
-
-            // Save the user's answer
-            SaveUserAnswer(questions, currentIndex, selectedAnswer);
 
             decimal score = 0;
             if (!string.IsNullOrEmpty(scoreString))
@@ -330,7 +322,5 @@ namespace MusicQuiz.Web.Controllers
 
             return View(model);
         }
-
-
     }
 }

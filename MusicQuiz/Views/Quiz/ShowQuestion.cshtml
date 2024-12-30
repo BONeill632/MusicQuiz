@@ -39,7 +39,7 @@
     </audio>
 </div>
 
-<form method="post" action="@(currentQuestionIndex == totalQuestions - 1 ? "/Quiz/QuizResults" : "/Quiz/NextQuestion")">
+<form method="post" action="/Quiz/NextQuestion">
     <div>
         @foreach (var option in Model.Options)
         {
