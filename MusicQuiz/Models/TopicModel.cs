@@ -1,4 +1,4 @@
-using MusicQuiz.Enums;
+using MusicQuiz.Core.Enums;
 
 namespace MusicQuiz.Web.Models
 {

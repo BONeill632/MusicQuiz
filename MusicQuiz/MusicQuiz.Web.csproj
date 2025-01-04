@@ -8,6 +8,25 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
+	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
+	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
+	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
+	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
+	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
+	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
+	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
+	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
+	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="wwwroot\Music\Cornet A.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 1\Ensemble 2 Minus 125Hz Octave.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 1\Ensemble 2 Minus 1kHz Octave.wav" />
@@ -120,48 +139,6 @@
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\400Hz_Octave_Noise.wav" />
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\6400Hz_Octave_Noise.wav" />
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\800Hz_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 125Hz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 1kHz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 250Hz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 2kHz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 4kHz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 500Hz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Noise Minus 8kHz Octave.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 2\Pink Noise Reference.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 3\Pink_Noise_HPF_1000Hz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 3\Pink_Noise_HPF_125Hz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 3\Pink_Noise_HPF_250Hz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 3\Pink_Noise_HPF_500Hz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 3\Pink_Noise_Reference.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 4\Pink_Noise_LPF_1kHz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 4\Pink_Noise_LPF_2kHz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 4\Pink_Noise_LPF_4kHz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 4\Pink_Noise_LPF_8kHz.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 4\Pink_Noise_Reference.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\10000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\1000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\100Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\12500Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\1250Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\125Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\16000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\1600Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\160Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\2000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\200Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\2500Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\250Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\3150Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\315Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\4000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\400Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\5000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\500Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\6300Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\630Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\8000Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\800Hz_3rd_Octave_Noise.wav" />
-		<None Include="wwwroot\Music\Pink Noise\Pink Noise 5\80Hz_3rd_Octave_Noise.wav" />
 		<None Include="wwwroot\Music\SineWave\1.25kHz.wav" />
 		<None Include="wwwroot\Music\SineWave\1.6kHz.wav" />
 		<None Include="wwwroot\Music\SineWave\100Hz.wav" />

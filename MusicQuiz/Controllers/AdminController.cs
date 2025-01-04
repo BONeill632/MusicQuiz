@@ -11,43 +11,38 @@ using System.Threading.Tasks;
 namespace MusicQuiz.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController : BaseController
+    public class AdminController(UserManager<UserData> userManager, RoleManager<IdentityRole> roleManager) : BaseController
     {
-        private readonly UserManager<UserData> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-
-        public AdminController(UserManager<UserData> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
 
         public async Task<IActionResult> UserList()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await userManager.Users.ToListAsync();
+#pragma warning disable CS8601 // Possible null reference assignment.
             var userListViewModel = users.Select(user => new UserListViewModel
             {
+                UserName = user.UserName,
                 UserId = user.Id,
                 Email = user.Email
             }).ToList();
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             return View(userListViewModel);
         }
 
         public async Task<IActionResult> Manage(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
+#pragma warning disable CS8601 // Possible null reference assignment.
             var model = new ManageUserRolesViewModel
             {
                 UserId = user.Id,
@@ -55,10 +50,11 @@ namespace MusicQuiz.Web.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 StudentID = user.StudentID,
-                Roles = await _roleManager.Roles.ToListAsync(),
-                UserRoles = await _userManager.GetRolesAsync(user),
-                SelectedRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "User"
+                Roles = await roleManager.Roles.ToListAsync(),
+                UserRoles = await userManager.GetRolesAsync(user),
+                SelectedRole = (await userManager.GetRolesAsync(user)).FirstOrDefault() ?? "User"
             };
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             return View(model);
         }
@@ -66,19 +62,19 @@ namespace MusicQuiz.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Manage(ManageUserRolesViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await userManager.FindByIdAsync(model.UserId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await userManager.GetRolesAsync(user);
             var selectedRole = model.SelectedRole;
 
             if (!userRoles.Contains(selectedRole))
             {
-                var result = await _userManager.AddToRoleAsync(user, selectedRole);
+                var result = await userManager.AddToRoleAsync(user, selectedRole);
 
                 if (!result.Succeeded)
                 {
@@ -86,7 +82,7 @@ namespace MusicQuiz.Web.Controllers
                     return View(model);
                 }
 
-                result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(new[] { selectedRole }));
+                result = await userManager.RemoveFromRolesAsync(user, userRoles.Except([selectedRole]));
 
                 if (!result.Succeeded)
                 {

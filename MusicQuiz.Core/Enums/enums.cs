@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MusicQuiz.Enums
+namespace MusicQuiz.Core.Enums
 {
     /// <summary>
     /// Represents the different levels of difficulty for the music quiz.

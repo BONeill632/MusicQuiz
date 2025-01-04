@@ -1,36 +1,39 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-public class BaseViewModel : INotifyPropertyChanged
+namespace MusicQuiz.Web.Models
 {
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    public class BaseViewModel : INotifyPropertyChanged
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(backingStore, value))
-            return false;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-        backingStore = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
 
-    private string userId;
-    public string UserId
-    {
-        get => userId;
-        set => SetProperty(ref userId, value);
-    }
+            backingStore = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
 
-    private bool isLoggedIn;
-    public bool IsLoggedIn
-    {
-        get => isLoggedIn;
-        set => SetProperty(ref isLoggedIn, value);
+        private string userId = "";
+        public string UserId
+        {
+            get => userId;
+            set => SetProperty(ref userId, value);
+        }
+
+        private bool isLoggedIn;
+        public bool IsLoggedIn
+        {
+            get => isLoggedIn;
+            set => SetProperty(ref isLoggedIn, value);
+        }
     }
 }

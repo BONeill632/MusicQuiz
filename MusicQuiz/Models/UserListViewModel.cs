@@ -2,8 +2,19 @@ namespace MusicQuiz.Web.Models
 {
     public class UserListViewModel
     {
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        /// <summary>
+        /// User ID
+        /// </summary>
+        public required string UserId { get; set; }
+
+        /// <summary>
+        /// User name
+        /// </summary>
+        public required string UserName { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public required string Email { get; set; }
     }
 }
