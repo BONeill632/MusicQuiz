@@ -8,17 +8,23 @@ html {
     }
 }
 
-h1 {
-    text-align: center;
-}
-
 html {
     position: relative;
     min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 body {
-    margin-bottom: 60px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
 }
 
 .chart-wrapper {
@@ -80,14 +86,19 @@ body {
 
  /*Making the layout look more like QUB*/
 .red-bar {
+    margin-top: auto;
     background-color: red;
     height: 40px;
 }
 
+.container {
+    flex: 1;
+}
 
 /*center footer text*/
 .footer {
     text-align: center;
+    margin-top: auto;
 }
 
 /*QUESTION STUFF*/
@@ -102,6 +113,12 @@ body {
     background-color: #d3d3d3;
 }
 
+.quiz-button {
+    padding: 10px;
+    margin: 10px;
+}
+
+/*HOMEPAGE*/
 .jumbotron {
     background-color: #f8f9fa;
     padding: 2rem 1rem;

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace MusicQuiz.Controllers
+namespace MusicQuiz.Web.Controllers
 {
     public class AssessmentController : Controller
     {
