@@ -1,39 +1,35 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MusicQuiz.Web.Models
+public class BaseViewModel : INotifyPropertyChanged
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(backingStore, value))
+            return false;
 
-        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
+        backingStore = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
 
-            backingStore = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
+    private string userId;
+    public string UserId
+    {
+        get => userId;
+        set => SetProperty(ref userId, value);
+    }
 
-        private string userId = "";
-        public string UserId
-        {
-            get => userId;
-            set => SetProperty(ref userId, value);
-        }
-
-        private bool isLoggedIn;
-        public bool IsLoggedIn
-        {
-            get => isLoggedIn;
-            set => SetProperty(ref isLoggedIn, value);
-        }
+    private bool isLoggedIn;
+    public bool IsLoggedIn
+    {
+        get => isLoggedIn;
+        set => SetProperty(ref isLoggedIn, value);
     }
 }

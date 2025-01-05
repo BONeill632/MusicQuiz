@@ -3,7 +3,39 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Select a quiz</h1>
-    <p>Here, you will select what level of the quiz you would like to start at.</p>
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to MusicQuiz</h1>
+        <p class="lead">Test your music knowledge with our fun and challenging quizzes!</p>
+        <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+        <a class="btn btn-light btn-lg" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-md-6">
+            <img src="~/images/quiz1.jpg" class="img-fluid" alt="Quiz Image 1">
+        </div>
+        <div class="col-md-6">
+            <h2>About MusicQuiz</h2>
+            <p>MusicQuiz is the ultimate platform to test your music knowledge. Whether you're a casual listener or a music aficionado, our quizzes are designed to challenge and entertain you.</p>
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-md-6 order-md-2">
+            <img src="~/images/quiz2.jpg" class="img-fluid" alt="Quiz Image 2">
+        </div>
+        <div class="col-md-6 order-md-1">
+            <h2>Why Join Us?</h2>
+            <p>By creating an account, you can track your progress, compete with friends, and unlock more challenging levels. Join our community of music lovers today!</p>
+        </div>
+    </div>
+
+    <div class="row my-5 text-center">
+        <div class="col">
+            <h2>Unsure whether to create an account?</h2>
+            <p>Try a no-strings-attached quiz to see what we have to offer!</p>
+            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="SelectTopic">Try a Quiz</a>
+        </div>
+    </div>
 </div>
