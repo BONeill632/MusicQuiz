@@ -21,7 +21,7 @@
 
 <h2>Question @(currentQuestionIndex + 1)</h2>
 
-@if (Model.SelectedTopic == MusicQuiz.Core.Enums.Topic.SineWave && Model.SelectedDifficulty == MusicQuiz.Core.Enums.DifficultyLevel.Easy && !string.IsNullOrEmpty(Model.MusicReferenceFilePath))
+@if (!string.IsNullOrEmpty(Model.MusicReferenceFilePath))
 {
     <div>
         <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>

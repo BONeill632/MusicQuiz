@@ -326,8 +326,165 @@ namespace MusicQuiz.Core.Migrations
 
                     { 73, "8kHz", 1, "Identify the correct frequency.", "/Music/SineWave/8kHz.wav", "/Music/SineWave/6.3kHz.wav", 1, "4kHz", "12kHz", "16kHz" },
                     { 74, "8kHz", 2, "Identify the correct frequency.", "/Music/SineWave/8kHz.wav", "", 1, "7.7kHz", "8.2kHz", "8.5kHz" },
-                    { 75, "8kHz", 3, "Identify the correct frequency.", "/Music/SineWave/8kHz.wav", "", 1, "7.85kHz", "8.1kHz", "8.05kHz" }
-                });
+                    { 75, "8kHz", 3, "Identify the correct frequency.", "/Music/SineWave/8kHz.wav", "", 1, "7.85kHz", "8.1kHz", "8.05kHz" },
+
+                    { 76, "HPF 125Hz", 1, "Identify the correct frequency.", "/Music/Pink Noise/HPF 125Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 12.5Hz", "HPF 500Hz", "HPF 125kHz" },
+                    { 77, "HPF 125Hz", 2, "Identify the correct frequency.", "/Music/Pink Noise/HPF 125Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 12.5Hz", "HPF 500Hz", "HPF 125kHz" },
+                    { 78, "HPF 125Hz", 3, "Identify the correct frequency.", "/Music/Pink Noise/HPF 125Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 12.5Hz", "HPF 500Hz", "HPF 125kHz" },
+
+                    { 79, "HPF 250Hz", 1, "Identify the correct frequency.", "/Music/Pink Noise/HPF 250Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 25Hz", "HPF 750Hz", "HPF 250kHz" },
+                    { 80, "HPF 250Hz", 2, "Identify the correct frequency.", "/Music/Pink Noise/HPF 250Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 25Hz", "HPF 750Hz", "HPF 250kHz" },
+                    { 81, "HPF 250Hz", 3, "Identify the correct frequency.", "/Music/Pink Noise/HPF 250Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 25Hz", "HPF 750Hz", "HPF 250kHz" },
+
+                    { 82, "HPF 500Hz", 1, "Identify the correct frequency.", "/Music/Pink Noise/HPF 500Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 5Hz", "HPF 50Hz", "HPF 5kHz" },
+                    { 83, "HPF 500Hz", 2, "Identify the correct frequency.", "/Music/Pink Noise/HPF 500Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 5Hz", "HPF 50Hz", "HPF 5kHz" },
+                    { 84, "HPF 500Hz", 3, "Identify the correct frequency.", "/Music/Pink Noise/HPF 500Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 5Hz", "HPF 50Hz", "HPF 5kHz" },
+
+                    { 85, "HPF 1000Hz", 1, "Identify the correct frequency.", "/Music/Pink Noise/HPF 1000Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 100Hz", "HPF 10kHz", "HPF 1kHz" },
+                    { 86, "HPF 1000Hz", 2, "Identify the correct frequency.", "/Music/Pink Noise/HPF 1000Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 100Hz", "HPF 10kHz", "HPF 1kHz" },
+                    { 87, "HPF 1000Hz", 3, "Identify the correct frequency.", "/Music/Pink Noise/HPF 1000Hz.wav", "/Music/Pink Noise/HPF Reference.wav", 4, "HPF 100Hz", "HPF 10kHz", "HPF 1kHz" },
+
+                    { 88, "LPF 1kHz", 1, "Identify the correct frequency.", "/Music/Pink Noise/LPF 1kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 1.5kHz", "LPF 10.5kHz", "LPF 100Hz" },
+                    { 89, "LPF 1kHz", 2, "Identify the correct frequency.", "/Music/Pink Noise/LPF 1kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 1.5kHz", "LPF 10.5kHz", "LPF 100Hz" },
+                    { 90, "LPF 1kHz", 3, "Identify the correct frequency.", "/Music/Pink Noise/LPF 1kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 1.5kHz", "LPF 10.5kHz", "LPF 100Hz" },
+
+                    { 91, "LPF 2kHz", 1, "Identify the correct frequency.", "/Music/Pink Noise/LPF 2kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 2.5kHz", "LPF 250Hz", "LPF 200Hz" },
+                    { 92, "LPF 2kHz", 2, "Identify the correct frequency.", "/Music/Pink Noise/LPF 2kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 2.5kHz", "LPF 250Hz", "LPF 200Hz" },
+                    { 93, "LPF 2kHz", 3, "Identify the correct frequency.", "/Music/Pink Noise/LPF 2kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 2.5kHz", "LPF 250Hz", "LPF 200Hz" },
+
+                    { 94, "LPF 4kHz", 1, "Identify the correct frequency.", "/Music/Pink Noise/LPF 4kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 45kHz", "LPF 450Hz", "LPF 400Hz" },
+                    { 95, "LPF 4kHz", 2, "Identify the correct frequency.", "/Music/Pink Noise/LPF 4kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 45kHz", "LPF 450Hz", "LPF 400Hz" },
+                    { 96, "LPF 4kHz", 3, "Identify the correct frequency.", "/Music/Pink Noise/LPF 4kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 45kHz", "LPF 450Hz", "LPF 400Hz" },
+
+                    { 97, "LPF 8kHz", 1, "Identify the correct frequency.", "/Music/Pink Noise/LPF 8kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 80kHz", "LPF 5kHz", "LPF 800Hz" },
+                    { 98, "LPF 8kHz", 2, "Identify the correct frequency.", "/Music/Pink Noise/LPF 8kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 80kHz", "LPF 5kHz", "LPF 800Hz" },
+                    { 99, "LPF 8kHz", 3, "Identify the correct frequency.", "/Music/Pink Noise/LPF 8kHz.wav", "/Music/Pink Noise/LPF Reference.wav", 4, "LPF 80kHz", "LPF 5kHz", "LPF 800Hz" },
+
+                    { 100, "80Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "//Music/Pink Noise/80Hz 3rd Octave Noise.wav", "/Music/Pink Noise/80Hz 3rd Octave Noise.wav", 4, "100Hz 3rd Octave Noise", "160Hz 3rd Octave Noise", "125Hz 3rd Octave Noise" },
+                    { 101, "100Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/100Hz 3rd Octave Noise.wav", "/Music/Pink Noise/100Hz 3rd Octave Noise.wav", 4, "80Hz 3rd Octave Noise", "160Hz 3rd Octave Noise", "125Hz 3rd Octave Noise" },
+                    { 102, "125Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/125Hz 3rd Octave Noise.wav", "/Music/Pink Noise/125Hz 3rd Octave Noise.wav", 4, "100Hz 3rd Octave Noise", "160Hz 3rd Octave Noise", "80Hz 3rd Octave Noise" },
+
+                    { 103, "160Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/160Hz 3rd Octave Noise.wav", "/Music/Pink Noise/160Hz 3rd Octave Noise.wav", 4, "125Hz 3rd Octave Noise", "200Hz 3rd Octave Noise", "100Hz 3rd Octave Noise" },
+                    { 104, "200Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/200Hz 3rd Octave Noise.wav", "/Music/Pink Noise/200Hz 3rd Octave Noise.wav", 4, "160Hz 3rd Octave Noise", "125Hz 3rd Octave Noise", "250Hz 3rd Octave Noise" },
+                    { 105, "250Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/250Hz 3rd Octave Noise.wav", "/Music/Pink Noise/250Hz 3rd Octave Noise.wav", 4, "200Hz 3rd Octave Noise", "315Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+
+                    { 106, "315Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/315Hz 3rd Octave Noise.wav", "/Music/Pink Noise/315Hz 3rd Octave Noise.wav", 4, "250Hz 3rd Octave Noise", "400Hz 3rd Octave Noise", "200Hz 3rd Octave Noise" },
+                    { 107, "400Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/400Hz 3rd Octave Noise.wav", "/Music/Pink Noise/400Hz 3rd Octave Noise.wav", 4, "315Hz 3rd Octave Noise", "500Hz 3rd Octave Noise", "250Hz 3rd Octave Noise" },
+                    { 108, "500Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/500Hz 3rd Octave Noise.wav", 4, "400Hz 3rd Octave Noise", "630Hz 3rd Octave Noise", "315Hz 3rd Octave Noise" },
+
+                    { 109, "630Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/630Hz 3rd Octave Noise.wav", "/Music/Pink Noise/630Hz 3rd Octave Noise.wav", 4, "500Hz 3rd Octave Noise", "800Hz 3rd Octave Noise", "400Hz 3rd Octave Noise" },
+                    { 110, "800Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/800Hz 3rd Octave Noise.wav", "/Music/Pink Noise/800Hz 3rd Octave Noise.wav", 4, "630Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise", "500Hz 3rd Octave Noise" },
+                    { 111, "1000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/1000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1000Hz 3rd Octave Noise.wav", 4, "800Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise", "630Hz 3rd Octave Noise" },
+
+                    { 112, "1250Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/1250Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1250Hz 3rd Octave Noise.wav", 4, "1000Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise", "800Hz 3rd Octave Noise" },
+                    { 113, "1600Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", 4, "1250Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise" },
+                    { 114, "2000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", 4, "1600Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise" },
+
+                    { 115, "2500Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", 4, "2000Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise" },
+                    { 116, "3150Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", 4, "2500Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise" },
+                    { 117, "4000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", 4, "3150Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise" },
+
+                    { 118, "5000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", 4, "4000Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise" },
+                    { 119, "6300Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", 4, "5000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise" },
+                    { 120, "8000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", 4, "6300Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise" },
+
+                    { 121, "10000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", 4, "8000Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise", "12500Hz 3rd Octave Noise" },
+                    { 122, "12500Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise", "16000Hz 3rd Octave Noise" },
+                    { 123, "16000Hz 3rd Octave Noise", 1, "Identify the correct frequency.", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", 4, "12500Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise" },
+
+                    { 124, "80Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/80Hz 3rd Octave Noise.wav", "/Music/Pink Noise/80Hz 3rd Octave Noise.wav", 4, "100Hz 3rd Octave Noise", "125Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+                    { 125, "100Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/100Hz 3rd Octave Noise.wav", "/Music/Pink Noise/100Hz 3rd Octave Noise.wav", 4, "80Hz 3rd Octave Noise", "125Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+                    { 126, "125Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/125Hz 3rd Octave Noise.wav", "/Music/Pink Noise/125Hz 3rd Octave Noise.wav", 4, "100Hz 3rd Octave Noise", "80Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+
+                    { 127, "160Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/160Hz 3rd Octave Noise.wav", "/Music/Pink Noise/160Hz 3rd Octave Noise.wav", 4, "125Hz 3rd Octave Noise", "100Hz 3rd Octave Noise", "200Hz 3rd Octave Noise" },
+                    { 128, "200Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/200Hz 3rd Octave Noise.wav", "/Music/Pink Noise/200Hz 3rd Octave Noise.wav", 4, "160Hz 3rd Octave Noise", "250Hz 3rd Octave Noise", "125Hz 3rd Octave Noise" },
+                    { 129, "250Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/250Hz 3rd Octave Noise.wav", "/Music/Pink Noise/250Hz 3rd Octave Noise.wav", 4, "200Hz 3rd Octave Noise", "160Hz 3rd Octave Noise", "315Hz 3rd Octave Noise" },
+
+                    { 130, "315Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/315Hz 3rd Octave Noise.wav", "/Music/Pink Noise/315Hz 3rd Octave Noise.wav", 4, "250Hz 3rd Octave Noise", "200Hz 3rd Octave Noise", "400Hz 3rd Octave Noise" },
+                    { 131, "400Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/400Hz 3rd Octave Noise.wav", "/Music/Pink Noise/400Hz 3rd Octave Noise.wav", 4, "315Hz 3rd Octave Noise", "250Hz 3rd Octave Noise", "500Hz 3rd Octave Noise" },
+                    { 132, "500Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/500Hz 3rd Octave Noise.wav", 4, "400Hz 3rd Octave Noise", "315Hz 3rd Octave Noise", "630Hz 3rd Octave Noise" },
+
+                    { 133, "630Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/630Hz 3rd Octave Noise.wav", "/Music/Pink Noise/630Hz 3rd Octave Noise.wav", 4, "500Hz 3rd Octave Noise", "400Hz 3rd Octave Noise", "800Hz 3rd Octave Noise" },
+                    { 134, "800Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/800Hz 3rd Octave Noise.wav", "/Music/Pink Noise/800Hz 3rd Octave Noise.wav", 4, "630Hz 3rd Octave Noise", "500Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise" },
+                    { 135, "1000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/1000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1000Hz 3rd Octave Noise.wav", 4, "800Hz 3rd Octave Noise", "630Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise" },
+
+                    { 136, "1250Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/1250Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1250Hz 3rd Octave Noise.wav", 4, "1000Hz 3rd Octave Noise", "800Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise" },
+                    { 137, "1600Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", 4, "1250Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise" },
+                    { 138, "2000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", 4, "1600Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise" },
+
+                    { 139, "2500Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", 4, "2000Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise" },
+                    { 140, "3150Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", 4, "2500Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise" },
+                    { 141, "4000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", 4, "3150Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise" },
+
+                    { 142, "5000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", 4, "4000Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise" },
+                    { 143, "6300Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", 4, "5000Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise" },
+                    { 144, "8000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", 4, "6300Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise" },
+
+                    { 145, "10000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", 4, "8000Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise", "12500Hz 3rd Octave Noise" },
+                    { 146, "12500Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise", "16000Hz 3rd Octave Noise" },
+                    { 147, "16000Hz 3rd Octave Noise", 2, "Identify the correct frequency.", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", 4, "12500Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise" },
+
+                    { 148, "80Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/80Hz 3rd Octave Noise.wav", "", 4, "100Hz 3rd Octave Noise", "125Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+                    { 149, "100Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/100Hz 3rd Octave Noise.wav", "", 4, "80Hz 3rd Octave Noise", "125Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+                    { 150, "125Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/125Hz 3rd Octave Noise.wav", "", 4, "100Hz 3rd Octave Noise", "80Hz 3rd Octave Noise", "160Hz 3rd Octave Noise" },
+
+                    { 151, "160Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/160Hz 3rd Octave Noise.wav", "", 4, "125Hz 3rd Octave Noise", "100Hz 3rd Octave Noise", "200Hz 3rd Octave Noise" },
+                    { 152, "200Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/200Hz 3rd Octave Noise.wav", "", 4, "160Hz 3rd Octave Noise", "250Hz 3rd Octave Noise", "125Hz 3rd Octave Noise" },
+                    { 153, "250Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/250Hz 3rd Octave Noise.wav", "", 4, "200Hz 3rd Octave Noise", "160Hz 3rd Octave Noise", "315Hz 3rd Octave Noise" },
+
+                    { 154, "315Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/315Hz 3rd Octave Noise.wav", "", 4, "250Hz 3rd Octave Noise", "200Hz 3rd Octave Noise", "400Hz 3rd Octave Noise" },
+                    { 155, "400Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/400Hz 3rd Octave Noise.wav", "", 4, "315Hz 3rd Octave Noise", "250Hz 3rd Octave Noise", "500Hz 3rd Octave Noise" },
+                    { 156, "500Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/500Hz 3rd Octave Noise.wav", "", 4, "400Hz 3rd Octave Noise", "315Hz 3rd Octave Noise", "630Hz 3rd Octave Noise" },
+
+                    { 157, "630Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/630Hz 3rd Octave Noise.wav", "", 4, "500Hz 3rd Octave Noise", "400Hz 3rd Octave Noise", "800Hz 3rd Octave Noise" },
+                    { 158, "800Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/800Hz 3rd Octave Noise.wav", "", 4, "630Hz 3rd Octave Noise", "500Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise" },
+                    { 159, "1000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/1000Hz 3rd Octave Noise.wav", "", 4, "800Hz 3rd Octave Noise", "630Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise" },
+
+                    { 160, "1250Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/1250Hz 3rd Octave Noise.wav", "", 4, "1000Hz 3rd Octave Noise", "800Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise" },
+                    { 161, "1600Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", "/Music/Pink Noise/1600Hz 3rd Octave Noise.wav", 4, "1250Hz 3rd Octave Noise", "1000Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise" },
+                    { 162, "2000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", 4, "1600Hz 3rd Octave Noise", "1250Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise" },
+
+                    { 163, "2500Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2500Hz 3rd Octave Noise.wav", 4, "2000Hz 3rd Octave Noise", "1600Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise" },
+                    { 164, "3150Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", 4, "2500Hz 3rd Octave Noise", "2000Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise" },
+                    { 165, "4000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/4000Hz 3rd Octave Noise.wav", 4, "3150Hz 3rd Octave Noise", "2500Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise" },
+
+                    { 166, "5000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", 4, "4000Hz 3rd Octave Noise", "3150Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise" },
+                    { 167, "6300Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", 4, "5000Hz 3rd Octave Noise", "4000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise" },
+                    { 168, "8000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", 4, "6300Hz 3rd Octave Noise", "5000Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise" },
+
+                    { 169, "10000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", 4, "8000Hz 3rd Octave Noise", "6300Hz 3rd Octave Noise", "12500Hz 3rd Octave Noise" },
+                    { 170, "12500Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise", "16000Hz 3rd Octave Noise" },
+                    { 171, "16000Hz 3rd Octave Noise", 3, "Identify the correct frequency.", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", 4, "12500Hz 3rd Octave Noise", "10000Hz 3rd Octave Noise", "8000Hz 3rd Octave Noise" },
+
+                    { 172, "Minus 1kHz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 1kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+                    { 173, "Minus 2kHz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 2kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 1kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+                    { 174, "Minus 4kHz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 4kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 1kHz Octave", "Minus 8kHz Octave" },
+
+                    { 175, "Minus 8kHz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 8kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 4kHz Octave", "Minus 2kHz Octave", "Minus 1kHz Octave" },
+                    { 176, "Minus 125Hz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 125Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+                    { 177, "Minus 250Hz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 250Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 125Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+
+                    { 178, "Minus 500Hz Octave", 1, "Identify the correct frequency.", "/Music/Pink Noise/Minus 500Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 125Hz Octave", "Minus 1kHz Octave" },
+                    { 179, "Minus 1kHz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 1kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+                    { 180, "Minus 2kHz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 2kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 1kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+
+                    { 181, "Minus 4kHz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 4kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 1kHz Octave", "Minus 8kHz Octave" },
+                    { 182, "Minus 8kHz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 8kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 4kHz Octave", "Minus 2kHz Octave", "Minus 1kHz Octave" },
+                    { 183, "Minus 125Hz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 125Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+
+                    { 184, "Minus 250Hz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 250Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 125Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+                    { 185, "Minus 500Hz Octave", 2, "Identify the correct frequency.", "/Music/Pink Noise/Minus 500Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 125Hz Octave", "Minus 1kHz Octave" },
+                    { 186, "Minus 1kHz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 1kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+
+                    { 187, "Minus 2kHz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 2kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 1kHz Octave", "Minus 4kHz Octave", "Minus 8kHz Octave" },
+                    { 188, "Minus 4kHz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 4kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 2kHz Octave", "Minus 1kHz Octave", "Minus 8kHz Octave" },
+                    { 189, "Minus 8kHz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 8kHz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 4kHz Octave", "Minus 2kHz Octave", "Minus 1kHz Octave" },
+
+                    { 190, "Minus 125Hz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 125Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+                    { 191, "Minus 250Hz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 250Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 125Hz Octave", "Minus 500Hz Octave", "Minus 1kHz Octave" },
+                    { 192, "Minus 500Hz Octave", 3, "Identify the correct frequency.", "/Music/Pink Noise/Minus 500Hz Octave.wav", "/Music/Pink Noise/Minus Reference.wav", 4, "Minus 250Hz Octave", "Minus 125Hz Octave", "Minus 1kHz Octave" }
+
+        });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
