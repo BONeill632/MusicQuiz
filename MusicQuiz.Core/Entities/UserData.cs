@@ -21,5 +21,10 @@ namespace MusicQuiz.Core.Entities
         /// Student ID
         /// </summary>
         public required string StudentID { get; set; }
+
+        /// <summary>
+        /// Created for ease of seeding. The ID field which is a hashed string changed every seed
+        /// </summary>
+        public int IntID { get; set; }
     }
 }

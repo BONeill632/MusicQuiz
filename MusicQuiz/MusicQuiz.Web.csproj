@@ -8,18 +8,34 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="wwwroot\Music\Guitar\**" />
+	  <Compile Remove="wwwroot\Music\Harp\**" />
+	  <Compile Remove="wwwroot\Music\Miramba\**" />
+	  <Compile Remove="wwwroot\Music\Piano\**" />
 	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
 	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
 	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
 	  <Compile Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <Content Remove="wwwroot\Music\Guitar\**" />
+	  <Content Remove="wwwroot\Music\Harp\**" />
+	  <Content Remove="wwwroot\Music\Miramba\**" />
+	  <Content Remove="wwwroot\Music\Piano\**" />
 	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
 	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
 	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
 	  <Content Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Guitar\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Harp\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Miramba\**" />
+	  <EmbeddedResource Remove="wwwroot\Music\Piano\**" />
 	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
 	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
 	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
 	  <EmbeddedResource Remove="wwwroot\Music\Pink Noise\Pink Noise 5\**" />
+	  <None Remove="wwwroot\Music\Guitar\**" />
+	  <None Remove="wwwroot\Music\Harp\**" />
+	  <None Remove="wwwroot\Music\Miramba\**" />
+	  <None Remove="wwwroot\Music\Piano\**" />
 	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 2\**" />
 	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 3\**" />
 	  <None Remove="wwwroot\Music\Pink Noise\Pink Noise 4\**" />
@@ -27,7 +43,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="wwwroot\Music\Cornet A.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 1\Ensemble 2 Minus 125Hz Octave.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 1\Ensemble 2 Minus 1kHz Octave.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 1\Ensemble 2 Minus 250Hz Octave.wav" />
@@ -82,56 +97,6 @@
 		<None Include="wwwroot\Music\Ensembles\Ensemble 9\Ensemble3_LPF_4kHz.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 9\Ensemble3_LPF_8kHz.wav" />
 		<None Include="wwwroot\Music\Ensembles\Ensemble 9\Ensemble3_Reference.wav" />
-		<None Include="wwwroot\Music\Flute A.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar A2 110Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar A3 220Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar A4 440Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar A5 880Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar C3 131Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar C4 262Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar E3 165Hz.wav" />
-		<None Include="wwwroot\Music\Guitar\Guitar E4 330Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_A2_110Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_A3_220Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_A4_440Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_A5_880Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_C3_131Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_C4_262Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_C5_523Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_C6_1.05kHz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_E3_165Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_E4_330Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_E5_659Hz.wav" />
-		<None Include="wwwroot\Music\Harp\Harp_E6_1.32kHz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_A2_110Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_A3_220Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_A4_440Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_A5_880Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_A6_1.76kHz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_C3_131Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_C4_262Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_C5_523Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_C6_1.05kHz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_C7_2.1kHz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_E3_165Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_E4_330Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_E5_659Hz.wav" />
-		<None Include="wwwroot\Music\Miramba\Marimba_E6_1.32kHz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A1_55Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A2_110Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A3_220Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A4_440Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A5_880Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A6_1760Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_A7_3520Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_C3_131Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_C4_262Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_C5_523Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_C6_1.05kHz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_E3_165Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_E4_330Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_E5_659Hz.wav" />
-		<None Include="wwwroot\Music\Piano\Piano_E6_1.32kHz.wav" />
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\100Hz_Octave_Noise.wav" />
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\1600Hz_Octave_Noise.wav" />
 		<None Include="wwwroot\Music\Pink Noise\Pink Noise 1\200Hz_Octave_Noise.wav" />
@@ -164,8 +129,6 @@
 		<None Include="wwwroot\Music\SineWave\800Hz.wav" />
 		<None Include="wwwroot\Music\SineWave\80Hz.wav" />
 		<None Include="wwwroot\Music\SineWave\8kHz.wav" />
-		<None Include="wwwroot\Music\Soprano Sax A.wav" />
-		<None Include="wwwroot\Music\Violin A.wav" />
 	</ItemGroup>
 
 	<ItemGroup>

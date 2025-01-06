@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Core.Entities;
-using System.Collections.Generic;
+using MusicQuiz.Core.Migrations;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 {
@@ -19,18 +17,21 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         private readonly IUserStore<UserData> _userStore;
         private readonly IUserEmailStore<UserData> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly ApplicationDbContext _context; // Inject your DB context
 
         public RegisterModel(
             UserManager<UserData> userManager,
             IUserStore<UserData> userStore,
             SignInManager<UserData> signInManager,
-            ILogger<RegisterModel> logger)
+            ILogger<RegisterModel> logger,
+            ApplicationDbContext context) // Inject your DB context
         {
             _userManager = userManager;
             _userStore = userStore;
-            _emailStore = (IUserEmailStore<UserData>)GetEmailStore();
+            _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _context = context; // Initialize the context
         }
 
         [BindProperty]
@@ -88,10 +89,25 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                // Set the Forename and Surname properties
+                // Set the Forename, Surname, and UserID
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.StudentID = Input.StudentID;
+
+                // Increment the UserID
+                var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
+                if (lastUserID == null)
+                {
+                    lastUserID = new LastAssignedUserID { LastUserID = 2 }; // Starting ID
+                    _context.LastAssignedUserID.Add(lastUserID);
+                }
+
+                // Set the new UserID and update the LastAssignedUserID
+                user.IntID = (lastUserID.LastUserID + 1);
+                lastUserID.LastUserID += 1;
+
+                // Save the updated student ID
+                await _context.SaveChangesAsync();
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -112,6 +128,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -131,8 +148,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             catch
             {
                 throw new InvalidOperationException($"Can't create an instance of '{nameof(UserData)}'. " +
-                    $"Ensure that '{nameof(UserData)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                    $"Ensure that '{nameof(UserData)}' is not an abstract class and has a parameterless constructor.");
             }
         }
 

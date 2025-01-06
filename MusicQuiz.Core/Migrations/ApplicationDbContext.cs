@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MusicQuiz.Core.Data;
 using MusicQuiz.Core.Entities;
-using MusicQuiz.Infrastructure.Data;
 
 namespace MusicQuiz.Core.Migrations
 {
@@ -10,6 +10,8 @@ namespace MusicQuiz.Core.Migrations
     {
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
         public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; } = null!;
+
+        public DbSet<LastAssignedUserID> LastAssignedUserID { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -76,7 +78,7 @@ namespace MusicQuiz.Core.Migrations
             });
 
             // Call the seed data configuration
-            QuizQuestionEasySineSeedData.Seed(builder);
+            QuizQuestionSeedData.Seed(builder);
         }
     }
 }

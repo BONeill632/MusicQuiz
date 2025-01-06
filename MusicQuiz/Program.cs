@@ -4,7 +4,8 @@ using MusicQuiz.Application.Services;
 using Microsoft.Build.Locator;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Application.Interfaces;
-using MusicQuiz.Core.Entities; // Add this using directive
+using MusicQuiz.Core.Entities;
+using MusicQuiz.Core.Data;
 
 // Register MSBuild instance, needed for scaffolding the Identity pages
 var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
@@ -95,8 +96,12 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// Initialize roles
+// Initialize roles and seed data
 await InitializeRoles(app.Services);
+
+
+await SeedData(app.Services);
+await SeedAccountData(app.Services);
 
 app.Run();
 
@@ -114,4 +119,28 @@ static async Task InitializeRoles(IServiceProvider serviceProvider)
             await roleManager.CreateAsync(new IdentityRole(roleName));
         }
     }
+}
+
+// Method to seed Question data
+static async Task SeedData(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (!dbContext.QuizQuestions.Any())
+    {
+        var seedData = QuizQuestionSeedData.GenerateSeedData();
+        await dbContext.QuizQuestions.AddRangeAsync(seedData);
+        await dbContext.SaveChangesAsync();
+    }
+}
+
+/// Method to seed Question data
+static async Task SeedAccountData(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserData>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await AccountSeedData.SeedUserData(userManager, roleManager); // Call the seed method here
 }
