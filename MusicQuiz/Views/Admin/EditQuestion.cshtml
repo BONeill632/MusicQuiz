@@ -1,0 +1,89 @@
+﻿@model MusicQuiz.Web.Models.Quiz.QuestionViewModel
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<h1>Edit Question</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <input type="hidden" id="successMessage" value="@TempData["SuccessMessage"]" />
+}
+
+<form id="editQuestionForm" asp-action="EditQuestion" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="QuestionID" />
+
+    <div class="form-group">
+        <label for="SelectedTopic">Topic</label>
+        <select asp-for="SelectedTopic" class="form-control" asp-items="@(new SelectList(Enum.GetValues(typeof(MusicQuiz.Core.Enums.Topic))))">
+            <option value="">Select a topic</option>
+        </select>
+        <span asp-validation-for="SelectedTopic" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="SelectedDifficulty">Difficulty</label>
+        <select asp-for="SelectedDifficulty" class="form-control" asp-items="@(new SelectList(Enum.GetValues(typeof(MusicQuiz.Core.Enums.DifficultyLevel))))">
+            <option value="">Select a difficulty</option>
+        </select>
+        <span asp-validation-for="SelectedDifficulty" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Question"></label>
+        <input asp-for="Question" class="form-control" placeholder="Question" />
+        <span asp-validation-for="Question" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MusicQuestionFilePath"></label>
+        <input asp-for="MusicQuestionFilePath" class="form-control" placeholder="Music Path" />
+        <span asp-validation-for="MusicQuestionFilePath" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MusicReferenceFilePath"></label>
+        <input asp-for="MusicReferenceFilePath" class="form-control" placeholder="Reference Path" />
+        <span asp-validation-for="MusicReferenceFilePath" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Options.CorrectAnswer">Correct Answer</label>
+        <input asp-for="Options.CorrectAnswer" class="form-control" placeholder="Correct Answer" />
+        <span asp-validation-for="Options.CorrectAnswer" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerOne">Wrong Answer One</label>
+        <input asp-for="Options.WrongAnswerOne" class="form-control" placeholder="Wrong Answer One" />
+        <span asp-validation-for="Options.WrongAnswerOne" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerTwo">Wrong Answer Two</label>
+        <input asp-for="Options.WrongAnswerTwo" class="form-control" placeholder="Wrong Answer Two" />
+        <span asp-validation-for="Options.WrongAnswerTwo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerThree">Wrong Answer Three</label>
+        <input asp-for="Options.WrongAnswerThree" class="form-control" placeholder="Wrong Answer Three" />
+        <span asp-validation-for="Options.WrongAnswerThree" class="text-danger"></span>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <button type="submit" class="btn btn-danger btn-lg w-100">Edit</button>
+        </div>
+        <div class="col-md-10">
+            <a href="/" class="btn btn-light btn-lg w-100">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/EditQuestionPopUp.js"></script>
+}
+

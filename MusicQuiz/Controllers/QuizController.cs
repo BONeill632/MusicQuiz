@@ -5,6 +5,8 @@ using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Enums;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models;
+using MusicQuiz.Web.Models.Home;
+using MusicQuiz.Web.Models.Quiz;
 using System.Text.Json;
 
 namespace MusicQuiz.Web.Controllers
@@ -132,7 +134,7 @@ namespace MusicQuiz.Web.Controllers
                     MusicQuestionFilePath = q.QuestionMusicFilePath,
                     MusicReferenceFilePath = q.ReferenceMusicFilePath,
                     MusicReferenceName = Path.GetFileNameWithoutExtension(q.ReferenceMusicFilePath),
-                    Options = options,
+                    OptionsForQuiz = options,
                     CorrectAnswer = q.CorrectAnswer,
                 };
             }).ToList();
@@ -316,11 +318,16 @@ namespace MusicQuiz.Web.Controllers
 
             var userID = GetUserIdAsync().Result;
 
-            resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)questions.FirstOrDefault().SelectedDifficulty, (int)questions.FirstOrDefault().SelectedTopic, userID);
+            if (questions.Count != 0)
+            {
+                var firstQuestion = questions.First();
+                resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)firstQuestion.SelectedDifficulty, (int)firstQuestion.SelectedTopic, userID);
+            }
 
             ClearQuizSession();
 
             return View(model);
         }
+
     }
 }

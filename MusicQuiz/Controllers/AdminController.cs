@@ -3,36 +3,33 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Core.Entities;
-using MusicQuiz.Web.Models;
+using MusicQuiz.Core.Enums;
+using MusicQuiz.Core.Migrations;
+using MusicQuiz.Web.Models.Admin;
+using MusicQuiz.Web.Models.Quiz;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using QuestionViewModel = MusicQuiz.Web.Models.Quiz.QuestionViewModel;
 
 namespace MusicQuiz.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController : BaseController
+    public class AdminController(UserManager<UserData> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context) : BaseController
     {
-        private readonly UserManager<UserData> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        public AdminController(UserManager<UserData> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
 
         public async Task<IActionResult> UserList()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await userManager.Users.ToListAsync();
             var userListViewModel = users.Select(user => new UserListViewModel
             {
-                UserName = user.UserName,
-                UserId = user.Id,
-                Email = user.Email
+                UserName = user.UserName ?? "Unknown",
+                UserId = user.Id ?? "Unknown",
+                Email = user.Email ?? "Unknown"
             }).ToList();
 
             return View(userListViewModel);
@@ -40,7 +37,7 @@ namespace MusicQuiz.Web.Controllers
 
         public async Task<IActionResult> Manage(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -49,14 +46,14 @@ namespace MusicQuiz.Web.Controllers
 
             var model = new ManageUserRolesViewModel
             {
-                UserId = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                StudentID = user.StudentID,
-                Roles = await _roleManager.Roles.ToListAsync(),
-                UserRoles = await _userManager.GetRolesAsync(user),
-                SelectedRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "User"
+                UserId = user.Id ?? "Unknown",
+                Email = user.Email ?? "Unknown",
+                FirstName = user.FirstName ?? "Unknown",
+                LastName = user.LastName ?? "Unknown",
+                StudentID = user.StudentID ?? "Unknown",
+                Roles = await roleManager.Roles.ToListAsync(),
+                UserRoles = await userManager.GetRolesAsync(user),
+                SelectedRole = (await userManager.GetRolesAsync(user)).FirstOrDefault() ?? "User"
             };
 
             return View(model);
@@ -65,19 +62,19 @@ namespace MusicQuiz.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Manage(ManageUserRolesViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await userManager.FindByIdAsync(model.UserId);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await userManager.GetRolesAsync(user);
             var selectedRole = model.SelectedRole;
 
             if (!userRoles.Contains(selectedRole))
             {
-                var result = await _userManager.AddToRoleAsync(user, selectedRole);
+                var result = await userManager.AddToRoleAsync(user, selectedRole);
 
                 if (!result.Succeeded)
                 {
@@ -85,7 +82,7 @@ namespace MusicQuiz.Web.Controllers
                     return View(model);
                 }
 
-                result = await _userManager.RemoveFromRolesAsync(user, userRoles.Except(new[] { selectedRole }));
+                result = await userManager.RemoveFromRolesAsync(user, userRoles.Except([selectedRole]));
 
                 if (!result.Succeeded)
                 {
@@ -96,5 +93,277 @@ namespace MusicQuiz.Web.Controllers
 
             return RedirectToAction("UserList");
         }
+
+
+        //public IActionResult ViewQuestions()
+        //{
+        //    var model = new QuestionSearchViewModel
+        //    {
+        //        Topics = GetTopics(),
+        //        Difficulties = GetDifficulties()
+        //    };
+
+        //    return View(model);
+        //}
+
+        [HttpGet]
+        public async Task<IActionResult> ViewQuestions(int pageNumber = 1, int pageSize = 20, Topic? selectedTopic = null, DifficultyLevel? selectedDifficulty = null)
+        {
+            var model = new QuestionSearchViewModel
+            {
+                SelectedTopic = selectedTopic,
+                SelectedDifficulty = selectedDifficulty,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Topics = GetTopics(),
+                Difficulties = GetDifficulties()
+            };
+
+            if (selectedTopic.HasValue && selectedDifficulty.HasValue)
+            {
+                var topic = (int?)model.SelectedTopic ?? default;
+                var difficulty = (int?)model.SelectedDifficulty ?? default;
+
+                var (questions, totalQuestions) = await SearchQuestionsAsync(topic, difficulty, model.PageNumber, model.PageSize);
+                model.Questions = questions;
+                model.TotalQuestions = totalQuestions;
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ViewQuestions(QuestionSearchViewModel model, int pageNumber = 1)
+        {
+            model.PageNumber = pageNumber;
+            var topic = (int?)model.SelectedTopic ?? default;
+            var difficulty = (int?)model.SelectedDifficulty ?? default;
+
+            var (questions, totalQuestions) = await SearchQuestionsAsync(topic, difficulty, model.PageNumber, model.PageSize);
+            model.Questions = questions;
+            model.TotalQuestions = totalQuestions;
+
+            model.Topics = GetTopics();
+            model.Difficulties = GetDifficulties();
+
+            return View(model);
+        }
+
+
+        private async Task<(List<QuestionViewModel> Questions, int TotalQuestions)> SearchQuestionsAsync(int topic, int difficulty, int pageNumber, int pageSize)
+        {
+            var query = context.QuizQuestions
+                .Where(q => q.TopicId == topic && q.DifficultyId == difficulty);
+
+            var totalQuestions = await query.CountAsync();
+
+            var questions = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(q => new QuestionViewModel
+                {
+                    QuestionID = q.Id,
+                    SelectedTopic = (Topic)q.TopicId,
+                    SelectedDifficulty = (DifficultyLevel)q.DifficultyId,
+                    Question = q.Question,
+                    MusicQuestionFilePath = q.QuestionMusicFilePath,
+                    MusicReferenceFilePath = q.ReferenceMusicFilePath,
+                    MusicReferenceName = q.ReferenceMusicFilePath,
+                    OptionsForQuiz = new List<string> { q.CorrectAnswer, q.WrongAnswerOne, q.WrongAnswerTwo, q.WrongAnswerThree },
+                    CorrectAnswer = q.CorrectAnswer,
+                })
+                .ToListAsync();
+
+            return (questions, totalQuestions);
+        }
+
+        private static List<string> GetTopics()
+        {
+            return Enum.GetValues(typeof(Topic))
+                       .Cast<Topic>()
+                       .Select(t => t.ToString())
+                       .ToList();
+        }
+
+        private static List<string> GetDifficulties()
+        {
+            return Enum.GetValues(typeof(DifficultyLevel))
+                       .Cast<DifficultyLevel>()
+                       .Select(d => d.ToString())
+                       .ToList();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditQuestion(int id)
+        {
+            var question = await context.QuizQuestions.FindAsync(id);
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            var model = new QuestionViewModel
+            {
+                QuestionID = question.Id,
+                SelectedTopic = (Topic)question.TopicId,
+                SelectedDifficulty = (DifficultyLevel)question.DifficultyId,
+                Question = question.Question,
+                MusicQuestionFilePath = question.QuestionMusicFilePath,
+                MusicReferenceFilePath = question.ReferenceMusicFilePath,
+                Options = new QuizSelectableAnswers
+                {
+                    CorrectAnswer = question.CorrectAnswer,
+                    WrongAnswerOne = question.WrongAnswerOne,
+                    WrongAnswerTwo = question.WrongAnswerTwo,
+                    WrongAnswerThree = question.WrongAnswerThree
+                },
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditQuestion(QuestionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var question = await context.QuizQuestions.FindAsync(model.QuestionID);
+                if (question == null)
+                {
+                    return NotFound();
+                }
+
+                question.TopicId = (int)model.SelectedTopic;
+                question.DifficultyId = (int)model.SelectedDifficulty;
+                question.Question = model.Question;
+                question.QuestionMusicFilePath = model.MusicQuestionFilePath;
+                question.ReferenceMusicFilePath = model.MusicReferenceFilePath;
+                question.CorrectAnswer = model.Options.CorrectAnswer;
+                question.WrongAnswerOne = model.Options.WrongAnswerOne;
+                question.WrongAnswerTwo = model.Options.WrongAnswerTwo;
+                question.WrongAnswerThree = model.Options.WrongAnswerThree;
+
+                context.QuizQuestions.Update(question);
+                await context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Question edited successfully";
+                return RedirectToAction("EditQuestion", new { id = model.QuestionID });
+            }
+
+            return View(model);
+        }
+
+
+
+
+        [HttpGet]
+        public IActionResult GetMusicFiles()
+        {
+            var musicFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Music");
+            var musicFiles = Directory.GetFiles(musicFolder, "*.*", SearchOption.AllDirectories)
+                                      .Select(f => "/Music/" + f[(musicFolder.Length + 1)..])
+                                      .ToList();
+
+            return Json(musicFiles);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadMusicFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file selected");
+            }
+
+            var musicFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Music");
+            var filePath = Path.Combine(musicFolder, file.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return Ok(new { filePath = "/Music/" + file.FileName });
+        }
+
+        /// <summary>
+        /// Delete question from Admin page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> DeleteQuestion(int id)
+        {
+            var question = await context.QuizQuestions.FindAsync(id);
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            context.QuizQuestions.Remove(question);
+            await context.SaveChangesAsync();
+
+
+            TempData["SuccessMessage"] = "Question deleted successfully";
+            return RedirectToAction("ViewQuestions");
+        }
+
+        /// <summary>
+        /// Accessing the add question page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult AddQuestion()
+        {
+            var model = new QuestionViewModel
+            {
+                Options = new QuizSelectableAnswers
+                {
+                    CorrectAnswer = string.Empty,
+                    WrongAnswerOne = string.Empty,
+                    WrongAnswerTwo = string.Empty,
+                    WrongAnswerThree = string.Empty
+                }
+            };
+
+            GetMusicFiles();
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// post the above add question page
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> AddQuestion(QuestionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var question = new QuizQuestion
+                {
+                    TopicId = (int)model.SelectedTopic,
+                    DifficultyId = (int)model.SelectedDifficulty,
+                    Question = model.Question,
+                    QuestionMusicFilePath = model.MusicQuestionFilePath,
+                    ReferenceMusicFilePath = model.MusicReferenceFilePath,
+                    CorrectAnswer = model.Options.CorrectAnswer,
+                    WrongAnswerOne = model.Options.WrongAnswerOne,
+                    WrongAnswerTwo = model.Options.WrongAnswerTwo,
+                    WrongAnswerThree = model.Options.WrongAnswerThree
+                };
+
+                context.QuizQuestions.Add(question);
+                await context.SaveChangesAsync();
+
+
+                TempData["SuccessMessage"] = "Question added successfully";
+                return RedirectToAction("ViewQuestions");
+            }
+
+            return View(model);
+        }
+
     }
 }

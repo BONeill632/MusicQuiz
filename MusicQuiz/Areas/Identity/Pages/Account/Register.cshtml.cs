@@ -35,50 +35,58 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel
+        {
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            StudentID = string.Empty,
+            Email = string.Empty,
+            Password = string.Empty,
+            ConfirmPassword = string.Empty
+        };
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = string.Empty;
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; } = [];
 
         public class InputModel
         {
             [Required]
             [Display(Name = "Forename")]
-            public string FirstName { get; set; }
+            public required string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Surname")]
-            public string LastName { get; set; }
+            public required string LastName { get; set; }
 
             [Required]
             [Display(Name = "Student ID")]
-            public string StudentID { get; set; }
+            public required string StudentID { get; set; }
 
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public required string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
-            public string Password { get; set; }
+            public required string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            public required string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl)
         {
-            ReturnUrl = returnUrl;
+            ReturnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string returnUrl)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -103,8 +111,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 }
 
                 // Set the new UserID and update the LastAssignedUserID
-                user.IntID = (lastUserID.LastUserID + 1);
-                lastUserID.LastUserID += 1;
+                user.IntID = lastUserID.LastUserID + 1;
 
                 // Save the updated student ID
                 await _context.SaveChangesAsync();
@@ -116,7 +123,15 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     // Assign the "User" role to the new user
-                    await _userManager.AddToRoleAsync(user, "User");
+                    var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                    if (!roleResult.Succeeded)
+                    {
+                        foreach (var error in roleResult.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                        return Page();
+                    }
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

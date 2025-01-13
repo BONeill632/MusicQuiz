@@ -177,4 +177,9 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models\Assessment\" />
+	  <Folder Include="Models\Leaderboards\" />
+	</ItemGroup>
+
 </Project>

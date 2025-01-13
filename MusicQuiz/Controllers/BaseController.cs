@@ -12,8 +12,9 @@ namespace MusicQuiz.Web.Controllers
 
             if (context.Controller is Controller controller && controller.ViewData.Model is BaseViewModel model)
             {
-                model.IsLoggedIn = User.Identity.IsAuthenticated;
-                model.UserId = User.Identity.IsAuthenticated ? User.Identity.Name : null;
+                var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+                model.IsLoggedIn = isAuthenticated;
+                model.UserId = isAuthenticated ? User?.Identity?.Name ?? string.Empty : string.Empty;
             }
         }
     }

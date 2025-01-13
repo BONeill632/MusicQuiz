@@ -1,0 +1,110 @@
+﻿@if (TempData["SuccessMessage"] != null)
+{
+    <input type="hidden" id="successMessage" value="@TempData["SuccessMessage"]" />
+}
+@model MusicQuiz.Web.Models.Quiz.QuestionViewModel
+
+@{
+    ViewData["Title"] = "Add Question";
+}
+
+<h1>Add Question</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <input type="hidden" id="successMessage" value="@TempData["SuccessMessage"]" />
+}
+
+<form id="addQuestionForm" asp-action="AddQuestion" method="post" onsubmit="handleFormSubmit(event)">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label for="SelectedTopic">Topic</label>
+        <select asp-for="SelectedTopic" class="form-control" asp-items="@(new SelectList(Enum.GetValues(typeof(MusicQuiz.Core.Enums.Topic))))">
+            <option value="">Select a topic</option>
+        </select>
+        <span asp-validation-for="SelectedTopic" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="SelectedDifficulty">Difficulty</label>
+        <select asp-for="SelectedDifficulty" class="form-control" asp-items="@(new SelectList(Enum.GetValues(typeof(MusicQuiz.Core.Enums.DifficultyLevel))))">
+            <option value="">Select a difficulty</option>
+        </select>
+        <span asp-validation-for="SelectedDifficulty" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Question"></label>
+        <input asp-for="Question" class="form-control" placeholder="Question" />
+        <span asp-validation-for="Question" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MusicQuestionFilePath">Music Path</label>
+        <select asp-for="MusicQuestionFilePath" class="form-control" id="musicQuestionFilePathDropdown">
+            <option value="">Select a music file</option>
+        </select>
+        <span asp-validation-for="MusicQuestionFilePath" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MusicReferenceFilePath">Reference Path</label>
+        <select asp-for="MusicReferenceFilePath" class="form-control" id="musicReferenceFilePathDropdown">
+            <option value="">Select a reference file</option>
+        </select>
+        <span asp-validation-for="MusicReferenceFilePath" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Options.CorrectAnswer">Correct Answer</label>
+        <input asp-for="Options.CorrectAnswer" class="form-control" placeholder="Correct Answer" />
+        <span asp-validation-for="Options.CorrectAnswer" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerOne">Wrong Answer One</label>
+        <input asp-for="Options.WrongAnswerOne" class="form-control" placeholder="Wrong Answer One" />
+        <span asp-validation-for="Options.WrongAnswerOne" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerTwo">Wrong Answer Two</label>
+        <input asp-for="Options.WrongAnswerTwo" class="form-control" placeholder="Wrong Answer Two" />
+        <span asp-validation-for="Options.WrongAnswerTwo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Options.WrongAnswerThree">Wrong Answer Three</label>
+        <input asp-for="Options.WrongAnswerThree" class="form-control" placeholder="Wrong Answer Three" />
+        <span asp-validation-for="Options.WrongAnswerThree" class="text-danger"></span>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <button type="submit" class="btn btn-danger btn-lg w-100">Save Changes</button>
+        </div>
+        <div class="col-md-10">
+            <a href="/" class="btn btn-light btn-lg w-100">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/addQuestion.js"></script>
+    <script>
+        async function loadMusicFiles() {
+            const response = await fetch('/Admin/GetMusicFiles');
+            const musicFiles = await response.json();
+
+            const musicQuestionFilePathDropdown = document.getElementById('musicQuestionFilePathDropdown');
+            const musicReferenceFilePathDropdown = document.getElementById('musicReferenceFilePathDropdown');
+            musicQuestionFilePathDropdown.innerHTML = '<option value="">Select a music file</option>';
+            musicReferenceFilePathDropdown.innerHTML = '<option value="">Select a reference file</option>';
+            musicFiles.forEach(file => {
+                const option = document.createElement('option');
+                option.value = file;
+                option.textContent = file;
+                musicQuestionFilePathDropdown.appendChild(option);
+                musicReferenceFilePathDropdown.appendChild(option.cloneNode(true));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMusicFiles);
+    </script>
+}
+

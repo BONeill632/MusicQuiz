@@ -1,0 +1,98 @@
+﻿@model MusicQuiz.Web.Models.Admin.QuestionSearchViewModel
+
+@{
+    ViewData["Title"] = "View Questions";
+}
+
+<h1>View Questions</h1>
+
+<a asp-action="AddQuestion" class="btn btn-success">Add Question</a>
+
+<form asp-action="ViewQuestions" method="post">
+    <div class="form-group">
+        <label for="SelectedTopic">Topic</label>
+        <select asp-for="SelectedTopic" class="form-control" asp-items="@(new SelectList(Model.Topics))">
+            <option value="">Select a topic</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="SelectedDifficulty">Difficulty</label>
+        <select asp-for="SelectedDifficulty" class="form-control" asp-items="@(new SelectList(Model.Difficulties))">
+            <option value="">Select a difficulty</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (Model.Questions != null && Model.Questions.Any())
+{
+    <h3>Topic: @Model.SelectedTopic,  Difficulty: @Model.SelectedDifficulty</h3>
+
+    <form asp-action="ViewQuestions" method="post">
+
+        <div class="d-flex justify-content-center">
+            <div class="pagination">
+                @if (Model.PageNumber > 1)
+                {
+                    <a asp-action="ViewQuestions" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-pageSize="@Model.PageSize" asp-route-selectedTopic="@Model.SelectedTopic" asp-route-selectedDifficulty="@Model.SelectedDifficulty" class="me-2">Previous</a>
+                }
+                <span class="mx-2">Page @Model.PageNumber of @((Model.TotalQuestions + Model.PageSize - 1) / Model.PageSize)</span>
+                @if (Model.PageNumber < (Model.TotalQuestions + Model.PageSize - 1) / Model.PageSize)
+                {
+                    <a asp-action="ViewQuestions" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize" asp-route-selectedTopic="@Model.SelectedTopic" asp-route-selectedDifficulty="@Model.SelectedDifficulty" class="ms-2">Next</a>
+                }
+            </div>
+        </div>
+        <input type="hidden" asp-for="SelectedTopic" />
+        <input type="hidden" asp-for="SelectedDifficulty" />
+        <input type="hidden" asp-for="PageSize" />
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Question File Path</th>
+                    <th>Reference File Path</th>
+                    <th>Options</th>
+                    <th>Correct Answer</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in Model.Questions)
+                {
+                    <tr>
+                        <td>@question.Question</td>
+                        <td>@question.MusicQuestionFilePath</td>
+                        <td>@question.MusicReferenceFilePath</td>
+                        <td>@string.Join(", ", question.OptionsForQuiz)</td>
+                        <td>@question.CorrectAnswer</td>
+                        <td>
+                            <a asp-action="EditQuestion" asp-route-id="@question.QuestionID">Edit</a> /
+                            <a href="javascript:void(0);" onclick="confirmDelete(@question.QuestionID)">Delete</a>
+                            <form id="deleteForm-@question.QuestionID" asp-action="DeleteQuestion" asp-route-id="@question.QuestionID" method="post" style="display:none;"></form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <div class="pagination">
+                @if (Model.PageNumber > 1)
+                {
+                    <a asp-action="ViewQuestions" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-pageSize="@Model.PageSize" asp-route-selectedTopic="@Model.SelectedTopic" asp-route-selectedDifficulty="@Model.SelectedDifficulty" class="me-2">Previous</a>
+                }
+                <span class="mx-2">Page @Model.PageNumber of @((Model.TotalQuestions + Model.PageSize - 1) / Model.PageSize)</span>
+                @if (Model.PageNumber < (Model.TotalQuestions + Model.PageSize - 1) / Model.PageSize)
+                {
+                    <a asp-action="ViewQuestions" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize" asp-route-selectedTopic="@Model.SelectedTopic" asp-route-selectedDifficulty="@Model.SelectedDifficulty" class="ms-2">Next</a>
+                }
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    <script src="~/js/DeleteQuestionPopUp.js"></script>
+}
+

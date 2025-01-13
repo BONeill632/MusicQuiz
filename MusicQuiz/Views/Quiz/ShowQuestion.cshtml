@@ -1,4 +1,4 @@
-﻿@model MusicQuiz.Web.Models.QuestionViewModel
+﻿@model MusicQuiz.Web.Models.Quiz.QuestionViewModel
 @{
     ViewData["Title"] = "Quiz";
     var currentQuestionIndex = ViewBag.CurrentQuestionIndex as int? ?? 0;
@@ -26,7 +26,9 @@
     <div>
         <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
         <audio controls>
-            <source src="@Model.MusicReferenceFilePath" type="audio/wav">
+            <source src="@Model.MusicReferenceFilePath" type="audio/*">
+            <source src="@Model.MusicReferenceFilePath" type="audio/mpeg">
+            <source src="@Model.MusicReferenceFilePath" type="audio/ogg">
             Your browser does not support the audio element.
         </audio>
     </div>
@@ -34,14 +36,17 @@
 
 <div>
     <audio controls>
-        <source src="@Model.MusicQuestionFilePath" type="audio/wav">
+        <source src="@Model.MusicQuestionFilePath" type="audio/*">
+        <source src="@Model.MusicQuestionFilePath" type="audio/mpeg">
+        <source src="@Model.MusicQuestionFilePath" type="audio/ogg">
         Your browser does not support the audio element.
     </audio>
 </div>
 
+
 <form method="post" action="/Quiz/NextQuestion">
     <div>
-        @foreach (var option in Model.Options)
+        @foreach (var option in Model.OptionsForQuiz)
         {
             <div class="option">
                 <input type="radio" id="@option" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "")>

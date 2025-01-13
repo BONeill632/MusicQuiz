@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Manage Music Files";
+}
+
+<h1>Manage Music Files</h1>
+
+<h3>Upload Music File</h3>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" />
+    <button type="button" onclick="uploadFile()">Upload</button>
+</form>
+
+<h3>Browse Music Files</h3>
+<select id="musicFilesDropdown" class="form-control">
+    <option value="">Select a music file</option>
+</select>
+
+@section Scripts {
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/Admin/UploadMusicFile', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('File uploaded successfully');
+                loadMusicFiles();
+            } else {
+                alert('Failed to upload file');
+            }
+        }
+
+        async function loadMusicFiles() {
+            const response = await fetch('/Admin/GetMusicFiles');
+            const musicFiles = await response.json();
+
+            const dropdown = document.getElementById('musicFilesDropdown');
+            dropdown.innerHTML = '<option value="">Select a music file</option>';
+            musicFiles.forEach(file => {
+                const option = document.createElement('option');
+                option.value = file;
+                option.textContent = file;
+                dropdown.appendChild(option);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMusicFiles);
+    </script>
+}

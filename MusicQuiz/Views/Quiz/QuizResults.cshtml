@@ -1,4 +1,4 @@
-﻿@model MusicQuiz.Web.Models.QuizResultsViewModel
+﻿@model MusicQuiz.Web.Models.Quiz.QuizResultsViewModel
 @{
     ViewData["Title"] = "Quiz Results";
     var score = ViewBag.Score as decimal? ?? 0;
@@ -37,23 +37,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var question in Model.Questions)
+        @if (Model.Questions != null)
         {
-            <tr>
-                <td>@question.Question</td>
-                <td>@question.CorrectAnswer</td>
-                <td>@question.UserAnswer</td>
-                <td>
-                    @if (question.UserAnswer == question.CorrectAnswer)
-                    {
-                        <span style="color: green;">Correct</span>
-                    }
-                    else
-                    {
-                        <span style="color: red;">Incorrect</span>
-                    }
-                </td>
-            </tr>
+            @foreach (var question in Model.Questions)
+            {
+                <tr>
+                    <td>@question.Question</td>
+                    <td>@question.CorrectAnswer</td>
+                    <td>@question.UserAnswer</td>
+                    <td>
+                        @if (question.UserAnswer == question.CorrectAnswer)
+                        {
+                            <span style="color: green;">Correct</span>
+                        }
+                        else
+                        {
+                            <span style="color: red;">Incorrect</span>
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

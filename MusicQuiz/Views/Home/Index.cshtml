@@ -1,10 +1,10 @@
-﻿@model MusicQuiz.Web.Models.MusicQuizViewModel
+﻿@model MusicQuiz.Web.Models.Home.MusicQuizViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="container">
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity?.IsAuthenticated == true)
     {
         <div class="jumbotron text-center">
             <h1 class="display-4">Welcome back, @User.Identity.Name!</h1>
