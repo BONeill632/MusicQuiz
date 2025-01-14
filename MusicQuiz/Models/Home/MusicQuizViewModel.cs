@@ -44,12 +44,6 @@ namespace MusicQuiz.Web.Models.Home
         /// </summary>
         public decimal? LatestUserScore { get; set; } = null;
 
-
-        ///// <summary>
-        ///// List of Quiz Questions, may not be needed anymore
-        ///// </summary>
-        //public List<QuestionViewModel> QuizQuestions { get; set; } = [];
-
         /// <summary>
         /// Gets topics & difficulties for quiz selection
         /// </summary>
