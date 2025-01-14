@@ -4,25 +4,47 @@
 }
 @section Scripts {
     <script src="~/js/selectDifficulty.js"></script>
+
+    @* will not work when in any JS file *@
+    <script>
+        function selectOption(difficulty, className) {
+            document.getElementById("selectedDifficulty").value = difficulty;
+            var options = document.getElementsByClassName(className);
+            for (var i = 0; i < options.length; i++) {
+                options[i].classList.remove("selected");
+            }
+            document.getElementById(difficulty).classList.add("selected");
+            document.getElementById("submitButton").disabled = false;
+        }
+
+        function validateForm() {
+            var selectedDifficulty = document.getElementById("selectedDifficulty").value;
+            if (!selectedDifficulty) {
+                alert("Please select a difficulty level.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 }
 
 <h1>Select a difficulty</h1>
 
-<form method="post" action="/Quiz/Start">
+<form method="post" action="/Quiz/Start" onsubmit="return validateForm()">
     <div>
         @foreach (var difficulty in Model.Difficulty)
         {
             var isDisabled = (User.Identity == null || !User.Identity.IsAuthenticated) && difficulty.DifficultyLevel != MusicQuiz.Core.Enums.DifficultyLevel.Easy;
             if (isDisabled)
             {
-                <div class="quiz-option disabled" id="@difficulty.DifficultyLevel">
+                <div class="quiz-option text-center disabled" id="@difficulty.DifficultyLevel">
                     <i class="fas fa-lock"></i> @difficulty.Description
                     <p>Please log in or create an account to access these levels.</p>
                 </div>
             }
             else
             {
-                <div class="quiz-option" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
+                <div class="quiz-option text-center" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
                     @difficulty.Description
                 </div>
             }
@@ -30,5 +52,5 @@
     </div>
     <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />
     <input type="hidden" id="selectedDifficulty" name="selectedDifficulty" value="@Model.SelectedDifficulty" />
-    <button type="submit" class="btn btn-danger btn-lg w-100">Select</button>
+    <button type="submit" id="submitButton" class="btn btn-danger btn-lg w-100" disabled>Select</button>
 </form>

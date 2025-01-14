@@ -4,19 +4,41 @@
 }
 @section Scripts {
     <script src="~/js/selectTopic.js"></script>
+
+    @* will not work when in any JS file *@
+    <script>
+        function selectOption(topic, className) {
+            document.getElementById("selectedTopic").value = topic;
+            var options = document.getElementsByClassName(className);
+            for (var i = 0; i < options.length; i++) {
+                options[i].classList.remove("selected");
+            }
+            document.getElementById(topic).classList.add("selected");
+            document.getElementById("submitButton").disabled = false;
+        }
+
+        function validateForm() {
+            var selectedTopic = document.getElementById("selectedTopic").value;
+            if (!selectedTopic) {
+                alert("Please select a topic.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 }
 
 <h1>Select a topic</h1>
 
-<form method="post" action="/Quiz/SelectDifficulty">
+<form method="post" action="/Quiz/SelectDifficulty" onsubmit="return validateForm()">
     <ul>
         @foreach (var topic in Model.Topics)
         {
-            <div class="quiz-option" id="@topic.Topic" onclick="selectOption('@topic.Topic', 'quiz-option')">
+            <div class="quiz-option text-center" id="@topic.Topic" onclick="selectOption('@topic.Topic', 'quiz-option')">
                 @topic.Description
             </div>
         }
     </ul>
     <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />
-    <button type="submit" class="btn btn-danger btn-lg w-100">Select</button>
+    <button type="submit" id="submitButton" class="btn btn-danger btn-lg w-100" disabled>Select</button>
 </form>
