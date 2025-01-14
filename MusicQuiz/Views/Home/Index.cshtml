@@ -1,4 +1,9 @@
 ﻿@model MusicQuiz.Web.Models.Home.MusicQuizViewModel
+@using Microsoft.AspNetCore.Identity
+@using MusicQuiz.Core.Entities
+@inject SignInManager<UserData> SignInManager
+@inject UserManager<UserData> UserManager
+@inject UserExpService UserExpService
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -6,20 +11,70 @@
 <div class="container">
     @if (User.Identity?.IsAuthenticated == true)
     {
+        var userName = UserManager.GetUserAsync(User).Result.FirstName;
         <div class="jumbotron text-center">
-            <h1 class="display-4">Welcome back, @User.Identity.Name!</h1>
+            <h1 class="display-4">Welcome back, @userName!</h1>
             <p class="lead">Would you like to try a quiz?</p>
             <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
         </div>
 
         <div class="row my-5">
             <div class="col-md-6">
-                <img src="~/images/last-quiz.jpg" class="img-fluid" alt="Last Quiz Image">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    var user = UserManager.GetUserAsync(User).Result;
+                    var progressData = UserExpService.CalculateExpProgress(user);
+                    var isMaxLevel = (user?.GetLevel() ?? 1) == 5;
+                    var progressText = isMaxLevel
+                    ? $"{user?.EXP ?? 0}EXP"
+                    : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
+                    <h3 class="text-center">Level Progress</h3>
+
+                    <div class="progress-container-lg d-flex flex-column align-items-center text-center">
+                        <div class="circular-progress-lg"
+                             style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
+                            <span class="level-text-lg">@user?.GetLevel()</span>
+                        </div>
+                        <span class="progress-text mt-2"><strong>@progressText!</strong></span>
+                        @if (isMaxLevel)
+                        {
+                            <p>
+                                Wow! You've reached max level! Congratulations on mastering the frequencies and identifying altered sounds with ease.
+                                You've truly developed your ear training skills to the highest level. Keep challenging yourself to maintain your sharpness and continue learning!
+                            </p>
+                        }
+                        else{
+                            <p>
+                                Making progress! Let's get to the next level! With each quiz, you're sharpening your ear and becoming better
+                                at identifying subtle changes in sounds. The journey towards perfect ear training never ends, and every level
+                                brings you closer to mastering your auditory skills. Keep going, you're doing great!
+                            </p>
+                        }
+                    </div>
+                }
             </div>
             <div class="col-md-6">
-                <h2>Your Last Quiz Attempt</h2>
-                <p>Your last quiz attempt was on Model.LastQuizDate.ToString("MMMM dd, yyyy").</p>
-                <p>Your score: Model.LastQuizScore</p>
+                <h2 class="text-center">Your Last Quiz Attempt</h2>
+                @if (Model != null && Model.LatestAttemptDate.HasValue)
+                {
+                    <p class="text-center">
+                        Your last quiz attempt was on @Model.LatestAttemptDate.Value.ToString("dd MMM yyyy")
+                        at @Model.LatestAttemptDate.Value.ToString("hh:mm tt").
+                    </p>
+                    <p class="text-center">Your score: @Model.LatestUserScore.GetValueOrDefault().ToString("F2")%</p>
+                    <div class="text-center">
+                        <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try again!</a>
+                    </div>
+                }
+                else
+                {
+                    <h3 class="text-center text-red-bold">OOPS!</h3>
+                    <p class="text-center">It looks like you haven't tried any quizzes yet. Click here to get started!</p>
+                    <div class="text-center">
+                        <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
+                    </div>
+
+                }
             </div>
         </div>
 
@@ -36,33 +91,41 @@
             <h1 class="display-4">Welcome to MusicQuiz</h1>
             <p class="lead">Test your music knowledge with our fun and challenging quizzes!</p>
             <a class="btn btn-danger btn-lg" asp-area="Identity" asp-page="/Account/Register">Register</a>
-            <a class="btn btn-light btn-lg" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="btn btn-secondary btn-lg" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </div>
 
         <div class="row my-5">
-            <div class="col-md-6">
-                <img src="~/images/quiz1.jpg" class="img-fluid" alt="Quiz Image 1">
+            <div class="col-md-6 d-flex justify-content-center">
+                <img src="~/img/LevelHomepage.png" class="img-fluid" alt="Max Quiz Level">
             </div>
             <div class="col-md-6">
-                <h2>About MusicQuiz</h2>
-                <p>MusicQuiz is the ultimate platform to test your music knowledge. Whether you're a casual listener or a music aficionado, our quizzes are designed to challenge and entertain you.</p>
+                <h2 class="text-center">About MusicQuiz</h2>
+                <p class="text-center">
+                    Test your music knowledge with our fun and challenging quizzes! As you progress through different levels,
+                    you'll train your ears to detect changes in sound frequencies and alterations that are critical for any music professional.
+                    Whether you're a beginner or already an aficionado, our quizzes will help refine your skills.</p>
             </div>
         </div>
 
         <div class="row my-5">
             <div class="col-md-6 order-md-2">
-                <img src="~/images/quiz2.jpg" class="img-fluid" alt="Quiz Image 2">
+                <img src="~/img/HomeImage2.png" class="img-fluid" alt="Quiz Image 2">
             </div>
             <div class="col-md-6 order-md-1">
-                <h2>Why Join Us?</h2>
-                <p>By creating an account, you can track your progress, compete with friends, and unlock more challenging levels. Join our community of music lovers today!</p>
+                <h2 class="text-center">Why Join Us?</h2>
+                <p class="text-center">
+                    By creating an account, you can track your progress, compete with friends, and unlock more challenging levels.
+                    As you rise through the levels, you’ll become more adept at identifying changes in frequencies, and mastering
+                    your ear training will set you apart from others in the music world. Join our community of music lovers today and start honing your skills!
+                </p>
             </div>
         </div>
 
         <div class="row my-5 text-center">
             <div class="col">
                 <h2>Unsure whether to create an account?</h2>
-                <p>Try a no-strings-attached quiz to see what we have to offer!</p>
+                <p>If you're not sure whether to create an account, take a no-strings-attached quiz to see what we have to offer! Test your ear training abilities and see how well you can identify changes in sound.
+                    This is just the start of your journey towards mastering your auditory skills—who knows? You might end up reaching the max level before you even realize it!</p>
                 <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
             </div>
         </div>

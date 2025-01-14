@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Migrations;
@@ -19,6 +20,14 @@ namespace MusicQuiz.Application.Services
 
             context.UsersPracticeQuizResults.Add(quizResult);
             context.SaveChanges();
+        }
+
+        public async Task<UsersPracticeQuizResults?> GetMostRecentQuizResultAsync(string userId)
+        {
+            return await context.UsersPracticeQuizResults
+                .Where(qr => qr.UserID == userId)
+                .OrderByDescending(qr => qr.DateOfSubmission)
+                .FirstOrDefaultAsync();
         }
     }
 }

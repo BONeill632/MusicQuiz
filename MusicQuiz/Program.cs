@@ -67,6 +67,9 @@ builder.Services.AddScoped<UserRoleService>();
 // Register the ResultsService
 builder.Services.AddScoped<IResultsService, ResultsService>();
 
+// Register the UserExpService
+builder.Services.AddScoped<UserExpService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -99,7 +102,6 @@ app.MapRazorPages();
 // Initialize roles and seed data
 await InitializeRoles(app.Services);
 
-
 await SeedData(app.Services);
 await SeedAccountData(app.Services);
 
@@ -111,7 +113,7 @@ static async Task InitializeRoles(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = ["Admin", "User"];
+    string[] roleNames = { "Admin", "User" };
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))
@@ -135,7 +137,6 @@ static async Task SeedData(IServiceProvider serviceProvider)
     }
 }
 
-/// Method to seed Question data
 static async Task SeedAccountData(IServiceProvider serviceProvider)
 {
     using var scope = serviceProvider.CreateScope();

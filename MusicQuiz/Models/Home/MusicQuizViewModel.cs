@@ -1,6 +1,6 @@
-﻿using MusicQuiz.Core.Enums;
+﻿using MusicQuiz.Core.Entities;
+using MusicQuiz.Core.Enums;
 using MusicQuiz.Enums;
-using MusicQuiz.Web.Models.Quiz;
 
 namespace MusicQuiz.Web.Models.Home
 {
@@ -29,8 +29,30 @@ namespace MusicQuiz.Web.Models.Home
         /// </summary>
         public DifficultyLevel SelectedDifficulty { get; set; }
 
-        public List<QuestionViewModel> QuizQuestions { get; set; } = [];
+        /// <summary>
+        /// Latest Date
+        /// </summary>
+        public int? QuizId { get; set; } = null;
 
+        /// <summary>
+        /// Latest Date
+        /// </summary>
+        public DateTime? LatestAttemptDate { get; set; } = null;
+
+        /// <summary>
+        /// User Score
+        /// </summary>
+        public decimal? LatestUserScore { get; set; } = null;
+
+
+        ///// <summary>
+        ///// List of Quiz Questions, may not be needed anymore
+        ///// </summary>
+        //public List<QuestionViewModel> QuizQuestions { get; set; } = [];
+
+        /// <summary>
+        /// Gets topics & difficulties for quiz selection
+        /// </summary>
         public MusicQuizViewModel()
         {
             Topics = ((Topic[])Enum.GetValues(typeof(Topic)))

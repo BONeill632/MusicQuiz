@@ -26,5 +26,28 @@ namespace MusicQuiz.Core.Entities
         /// Created for ease of seeding. The ID field which is a hashed string changed every seed
         /// </summary>
         public int IntID { get; set; }
+
+        /// <summary>
+        /// Experience points
+        /// </summary>
+        public int EXP { get; set; }
+
+        /// <summary>
+        /// WORK OUT USER LEVEL
+        /// </summary>
+        /// <returns></returns>
+        public int GetLevel()
+        {
+            if (EXP < 150)
+                return 1;
+            else if (EXP < 300)
+                return 2;
+            else if (EXP < 500)
+                return 3;
+            else if (EXP < 1000)
+                return 4;
+            else
+                return 5;
+        }
     }
 }

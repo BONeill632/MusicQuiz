@@ -47,6 +47,17 @@ h1 {
 .option {
     display: flex;
     align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.option:hover {
+    background-color: #f0f0f0;
+    border-color: #888;
 }
 
 .option.correct {
@@ -59,9 +70,14 @@ h1 {
     padding: 10px;
 }
 
+.option.selected {
+    background-color: #d3d3d3;
+}
+
 .feedback-text {
     margin-left: 10px;
 }
+
 
 /*LOCK FOR SELECTED DIFFICULTY WHEN NOT LOGGED IN*/
 .disabled {
@@ -149,4 +165,133 @@ a:hover {
 
 .btn-link-red {
     color: red;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.audio-player {
+    width: 100%;
+    max-width: 600px;
+    margin: 10px 0;
+}
+
+.audio-player audio {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    color: white;
+}
+
+.audio-player audio::-webkit-media-controls {
+    background-color: white;
+    color: red;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-container button {
+    margin: 0 10px;
+}
+
+.option-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* level progress for nav bar */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.circular-progress {
+    width: 40px;
+    height: 40px;
+    background: conic-gradient(var(--fill-color) calc(var(--progress, 0) * 1%), white 0%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+}
+.circular-progress::before {
+    content: "";
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: white;
+    border-radius: 50%;
+    }
+.level-text {
+    position: absolute;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--fill-color);
+}
+.progress-info {
+    font-size: 14px;
+    color: white;
+}
+
+
+
+/*For the larger level on the index page*/
+/* Larger circular progress styles for webpage */
+.progress-container-lg {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+}
+.circular-progress-lg {
+    width: 100px;
+    height: 100px;
+    background: conic-gradient(var(--fill-color) calc(var(--progress, 0) * 1%), white 0%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.circular-progress-lg::before {
+    content: "";
+    position: absolute;
+    width: 85%;
+    height: 85%;
+    background: white;
+    border-radius: 50%;
+}
+
+.level-text-lg {
+    position: absolute;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--fill-color);
+}
+
+.progress-text-lg {
+    font-size: 32px;
+    color: white;
+}
+
+/*OOPS*/
+.text-red-bold {
+    color: red;
+    font-weight: bold;
 }

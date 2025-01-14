@@ -31,7 +31,8 @@
     }
 
     selectedOption.parentElement.appendChild(feedbackText);
-    document.getElementById("nextButton").style.display = "inline";
+    // Enable the Next button
+    document.getElementById('nextButton').disabled = false;
 }
 
 // Display saved feedback
@@ -46,7 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
             feedbackText.style.color = feedback.includes('Correct') ? 'green' : 'red';
             selectedOption.parentElement.appendChild(feedbackText);
             selectedOption.parentElement.classList.add(feedback.includes('Correct') ? 'correct' : 'incorrect');
-            document.getElementById("nextButton").style.display = "inline";
+            // Enable the Next button
+            document.getElementById('nextButton').disabled = false;
         }
     }
 });

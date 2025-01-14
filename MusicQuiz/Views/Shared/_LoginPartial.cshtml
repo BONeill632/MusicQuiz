@@ -2,26 +2,43 @@
 @using MusicQuiz.Core.Entities
 @inject SignInManager<UserData> SignInManager
 @inject UserManager<UserData> UserManager
+@inject UserExpService UserExpService
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = UserManager.GetUserAsync(User).Result;
+        var progressData = UserExpService.CalculateExpProgress(user);
+        var isMaxLevel = (user?.GetLevel() ?? 1) == 5;
+        var progressText = isMaxLevel
+        ? $"{user?.EXP ?? 0}EXP"
+        : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
+
+        <li class="nav-item d-flex align-items-center">
+            <div class="progress-container">
+                <div class="circular-progress"
+                     style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
+                    <span class="level-text">@user?.GetLevel()</span>
+                </div>
+                <span class="progress-info">@progressText</span>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.FirstName!</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>

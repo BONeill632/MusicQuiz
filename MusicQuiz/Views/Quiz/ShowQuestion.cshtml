@@ -12,58 +12,63 @@
 <input type="hidden" id="feedback" value="@feedback" />
 
 @section Scripts {
-    <script src="~/js/quiz.js"></script>
-    <script src="~/js/selectDifficulty.js"></script>
+    <script src="~/js/selectAnswer.js"></script>
     <script src="~/js/submitAnswer.js"></script>
+    <script src="~/js/enableButtons.js"></script>
 }
 
 <h1>Topic: @Model.SelectedTopic, Difficulty: @Model.SelectedDifficulty</h1>
-
-<h2>Question @(currentQuestionIndex + 1)</h2>
+<hr />
+<h2 class="center-content">Question @(currentQuestionIndex + 1)</h2>
 
 @if (!string.IsNullOrEmpty(Model.MusicReferenceFilePath))
 {
-    <div>
-        <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
-        <audio controls>
-            <source src="@Model.MusicReferenceFilePath" type="audio/*">
-            <source src="@Model.MusicReferenceFilePath" type="audio/mpeg">
-            <source src="@Model.MusicReferenceFilePath" type="audio/ogg">
-            Your browser does not support the audio element.
-        </audio>
+    <div class="center-content">
+        <div class="audio-player">
+            <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
+            <audio controls>
+                <source src="@Model.MusicReferenceFilePath" type="audio/*">
+                <source src="@Model.MusicReferenceFilePath" type="audio/mpeg">
+                <source src="@Model.MusicReferenceFilePath" type="audio/ogg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="audio-player">
+            <p>@Model.Question</p>
+            <audio controls>
+                <source src="@Model.MusicQuestionFilePath" type="audio/*">
+                <source src="@Model.MusicQuestionFilePath" type="audio/mpeg">
+                <source src="@Model.MusicQuestionFilePath" type="audio/ogg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
 }
-
-<div>
-    <audio controls>
-        <source src="@Model.MusicQuestionFilePath" type="audio/*">
-        <source src="@Model.MusicQuestionFilePath" type="audio/mpeg">
-        <source src="@Model.MusicQuestionFilePath" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
-</div>
-
 
 <form method="post" action="/Quiz/NextQuestion">
     <div>
         @foreach (var option in Model.OptionsForQuiz)
         {
-            <div class="option">
-                <input type="radio" id="@option" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "")>
-                <label for="@option">@option</label>
+            <div class="option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option">
+                <input type="radio" id="@option-radio" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "") style="display: none;">
+                <label for="@option-radio">@option</label>
             </div>
         }
     </div>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
     <div id="feedbackSection"></div>
-    <button type="button" onclick="submitAnswer()">Submit</button>
-    <button type="submit" id="nextButton" style="display:none;">@(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")</button>
+    <hr />
+    <div class="button-container">
+        <button type="button" onclick="submitPreviousForm()" class="btn btn-secondary btn-lg" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
+        <button type="button" id="submitButton" onclick="submitAnswer(); enableNextButton();" class="btn btn-danger btn-lg">Submit</button>
+        <button type="submit" id="nextButton" class="btn btn-secondary btn-lg" @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next") disabled>Next</button>
+    </div>
+    <hr />
 </form>
 
-<div>
-    <form method="post" action="/Quiz/PreviousQuestion" style="display:inline;">
-        <button type="submit" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
-    </form>
-</div>
+<form id="previousForm" method="post" action="/Quiz/PreviousQuestion" style="display:none;"></form>
 
 <h3>Current Score: @score</h3>
+
+

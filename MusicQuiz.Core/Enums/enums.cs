@@ -80,4 +80,37 @@ namespace MusicQuiz.Core.Enums
         Miramba = 4,
 
     }
+
+    public enum Level
+    {
+        /// <summary>
+        /// Level1
+        /// </summary>
+        [Description("Level 1")]
+        Level1 = 150,
+
+        /// <summary>
+        /// Level2
+        /// </summary>
+        [Description("Level 2")]
+        Level2 = 300,
+
+        /// <summary>
+        /// Level3
+        /// </summary>
+        [Description("Level 3")]
+        Level3 = 500,
+
+        /// <summary>
+        /// Level4
+        /// </summary>
+        [Description("Level 4")]
+        Level4 = 1000,
+
+        /// <summary>
+        /// Level5
+        /// </summary>
+        [Description("Level 5")]
+        Level5 = 1500
+    }
 }

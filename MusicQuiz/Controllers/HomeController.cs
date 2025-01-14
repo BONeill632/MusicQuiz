@@ -1,20 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Web.Models;
 using System.Diagnostics;
+using MusicQuiz.Core.Entities;
+using Microsoft.AspNetCore.Identity;
+using MusicQuiz.Application.Interfaces;
+using MusicQuiz.Web.Models.Home;
 
 namespace MusicQuiz.Web.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger) : BaseController
+    public class HomeController(UserManager<UserData> userManager, IResultsService resultsService) : BaseController
     {
-        public ILogger<HomeController> Logger { get; } = logger;
-
-        public IActionResult Index()
+        /// <summary>
+        /// View homepage
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index()
         {
             ClearQuizSession();
 
-            return View();
+            var user = await userManager.GetUserAsync(User);
+            UsersPracticeQuizResults? latestQuizResult = null;
+
+            if (user != null)
+            {
+                latestQuizResult = await resultsService.GetMostRecentQuizResultAsync(user.Id);
+            }
+
+            var model = new MusicQuizViewModel
+            {
+                LatestAttemptDate = latestQuizResult?.DateOfSubmission,
+                LatestUserScore = latestQuizResult?.UserScore
+            };
+
+            return View(model);
         }
 
+        /// <summary>
+        /// Privacy page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Privacy()
         {
             return View();

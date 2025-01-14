@@ -284,10 +284,6 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("ShowQuestion");
         }
 
-        /// <summary>
-        /// Show quiz results page (pie chart & list of questions)
-        /// </summary>
-        /// <returns></returns>
         public IActionResult QuizResults()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
@@ -322,12 +318,47 @@ namespace MusicQuiz.Web.Controllers
             {
                 var firstQuestion = questions.First();
                 resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)firstQuestion.SelectedDifficulty, (int)firstQuestion.SelectedTopic, userID);
+
+                // Update user's EXP
+                var user = userManager.FindByIdAsync(userID).Result;
+                if (user != null)
+                {
+                    int expGained = CalculateExpGained(score, (int)firstQuestion.SelectedDifficulty);
+                    user.EXP += expGained;
+                    userManager.UpdateAsync(user).Wait();
+                }
             }
 
             ClearQuizSession();
 
             return View(model);
         }
+
+        private static int CalculateExpGained(decimal score, int difficultyLevel)
+        {
+            int expGained = (int)score;
+
+            switch (difficultyLevel)
+            {
+                case (int)DifficultyLevel.Easy:
+                    // No change to expGained
+                    break;
+                case (int)DifficultyLevel.Medium:
+                    //Double exp for medium difficulty
+                    expGained *= 2;
+                    break;
+                case (int)DifficultyLevel.Hard:
+                    //Triple exp for hard difficulty
+                    expGained *= 3;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(difficultyLevel), difficultyLevel, null);
+            }
+
+            return expGained;
+        }
+
+
 
     }
 }

@@ -171,13 +171,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Update="Views\Quiz\SineWaves\SineIndex.cshtml">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="Models\Assessment\" />
 	  <Folder Include="Models\Leaderboards\" />
 	</ItemGroup>
