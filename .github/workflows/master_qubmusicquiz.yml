@@ -13,48 +13,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v3
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '9.0.102'
+          dotnet-version: '9.0.101'
+          include-prerelease: true
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build the project
+      - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: Publish the project
-        run: dotnet publish ./MusicQuiz.Web/MusicQuiz.Web.csproj --configuration Release --output ./publish
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: publish-artifact
-          path: ./publish
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Azure Login
-        uses: Azure/login@v2.2.0
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}  # Ensure your service principal credentials are stored in Secrets
-
-      - name: Download artifact
+      - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: publish-artifact
+          name: .net-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'QUBMusicQuiz'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: publish
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
+          package: .
