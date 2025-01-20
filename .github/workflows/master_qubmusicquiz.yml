@@ -31,6 +31,6 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'MusicQuiz'
+        app-name: 'QUBMusicQuiz'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
         package: ./publish
