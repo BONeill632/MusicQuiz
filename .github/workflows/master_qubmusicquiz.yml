@@ -25,14 +25,8 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release MusicQuiz.sln
 
-      - name: dotnet publish for Web Project
-        run: dotnet publish -c Release -o ./publish/web MusicQuiz/MusicQuiz.Web.csproj
-
-      - name: dotnet publish for Application Project
-        run: dotnet publish -c Release -o ./publish/application MusicQuiz/MusicQuiz.Application.csproj
-
-      - name: dotnet publish for Core Project
-        run: dotnet publish -c Release -o ./publish/core MusicQuiz/MusicQuiz.Core.csproj
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ./publish MusicQuiz.sln
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
