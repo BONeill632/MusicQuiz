@@ -76,6 +76,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'QUBMusicQuiz'  # Ensure this matches your Azure Web App name
-          slot-name: 'Production'  # Ensure you're deploying to the right slot (e.g., Production)
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}  # Correct publish profile secret
+          slot-name: 'production'  # Ensure you're deploying to the right slot (e.g., production)
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # Correct publish profile secret
           package: ./publish  # Ensure the path matches the publish directory
