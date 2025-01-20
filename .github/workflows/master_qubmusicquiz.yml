@@ -34,22 +34,11 @@ jobs:
       - name: Publish Core project
         run: dotnet publish --configuration Release --output ./publish/Core MusicQuiz.Core/MusicQuiz.Core.csproj
 
-      - name: Combine published outputs
-        run: |
-          mkdir ./publish/combined
-          xcopy "./publish/Web" "./publish/combined" /E /I
-          xcopy "./publish/Application" "./publish/combined" /E /I
-          xcopy "./publish/Core" "./publish/combined" /E /I
-          shell: cmd
-
-      - name: Debug publish output
-        run: dir ./publish/combined
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./publish/combined
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
@@ -67,11 +56,29 @@ jobs:
       - name: Debug downloaded artifact
         run: dir /s ./ # Inspect downloaded files
 
-      - name: Deploy to Azure Web App
+      - name: Deploy Web project to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./publish/combined
+          package: ./publish/Web
+
+      - name: Deploy Application project to Azure Web App (if needed)
+        id: deploy-application
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'QUBMusicQuiz'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
+          package: ./publish/Application
+
+      - name: Deploy Core project to Azure Web App (if needed)
+        id: deploy-core
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'QUBMusicQuiz'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
+          package: ./publish/Core
