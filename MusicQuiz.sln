@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicQuiz.Tests", "MusicQui
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicQuiz.Application", "MusicQuiz.Application\MusicQuiz.Application.csproj", "{3CE5FC4E-6713-4302-B5A4-67648044BCAE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicQuiz.Infrastructure", "MusicQuiz.Infrastructure\MusicQuiz.Infrastructure.csproj", "{44FE741D-3086-4B55-AFCF-9B8643C8E595}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{506D1F2F-51C0-4C60-83A3-D4F7722E5018}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
@@ -41,10 +39,6 @@ Global
 		{3CE5FC4E-6713-4302-B5A4-67648044BCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CE5FC4E-6713-4302-B5A4-67648044BCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CE5FC4E-6713-4302-B5A4-67648044BCAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44FE741D-3086-4B55-AFCF-9B8643C8E595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44FE741D-3086-4B55-AFCF-9B8643C8E595}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44FE741D-3086-4B55-AFCF-9B8643C8E595}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44FE741D-3086-4B55-AFCF-9B8643C8E595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

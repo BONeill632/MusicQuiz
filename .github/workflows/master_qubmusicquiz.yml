@@ -19,11 +19,20 @@ jobs:
           dotnet-version: '9.0.102'
           include-prerelease: true
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore dependencies
+        run: dotnet restore MusicQuiz/MusicQuiz.sln
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish
+      - name: Build with dotnet
+        run: dotnet build --configuration Release MusicQuiz/MusicQuiz.sln
+
+      - name: dotnet publish for Web Project
+        run: dotnet publish -c Release -o ./publish/web MusicQuiz/MusicQuiz.Web.csproj
+
+      - name: dotnet publish for Application Project
+        run: dotnet publish -c Release -o ./publish/application MusicQuiz/MusicQuiz.Application.csproj
+
+      - name: dotnet publish for Core Project
+        run: dotnet publish -c Release -o ./publish/core MusicQuiz/MusicQuiz.Core.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
