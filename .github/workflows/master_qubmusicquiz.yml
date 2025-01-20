@@ -22,17 +22,33 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore MusicQuiz.sln
 
-      - name: Build with dotnet
+      - name: Build solution
         run: dotnet build --configuration Release MusicQuiz.sln
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ./../publish MusicQuiz.sln
+      - name: Publish Web project
+        run: dotnet publish --configuration Release --output ./publish/Web MusicQuiz/MusicQuiz.Web.csproj
+
+      - name: Publish Application project
+        run: dotnet publish --configuration Release --output ./publish/Application MusicQuiz/MusicQuiz.Application.csproj
+
+      - name: Publish Core project
+        run: dotnet publish --configuration Release --output ./publish/Core MusicQuiz/MusicQuiz.Core.csproj
+
+      - name: Combine published outputs
+        run: |
+          mkdir ./publish/combined
+          xcopy ./publish/Web ./publish/combined /E /I
+          xcopy ./publish/Application ./publish/combined /E /I
+          xcopy ./publish/Core ./publish/combined /E /I
+
+      - name: Debug publish output
+        run: dir ./publish/combined
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./../publish
+          path: ./publish/combined
 
   deploy:
     runs-on: windows-latest
@@ -47,6 +63,9 @@ jobs:
         with:
           name: .net-app
 
+      - name: Debug downloaded artifact
+        run: dir /s ./ # Inspect downloaded files
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -54,4 +73,4 @@ jobs:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./../publish
+          package: ./publish/combined
