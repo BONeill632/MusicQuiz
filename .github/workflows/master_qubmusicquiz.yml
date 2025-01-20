@@ -20,10 +20,10 @@ jobs:
           include-prerelease: true
 
       - name: Restore dependencies
-        run: dotnet restore MusicQuiz/MusicQuiz.sln
+        run: dotnet restore MusicQuiz.sln
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release MusicQuiz/MusicQuiz.sln
+        run: dotnet build --configuration Release MusicQuiz.sln
 
       - name: dotnet publish for Web Project
         run: dotnet publish -c Release -o ./publish/web MusicQuiz/MusicQuiz.Web.csproj
