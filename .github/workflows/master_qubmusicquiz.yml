@@ -29,10 +29,10 @@ jobs:
         run: dotnet publish --configuration Release --output ./publish/Web MusicQuiz/MusicQuiz.Web.csproj
 
       - name: Publish Application project
-        run: dotnet publish --configuration Release --output ./publish/Application MusicQuiz/MusicQuiz.Application.csproj
+        run: dotnet publish --configuration Release --output ./publish/Application MusicQuiz.Application/MusicQuiz.Application.csproj
 
       - name: Publish Core project
-        run: dotnet publish --configuration Release --output ./publish/Core MusicQuiz/MusicQuiz.Core.csproj
+        run: dotnet publish --configuration Release --output ./publish/Core MusicQuiz.Core/MusicQuiz.Core.csproj
 
       - name: Combine published outputs
         run: |
