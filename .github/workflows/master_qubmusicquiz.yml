@@ -40,6 +40,11 @@ jobs:
       name: 'Production'
 
     steps:
+      - name: Azure Login
+        uses: Azure/login@v2.2.0
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  # Ensure your service principal credentials are stored in Secrets
+
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
