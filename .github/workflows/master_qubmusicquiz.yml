@@ -28,12 +28,6 @@ jobs:
       - name: Publish Web project
         run: dotnet publish --configuration Release --output ./publish/Web MusicQuiz/MusicQuiz.Web.csproj
 
-      - name: Publish Application project
-        run: dotnet publish --configuration Release --output ./publish/Application MusicQuiz.Application/MusicQuiz.Application.csproj
-
-      - name: Publish Core project
-        run: dotnet publish --configuration Release --output ./publish/Core MusicQuiz.Core/MusicQuiz.Core.csproj
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -60,4 +54,4 @@ jobs:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./publish
+          package: ./publish/Web
