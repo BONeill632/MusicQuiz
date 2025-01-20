@@ -47,7 +47,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
+          name: publish-artifact  # Change the name to match download artifact name
           path: ./publish  # Make sure this is the correct directory for the published files
 
   deploy:
@@ -62,13 +62,13 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: publish-artifact  # Make sure this matches the upload name
 
       # List downloaded artifact contents for clarity
       - name: List downloaded artifact contents
         run: |
           echo "Listing files in the artifact folder after download:"
-          dir ./net-app
+          dir ./publish  # This should match the folder where the artifact was downloaded
 
       # Deploy to Azure Web App
       - name: Deploy to Azure Web App
@@ -79,4 +79,3 @@ jobs:
           slot-name: 'Production'  # Ensure you're deploying to the right slot (e.g., Production)
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}  # Correct publish profile secret
           package: ./publish  # Ensure the path matches the publish directory
-
