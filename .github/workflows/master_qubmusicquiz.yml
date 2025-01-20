@@ -13,69 +13,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Set up .NET SDK
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.102'  # Ensure the correct .NET version is used
+          dotnet-version: '9.0.102'
 
-      # Output .NET version for debugging
-      - name: Show .NET version
-        run: dotnet --version
-
-      # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # Build the project
       - name: Build the project
-        run: |
-          echo "Building the project..."
-          dotnet build --configuration Release
-          echo "Listing files in the working directory after build:"
-          dir
+        run: dotnet build --configuration Release
 
-      # Publish the project to ./publish directory
       - name: Publish the project
-        run: |
-          echo "Publishing the project..."
-          dotnet publish ./MusicQuiz.Web/MusicQuiz.Web.csproj --configuration Release --output ./publish
-          echo "Listing files in the ./publish directory after publish:"
-          dir ./publish
+        run: dotnet publish ./MusicQuiz.Web/MusicQuiz.Web.csproj --configuration Release --output ./publish
 
-      # Upload the artifact for deployment job
-      - name: Upload artifact for deployment job
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: publish-artifact  # Change the name to match download artifact name
-          path: ./publish  # Make sure this is the correct directory for the published files
+          name: publish-artifact
+          path: ./publish
 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      # Download artifact from build job
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: publish-artifact  # Make sure this matches the upload name
+          name: publish-artifact
 
-      # List downloaded artifact contents for clarity
-      - name: List downloaded artifact contents
-        run: |
-          echo "Listing files in the artifact folder after download:"
-          dir publish  # This should match the folder where the artifact was downloaded
-
-      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'QUBMusicQuiz'  # Ensure this matches your Azure Web App name
-          slot-name: 'production'  # Ensure you're deploying to the right slot (e.g., production)
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # Correct publish profile secret
-          package: publish  # Ensure the path matches the publish directory
+          app-name: 'QUBMusicQuiz'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: publish
