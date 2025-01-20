@@ -68,7 +68,7 @@ jobs:
       - name: List downloaded artifact contents
         run: |
           echo "Listing files in the artifact folder after download:"
-          dir ./publish  # This should match the folder where the artifact was downloaded
+          dir publish  # This should match the folder where the artifact was downloaded
 
       # Deploy to Azure Web App
       - name: Deploy to Azure Web App
@@ -78,4 +78,4 @@ jobs:
           app-name: 'QUBMusicQuiz'  # Ensure this matches your Azure Web App name
           slot-name: 'production'  # Ensure you're deploying to the right slot (e.g., production)
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}  # Correct publish profile secret
-          package: ./publish  # Ensure the path matches the publish directory
+          package: publish  # Ensure the path matches the publish directory
