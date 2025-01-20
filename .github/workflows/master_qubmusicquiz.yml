@@ -26,7 +26,7 @@ jobs:
 
     - name: Publish
       run: |
-        dotnet publish ./MusicQuiz/MusicQuiz.csproj --configuration Release --output ./publish
+        dotnet publish ./MusicQuiz/MusicQuiz.Web.csproj --configuration Release --output ./publish
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
