@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - QUBMusicQuiz
 
 on:
@@ -16,23 +13,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.101'
+          dotnet-version: '9.0.101'  # Ensure the correct .NET version is used
           include-prerelease: true
 
-      - name: Build with dotnet
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the project
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Publish the project
+        run: dotnet publish --configuration Release --output ./publish  # Output to ./publish directory
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./publish  # Ensure you're uploading the correct published directory
 
   deploy:
     runs-on: windows-latest
@@ -51,7 +51,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'QUBMusicQuiz'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: .
+          app-name: 'QUBMusicQuiz'  # Ensure your app service name is correct
+          slot-name: 'Production'  # Ensure you're deploying to the correct slot
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}  # Ensure your publish profile secret is correct
+          package: ./publish  # Correct path to the published files
