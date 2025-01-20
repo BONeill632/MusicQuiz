@@ -60,22 +60,4 @@ jobs:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./publish/Web
-
-      - name: Deploy Application project to Azure Web App (if needed)
-        id: deploy-application
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'QUBMusicQuiz'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./publish/Application
-
-      - name: Deploy Core project to Azure Web App (if needed)
-        id: deploy-core
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'QUBMusicQuiz'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: ./publish/Core
+          package: ./publish
