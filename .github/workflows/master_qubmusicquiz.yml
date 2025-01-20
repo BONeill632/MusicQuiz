@@ -32,6 +32,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'MusicQuiz'
-        slot-name: 'production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
         package: ./publish
