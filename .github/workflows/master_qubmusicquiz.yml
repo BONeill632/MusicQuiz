@@ -13,26 +13,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Set up .NET SDK
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0.102'  # Ensure the correct .NET version is used
-          include-prerelease: true
 
+      # Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
+      # Build the project
       - name: Build the project
         run: dotnet build --configuration Release
 
+      # Publish the project to ./publish directory
       - name: Publish the project
-        run: dotnet publish --configuration Release --output ./publish  # Output to ./publish directory
+        run: dotnet publish ./MusicQuiz.Web/MusicQuiz.Web.csproj --configuration Release --output ./publish  # Explicitly specify project file path
 
+      # Upload the artifact for deployment job
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./publish  # Ensure you're uploading the correct published directory
+          path: ./publish  # Make sure this is the correct directory for the published files
 
   deploy:
     runs-on: windows-latest
@@ -42,16 +46,19 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      # Download artifact from build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
 
+      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'QUBMusicQuiz'  # Ensure your app service name is correct
-          slot-name: 'Production'  # Ensure you're deploying to the correct slot
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}  # Ensure your publish profile secret is correct
-          package: ./publish  # Correct path to the published files
+          app-name: 'QUBMusicQuiz'  # Ensure this matches your Azure Web App name
+          slot-name: 'Production'  # Ensure you're deploying to the right slot (e.g., Production)
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}  # Correct publish profile secret
+          package: ./publish  # Ensure the path matches the publish directory
+
