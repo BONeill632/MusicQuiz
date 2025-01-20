@@ -37,9 +37,10 @@ jobs:
       - name: Combine published outputs
         run: |
           mkdir ./publish/combined
-          xcopy ./publish/Web ./publish/combined /E /I
-          xcopy ./publish/Application ./publish/combined /E /I
-          xcopy ./publish/Core ./publish/combined /E /I
+          xcopy "./publish/Web" "./publish/combined" /E /I
+          xcopy "./publish/Application" "./publish/combined" /E /I
+          xcopy "./publish/Core" "./publish/combined" /E /I
+          shell: cmd
 
       - name: Debug publish output
         run: dir ./publish/combined
