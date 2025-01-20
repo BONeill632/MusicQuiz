@@ -53,9 +53,6 @@ jobs:
         with:
           name: .net-app
 
-      - name: Debug downloaded artifact
-        run: dir /s ./ # Inspect downloaded files
-
       - name: Deploy Web project to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
