@@ -51,4 +51,4 @@ jobs:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: .
+          package: ${{ runner.workspace }}/myapp
