@@ -16,7 +16,7 @@ jobs:
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.101'  # Ensure the correct .NET version is used
+          dotnet-version: '9.0.102'  # Ensure the correct .NET version is used
           include-prerelease: true
 
       - name: Restore dependencies
