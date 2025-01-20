@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{506D1F2F-51C0-4C60-83A3-D4F7722E5018}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		.github\workflows\master_qubmusicquiz.yml = .github\workflows\master_qubmusicquiz.yml
 	EndProjectSection
 EndProject
 Global
