@@ -26,13 +26,13 @@ jobs:
         run: dotnet build --configuration Release MusicQuiz.sln
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ./publish MusicQuiz.sln
+        run: dotnet publish -c Release -o ./../publish MusicQuiz.sln
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./publish
+          path: ./../publish
 
   deploy:
     runs-on: windows-latest
@@ -54,4 +54,4 @@ jobs:
           app-name: 'QUBMusicQuiz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
-          package: publish
+          package: ./../publish
