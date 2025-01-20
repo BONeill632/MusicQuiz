@@ -173,6 +173,7 @@
 	<ItemGroup>
 	  <Folder Include="Models\Assessment\" />
 	  <Folder Include="Models\Leaderboards\" />
+	  <Folder Include="publish\" />
 	</ItemGroup>
 
 </Project>
