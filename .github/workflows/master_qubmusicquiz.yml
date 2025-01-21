@@ -28,6 +28,12 @@ jobs:
       run: |
         dotnet publish ./MusicQuiz/MusicQuiz.Web.csproj --configuration Release --output ./publish
 
+    - name: Copy MSBuild to publish folder
+      run: |
+        # Ensure MSBuild is in the correct path within the wwwroot/tools/build folder
+        mkdir -p ./publish/wwwroot/tools/build
+        copy /Y "wwwroot/tools/build/MSBuild.exe" ./publish/wwwroot/tools/build/
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
