@@ -33,10 +33,23 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Register ApplicationDbContext
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Determine the environment
+var environment = builder.Environment;
+
+// Register ApplicationDbContext with environment-specific connection string
+string connectionString;
+if (environment.IsDevelopment())
+{
+    connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21))));
+
 
 // Add Identity services with roles
 builder.Services.AddDefaultIdentity<UserData>(options =>
