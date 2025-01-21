@@ -7,8 +7,14 @@ using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Data;
 
-// Register MSBuild instance, needed for scaffolding the Identity pages
-var msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
+var msbuildPath = Environment.GetEnvironmentVariable("MSBUILD_PATH");
+
+if (string.IsNullOrEmpty(msbuildPath))
+{
+    // Use default path in case environment variable is not set
+    msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
+}
+
 if (File.Exists(msbuildPath))
 {
     MSBuildLocator.RegisterMSBuildPath(Path.GetDirectoryName(msbuildPath));
@@ -17,6 +23,7 @@ else
 {
     throw new InvalidOperationException($"MSBuild not found at path: {msbuildPath}");
 }
+
 
 var builder = WebApplication.CreateBuilder(args);
 
