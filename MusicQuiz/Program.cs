@@ -7,25 +7,18 @@ using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Data;
 
-var msbuildPath = Environment.GetEnvironmentVariable("MSBUILD_PATH");
+var builder = WebApplication.CreateBuilder(args);
 
-if (string.IsNullOrEmpty(msbuildPath))
+// Determine the environment
+var environment = builder.Environment;
+
+string msbuildPath = string.Empty;
+
+// Use default MSBuild paths based on environment if the variable is not set
+if (environment.IsDevelopment())
 {
-    // Use default path in case environment variable is not set
     msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
 }
-
-if (File.Exists(msbuildPath))
-{
-    MSBuildLocator.RegisterMSBuildPath(Path.GetDirectoryName(msbuildPath));
-}
-else
-{
-    throw new InvalidOperationException($"MSBuild not found at path: {msbuildPath}");
-}
-
-
-var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -39,10 +32,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-// Determine the environment
-var environment = builder.Environment;
-Console.WriteLine($"Environment: {environment.EnvironmentName}");
 
 // Register ApplicationDbContext with environment-specific connection string
 string? connectionString;
