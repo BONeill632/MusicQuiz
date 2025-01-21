@@ -34,3 +34,4 @@ jobs:
         app-name: 'QUBMusicQuiz'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_935FA92267D645269031613B41C92431 }}
         package: ./publish
+        verbose: true
