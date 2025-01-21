@@ -35,6 +35,7 @@ builder.Services.AddSession(options =>
 
 // Determine the environment
 var environment = builder.Environment;
+Console.WriteLine($"Environment: {environment.EnvironmentName}");
 
 // Register ApplicationDbContext with environment-specific connection string
 string connectionString;
@@ -115,8 +116,47 @@ app.MapRazorPages();
 // Initialize roles and seed data
 await InitializeRoles(app.Services);
 
-await SeedData(app.Services);
-await SeedAccountData(app.Services);
+static async Task SeedData(IServiceProvider serviceProvider)
+{
+    try
+    {
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        Console.WriteLine("Seeding data...");
+
+        if (!dbContext.QuizQuestions.Any())
+        {
+            var seedData = QuizQuestionSeedData.GenerateSeedData();
+            await dbContext.QuizQuestions.AddRangeAsync(seedData);
+            await dbContext.SaveChangesAsync();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
+    }
+}
+
+static async Task SeedAccountData(IServiceProvider serviceProvider)
+{
+    try
+    {
+        using var scope = serviceProvider.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserData>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        Console.WriteLine("Seeding account data...");
+
+        await AccountSeedData.SeedUserData(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while seeding account data: {ex.Message}");
+    }
+}
+
+
 
 app.Run();
 
