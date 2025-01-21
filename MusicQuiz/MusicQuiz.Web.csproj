@@ -150,6 +150,7 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0" />
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.2.1" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+		<PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.8" />
 		<PackageReference Include="MySqlConnector" Version="2.4.0" />
 		<PackageReference Include="NuGet.Common" Version="6.12.1" />
 		<PackageReference Include="NuGet.Protocol" Version="6.12.1" />
@@ -172,6 +173,12 @@
 	<ItemGroup>
 	  <Folder Include="Models\Assessment\" />
 	  <Folder Include="Models\Leaderboards\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="wwwroot\favicon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 </Project>
