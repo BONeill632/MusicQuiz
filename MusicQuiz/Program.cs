@@ -35,14 +35,8 @@ builder.Services.AddSession(options =>
 
 // Register ApplicationDbContext with environment-specific connection string
 string? connectionString;
-if (environment.IsDevelopment())
-{
-    connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
-}
-else
-{
-    connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
-}
+
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
 {
