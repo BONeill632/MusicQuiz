@@ -14,11 +14,11 @@ var environment = builder.Environment;
 
 string msbuildPath = string.Empty;
 
-//// Use default MSBuild paths based on environment if the variable is not set
-//if (environment.IsDevelopment())
-//{
-//    msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
-//}
+// Use default MSBuild paths based on environment if the variable is not set
+if (environment.IsDevelopment())
+{
+    msbuildPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe";
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
