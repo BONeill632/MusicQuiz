@@ -48,9 +48,13 @@ else
     connectionString = builder.Configuration.GetConnectionString("ProductionConnection");
 }
 
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string not found.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21))));
-
 
 // Add Identity services with roles
 builder.Services.AddDefaultIdentity<UserData>(options =>
@@ -115,7 +119,28 @@ app.MapRazorPages();
 
 // Initialize roles and seed data
 await InitializeRoles(app.Services);
+await SeedData(app.Services);
+await SeedAccountData(app.Services);
 
+app.Run();
+
+// Method to create roles
+static async Task InitializeRoles(IServiceProvider serviceProvider)
+{
+    using var scope = serviceProvider.CreateScope();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    string[] roleNames = ["Admin", "User"];
+    foreach (var roleName in roleNames)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}
+
+// Method to seed Question data
 static async Task SeedData(IServiceProvider serviceProvider)
 {
     try
@@ -138,6 +163,7 @@ static async Task SeedData(IServiceProvider serviceProvider)
     }
 }
 
+// Method to seed Account data
 static async Task SeedAccountData(IServiceProvider serviceProvider)
 {
     try
@@ -154,47 +180,4 @@ static async Task SeedAccountData(IServiceProvider serviceProvider)
     {
         Console.WriteLine($"An error occurred while seeding account data: {ex.Message}");
     }
-}
-
-
-
-app.Run();
-
-// Method to create roles
-static async Task InitializeRoles(IServiceProvider serviceProvider)
-{
-    using var scope = serviceProvider.CreateScope();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    string[] roleNames = { "Admin", "User" };
-    foreach (var roleName in roleNames)
-    {
-        if (!await roleManager.RoleExistsAsync(roleName))
-        {
-            await roleManager.CreateAsync(new IdentityRole(roleName));
-        }
-    }
-}
-
-// Method to seed Question data
-static async Task SeedData(IServiceProvider serviceProvider)
-{
-    using var scope = serviceProvider.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    if (!dbContext.QuizQuestions.Any())
-    {
-        var seedData = QuizQuestionSeedData.GenerateSeedData();
-        await dbContext.QuizQuestions.AddRangeAsync(seedData);
-        await dbContext.SaveChangesAsync();
-    }
-}
-
-static async Task SeedAccountData(IServiceProvider serviceProvider)
-{
-    using var scope = serviceProvider.CreateScope();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserData>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    await AccountSeedData.SeedUserData(userManager, roleManager); // Call the seed method here
 }
