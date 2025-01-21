@@ -38,7 +38,7 @@ var environment = builder.Environment;
 Console.WriteLine($"Environment: {environment.EnvironmentName}");
 
 // Register ApplicationDbContext with environment-specific connection string
-string connectionString;
+string? connectionString;
 if (environment.IsDevelopment())
 {
     connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
