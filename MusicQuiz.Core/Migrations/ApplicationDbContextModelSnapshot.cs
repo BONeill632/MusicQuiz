@@ -179,7 +179,7 @@ namespace MusicQuiz.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LastAssignedUserID");
+                    b.ToTable("LastAssignedUserID", (string)null);
                 });
 
             modelBuilder.Entity("MusicQuiz.Core.Entities.QuizQuestion", b =>
@@ -226,7 +226,7 @@ namespace MusicQuiz.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuizQuestions");
+                    b.ToTable("QuizQuestions", (string)null);
 
                     b.HasData(
                         new
@@ -6622,7 +6622,7 @@ namespace MusicQuiz.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersPracticeQuizResults");
+                    b.ToTable("UsersPracticeQuizResults", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

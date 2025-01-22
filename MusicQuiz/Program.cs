@@ -85,8 +85,9 @@ using (var scope = app.Services.CreateScope())
 
         // Seed roles and data
         await InitializeRoles(services);
-        await SeedData(services);
         await SeedAccountData(services);
+        await SeedData(services);
+
     }
     catch (Exception ex)
     {

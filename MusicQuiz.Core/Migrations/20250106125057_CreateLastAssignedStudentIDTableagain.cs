@@ -11,9 +11,12 @@ namespace MusicQuiz.Core.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "LastAssignedStudentID");
+            // Check if the table exists and drop it if it does
+            migrationBuilder.Sql(@"
+        DROP TABLE IF EXISTS `LastAssignedStudentID`;
+    ");
 
+            // Create the new table
             migrationBuilder.CreateTable(
                 name: "LastAssignedUserID",
                 columns: table => new
@@ -34,20 +37,6 @@ namespace MusicQuiz.Core.Migrations
         {
             migrationBuilder.DropTable(
                 name: "LastAssignedUserID");
-
-            migrationBuilder.CreateTable(
-                name: "LastAssignedStudentID",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    LastStudentID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LastAssignedStudentID", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
         }
     }
 }
