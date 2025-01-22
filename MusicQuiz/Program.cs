@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Services;
-using Microsoft.Build.Locator;
-using MusicQuiz.Core.Migrations;
 using MusicQuiz.Application.Interfaces;
-using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Data;
+using MusicQuiz.Core.Entities;
+using MusicQuiz.Core.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,9 +33,7 @@ builder.Services.AddSession(options =>
 });
 
 // Register ApplicationDbContext with environment-specific connection string
-string? connectionString;
-
-    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
 {
@@ -69,22 +66,36 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// Register UserRoleService
+// Register services
 builder.Services.AddScoped<UserRoleService>();
-
-// Register the ResultsService
 builder.Services.AddScoped<IResultsService, ResultsService>();
-
-// Register the UserExpService
 builder.Services.AddScoped<UserExpService>();
 
 var app = builder.Build();
 
-await SeedData(app.Services);
-await SeedAccountData(app.Services);
+// Apply migrations and seed data before starting the application
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Apply pending migrations
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
 
+        // Seed roles and data
+        await InitializeRoles(services);
+        await SeedData(services);
+        await SeedAccountData(services);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred during migration or seeding: {ex.Message}");
+        throw; // Rethrow the exception to ensure visibility during development
+    }
+}
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -110,9 +121,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
-// Initialize roles and seed data
-await InitializeRoles(app.Services);
 
 app.Run();
 
