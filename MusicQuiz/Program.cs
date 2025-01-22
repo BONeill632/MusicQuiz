@@ -80,6 +80,10 @@ builder.Services.AddScoped<UserExpService>();
 
 var app = builder.Build();
 
+await SeedData(app.Services);
+await SeedAccountData(app.Services);
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -109,8 +113,6 @@ app.MapRazorPages();
 
 // Initialize roles and seed data
 await InitializeRoles(app.Services);
-await SeedData(app.Services);
-await SeedAccountData(app.Services);
 
 app.Run();
 
