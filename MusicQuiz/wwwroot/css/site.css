@@ -6,6 +6,12 @@ html {
     html {
         font-size: 18px;
     }
+    .legend-container div > div {
+        flex: 1 1 30%;
+    }
+    .progress-bar-header, .progress-bar-cell {
+        padding: 10px 15px;
+    }
 }
 
 html {
@@ -57,24 +63,24 @@ h1 {
     font-weight: bold;
 }
 
-.option:hover {
-    background-color: #f0f0f0;
-    border-color: #888;
-}
+    .option:hover {
+        background-color: #f0f0f0;
+        border-color: #888;
+    }
 
-.option.correct {
-    border: 2px solid green;
-    padding: 10px;
-}
+    .option.correct {
+        border: 2px solid green;
+        padding: 10px;
+    }
 
-.option.incorrect {
-    border: 2px solid red;
-    padding: 10px;
-}
+    .option.incorrect {
+        border: 2px solid red;
+        padding: 10px;
+    }
 
-.option.selected {
-    background-color: #d3d3d3;
-}
+    .option.selected {
+        background-color: #d3d3d3;
+    }
 
 .feedback-text {
     margin-left: 10px;
@@ -96,13 +102,28 @@ h1 {
     background-color: rgb(214, 0, 13);
 }
 
-.custom-navbar-red .navbar-brand,
-.custom-navbar-red .nav-link {
-    color: white !important;
+    .custom-navbar-red .navbar-brand,
+    .custom-navbar-red .nav-link {
+        color: white !important;
+    }
+
+    .custom-navbar-red .navbar-nav .nav-link {
+        font-size: 0.9rem; /* Keep the decreased font size */
+        padding-left: 0.1rem; /* Reduced padding for left side */
+        padding-right: 0.1rem; /* Reduced padding for right side */
+    }
+
+    .custom-navbar-red .navbar-nav .nav-item {
+        margin-right: 0.1rem; /* Decreased margin for tighter spacing */
+    }
+
+@media (max-width: 576px) {
+    .custom-navbar-red .navbar-nav .nav-link {
+        padding-left: 0.1rem; /* Further reduce padding on smaller screens */
+        padding-right: 0.1rem;
+    }
 }
-
-
- /*Making the layout look more like QUB*/
+/*Making the layout look more like QUB*/
 .red-bar {
     margin-top: auto;
     background-color: red;
@@ -127,12 +148,11 @@ h1 {
     cursor: pointer;
     font-weight: bold;
     border-radius: 5px;
-
 }
 
-.quiz-option.selected {
-    background-color: #d3d3d3;
-}
+    .quiz-option.selected {
+        background-color: #d3d3d3;
+    }
 
 .quiz-button {
     padding: 5px;
@@ -167,9 +187,9 @@ a {
     color: red;
 }
 
-a:hover {
-    color: darkred;
-}
+    a:hover {
+        color: darkred;
+    }
 
 .btn-link-red {
     color: red;
@@ -188,18 +208,18 @@ a:hover {
     margin: 10px 0;
 }
 
-.audio-player audio {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: white;
-    color: white;
-}
+    .audio-player audio {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: white;
+        color: white;
+    }
 
-.audio-player audio::-webkit-media-controls {
-    background-color: white;
-    color: red;
-}
+        .audio-player audio::-webkit-media-controls {
+            background-color: white;
+            color: red;
+        }
 
 .button-container {
     display: flex;
@@ -207,9 +227,9 @@ a:hover {
     align-items: center;
 }
 
-.button-container button {
-    margin: 0 10px;
-}
+    .button-container button {
+        margin: 0 10px;
+    }
 
 .option-center {
     display: flex;
@@ -235,20 +255,23 @@ a:hover {
     position: relative;
     flex-shrink: 0;
 }
-.circular-progress::before {
-    content: "";
-    position: absolute;
-    width: 80%;
-    height: 80%;
-    background: white;
-    border-radius: 50%;
+
+    .circular-progress::before {
+        content: "";
+        position: absolute;
+        width: 80%;
+        height: 80%;
+        background: white;
+        border-radius: 50%;
     }
+
 .level-text {
     position: absolute;
     font-size: 14px;
     font-weight: bold;
     color: var(--fill-color);
 }
+
 .progress-info {
     font-size: 14px;
     color: white;
@@ -263,6 +286,7 @@ a:hover {
     text-align: center;
     gap: 20px;
 }
+
 .circular-progress-lg {
     width: 100px;
     height: 100px;
@@ -275,14 +299,14 @@ a:hover {
     flex-shrink: 0;
 }
 
-.circular-progress-lg::before {
-    content: "";
-    position: absolute;
-    width: 85%;
-    height: 85%;
-    background: white;
-    border-radius: 50%;
-}
+    .circular-progress-lg::before {
+        content: "";
+        position: absolute;
+        width: 85%;
+        height: 85%;
+        background: white;
+        border-radius: 50%;
+    }
 
 .level-text-lg {
     position: absolute;
@@ -311,29 +335,29 @@ a:hover {
     border-spacing: 0 10px;
 }
 
-.table-modern thead th {
-    text-align: left;
-    font-weight: bold;
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #dee2e6;
-    padding: 10px;
-}
-
-.table-modern tbody tr {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-color: whitesmoke;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    .table-modern thead th {
+        text-align: left;
+        font-weight: bold;
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        padding: 10px;
     }
 
-.table-modern tbody tr:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+    .table-modern tbody tr {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background-color: whitesmoke;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-.table-modern tbody td {
-    padding: 15px;
-    border-top: none;
-}
+        .table-modern tbody tr:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+    .table-modern tbody td {
+        padding: 15px;
+        border-top: none;
+    }
 
 /* Text Highlighting */
 /* Green text for correct answers */
@@ -348,7 +372,7 @@ a:hover {
 
 /* Red text for incorrect answers */
 .row-danger {
-    color: #dc3545; 
+    color: #dc3545;
 }
 
 .centered {
@@ -410,12 +434,6 @@ form thead green tick
     }
 }
 
-@media (min-width: 768px) {
-    .legend-container div > div {
-        flex: 1 1 30%;
-    }
-}
-
 @media (min-width: 992px) {
     .legend-container div > div {
         flex: 1 1 22%;
@@ -445,14 +463,14 @@ form thead green tick
         margin: 20px auto; /* Center the table on mobile */
     }
 
-    .progress-bar-table thead, .progress-bar-table tbody {
-        display: inline-block;
-    }
+        .progress-bar-table thead, .progress-bar-table tbody {
+            display: inline-block;
+        }
 
-    .progress-bar-table th, .progress-bar-table td {
-        display: block;
-        text-align: center;
-    }
+        .progress-bar-table th, .progress-bar-table td {
+            display: block;
+            text-align: center;
+        }
 
     /* Adjust padding for mobile */
     .progress-bar-header, .progress-bar-cell {
@@ -463,12 +481,6 @@ form thead green tick
 @media (min-width: 576px) {
     .progress-bar-header, .progress-bar-cell {
         padding: 8px 12px;
-    }
-}
-
-@media (min-width: 768px) {
-    .progress-bar-header, .progress-bar-cell {
-        padding: 10px 15px;
     }
 }
 
@@ -575,3 +587,9 @@ form thead green tick
         line-height: 1.6;
         color: #555;
     }
+
+
+.navbar-brand {
+    padding-right: 0px; /* Reduce the right padding */
+    margin-right: 5px; /* Optionally adjust the margin as well */
+}

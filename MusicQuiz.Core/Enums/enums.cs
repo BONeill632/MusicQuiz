@@ -86,31 +86,31 @@ namespace MusicQuiz.Core.Enums
         /// Level1
         /// </summary>
         [Description("Level 1")]
-        Level1 = 150,
+        Level1 = 500, // Total: 500
 
         /// <summary>
         /// Level2
         /// </summary>
         [Description("Level 2")]
-        Level2 = 300,
+        Level2 = 1000, // Total: 1500
 
         /// <summary>
         /// Level3
         /// </summary>
         [Description("Level 3")]
-        Level3 = 500,
+        Level3 = 1500, // Total: 3000
 
         /// <summary>
         /// Level4
         /// </summary>
         [Description("Level 4")]
-        Level4 = 1000,
+        Level4 = 2000, // Total: 5000
 
         /// <summary>
         /// Level5
         /// </summary>
         [Description("Level 5")]
-        Level5 = 1500
+        Level5 = 5000 // Max level
     }
 
     public enum EXP

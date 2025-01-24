@@ -489,6 +489,7 @@ namespace MusicQuiz.Web.Controllers
                     userManager.UpdateAsync(user).Wait();
                 }
             }
+            //if you refreshed the page iut lost the data. taking this out for now until I find out where I need it
             //ClearQuizSession();
 
             return View(model);

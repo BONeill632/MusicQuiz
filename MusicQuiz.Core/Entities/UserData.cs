@@ -38,13 +38,19 @@ namespace MusicQuiz.Core.Entities
         /// <returns></returns>
         public int GetLevel()
         {
-            if (EXP < 150)
+            if (EXP < (int)MusicQuiz.Core.Enums.Level.Level1)
                 return 1;
-            else if (EXP < 300)
+            else if (EXP < ((int)MusicQuiz.Core.Enums.Level.Level1 +
+                        (int)MusicQuiz.Core.Enums.Level.Level2))
                 return 2;
-            else if (EXP < 500)
+            else if (EXP < ((int)MusicQuiz.Core.Enums.Level.Level1 +
+                        (int)MusicQuiz.Core.Enums.Level.Level2
+                        + (int)MusicQuiz.Core.Enums.Level.Level3))
                 return 3;
-            else if (EXP < 1000)
+            else if (EXP < ((int)MusicQuiz.Core.Enums.Level.Level1 +
+                        (int)MusicQuiz.Core.Enums.Level.Level2
+                        + (int)MusicQuiz.Core.Enums.Level.Level3
+                        + (int)MusicQuiz.Core.Enums.Level.Level4))
                 return 4;
             else
                 return 5;

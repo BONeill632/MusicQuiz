@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MusicQuiz.Core.Entities
+@using MusicQuiz.Application.Services
 @inject SignInManager<UserData> SignInManager
 @inject UserManager<UserData> UserManager
 @inject UserExpService UserExpService
@@ -20,16 +21,24 @@
                      style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
                     <span class="level-text">@user?.GetLevel()</span>
                 </div>
-                <span class="progress-info">@progressText</span>
+                <span class="progress-info"><strong>@progressText</strong></span>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.FirstName!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
+        <!-- Account Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Account
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown" style="background-color: red; border: 1px; border-radius: 5px;">
+                <li>
+                    <a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Manage/Index">Manage</a>
+                </li>
+                <li>
+                    <form class="dropdown-item m-0 p-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="btn text-white w-100 text-start">Logout</button>
+                    </form>
+                </li>
+            </ul>
         </li>
     }
     else
