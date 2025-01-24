@@ -1,10 +1,10 @@
 html {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 @media (min-width: 768px) {
     html {
-        font-size: 16px;
+        font-size: 18px;
     }
 }
 
@@ -21,6 +21,7 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0;
+    font-size: 1.125rem;
 }
 
 h1 {
@@ -53,6 +54,7 @@ h1 {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s, border-color 0.3s;
+    font-weight: bold;
 }
 
 .option:hover {
@@ -120,9 +122,12 @@ h1 {
 /*QUESTION STUFF*/
 .quiz-option {
     border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
+    padding: 8px;
+    margin: 8px;
     cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+
 }
 
 .quiz-option.selected {
@@ -130,8 +135,8 @@ h1 {
 }
 
 .quiz-button {
-    padding: 10px;
-    margin: 10px;
+    padding: 5px;
+    margin: 5px;
 }
 
 /*HOMEPAGE*/
@@ -148,7 +153,10 @@ h1 {
 .img-fluid {
     max-width: 100%;
     height: auto;
+    max-height: 100%; /* Prevents the image from stretching vertically */
+    object-fit: contain; /* Ensures it maintains aspect ratio */
 }
+
 
 .my-5 {
     margin-top: 3rem !important;
@@ -288,8 +296,282 @@ a:hover {
     color: white;
 }
 
-/*OOPS*/
+/*OOPS on homepage*/
 .text-red-bold {
     color: red;
     font-weight: bold;
 }
+
+/* Modern Table Styles
+    From Chat GPT
+*/
+.table-modern {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.table-modern thead th {
+    text-align: left;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    padding: 10px;
+}
+
+.table-modern tbody tr {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: whitesmoke;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+.table-modern tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.table-modern tbody td {
+    padding: 15px;
+    border-top: none;
+}
+
+/* Text Highlighting */
+/* Green text for correct answers */
+.row-success {
+    color: #28a745;
+}
+
+/* Amber text for partially correct answers */
+.row-warning {
+    color: ORANGE;
+}
+
+/* Red text for incorrect answers */
+.row-danger {
+    color: #dc3545; 
+}
+
+.centered {
+    text-align: center;
+}
+
+.score-container {
+    text-align: center;
+    /* Adds some space between the header and score */
+    margin-top: 10px;
+}
+
+.score {
+    font-size: 4em;
+    font-weight: bold;
+}
+
+form thead green tick
+.icon-green {
+    color: green;
+}
+/*Quiz legend*/
+.legend-container {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.9em;
+    width: 100%; /* Ensure the container takes full width */
+}
+
+    .legend-container h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .legend-container div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        width: 100%; /* Ensure the container takes full width */
+    }
+
+        .legend-container div > div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex: 1 1 100%; /* Default to full width */
+        }
+
+    .legend-container span {
+        font-size: 0.8em;
+    }
+
+/* Adjust layout for larger screens */
+@media (min-width: 576px) {
+    .legend-container div > div {
+        flex: 1 1 45%;
+    }
+}
+
+@media (min-width: 768px) {
+    .legend-container div > div {
+        flex: 1 1 30%;
+    }
+}
+
+@media (min-width: 992px) {
+    .legend-container div > div {
+        flex: 1 1 22%;
+    }
+}
+
+/* Progress Table Styling */
+.progress-bar-table {
+    margin: 20px auto; /* Center the table horizontally */
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+    max-width: 100%; /* Ensure table width does not exceed the container */
+    box-sizing: border-box;
+}
+
+/* Table headers and cells */
+.progress-bar-header, .progress-bar-cell {
+    padding: 5px 10px;
+}
+
+@media (max-width: 576px) {
+    .progress-bar-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin: 20px auto; /* Center the table on mobile */
+    }
+
+    .progress-bar-table thead, .progress-bar-table tbody {
+        display: inline-block;
+    }
+
+    .progress-bar-table th, .progress-bar-table td {
+        display: block;
+        text-align: center;
+    }
+
+    /* Adjust padding for mobile */
+    .progress-bar-header, .progress-bar-cell {
+        padding: 2px 5px;
+    }
+}
+
+@media (min-width: 576px) {
+    .progress-bar-header, .progress-bar-cell {
+        padding: 8px 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .progress-bar-header, .progress-bar-cell {
+        padding: 10px 15px;
+    }
+}
+
+/* Ensure full-width table is centered on larger screens */
+@media (min-width: 576px) {
+    .progress-bar-table {
+        display: table; /* Use table display property for larger screens */
+        width: auto; /* Let the table size based on its content */
+        margin: 0 auto; /* Center the table horizontally */
+    }
+}
+
+/*Making the quiz index information pretty*/
+.center-content {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-list {
+    list-style-type: decimal;
+    margin-left: 20px;
+    text-align: left;
+}
+
+    .info-list li {
+        margin: 10px 0;
+    }
+
+.exp-list {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+    .exp-list li {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+
+
+
+/* Style for the collapsible section of homepage paragraphs */
+/* General Styling for Collapsible Content */
+/* General Styling for Collapsible Content */
+.collapsible-container {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+    .collapsible-header:hover {
+        background-color: #eaeaea;
+    }
+
+.arrow {
+    font-size: 1.6rem;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+/* Rotate arrow up when expanded */
+.collapsible-header.open .arrow {
+    transform: rotate(180deg);
+}
+
+/* Content section for smooth expansion/collapse */
+.collapsible-content {
+    max-height: 0; /* Initially collapsed */
+    overflow: hidden; /* Hide content that's not visible */
+    transition: max-height 0.5s ease; /* Smooth expand/collapse */
+}
+
+    .collapsible-content.open {
+        max-height: 1000px; /* Large enough to fit the full content */
+    }
+
+    .collapsible-content p {
+        margin: 0;
+        padding: 15px;
+        font-size: 1rem;
+        background-color: #f9f9f9;
+        line-height: 1.6;
+        color: #555;
+    }

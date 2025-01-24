@@ -220,6 +220,8 @@ namespace MusicQuiz.Web.Controllers
                 },
             };
 
+            GetMusicFiles();
+
             return View(model);
         }
 

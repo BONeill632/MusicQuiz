@@ -31,6 +31,19 @@
     }
 
     selectedOption.parentElement.appendChild(feedbackText);
+
+    // Increment the attempt number in JavaScript
+    var attemptNumberField = document.getElementById('attemptNumber');
+    var attemptNumber = parseInt(attemptNumberField.value) || 0;
+    attemptNumber++;  // Increase attempt number by 1
+    attemptNumberField.value = attemptNumber;  // Update hidden field with new attempt number
+
+    // Populate the firstUserAnswer if it is not already set
+    var firstUserAnswerField = document.getElementById('firstUserAnswer');
+    if (!firstUserAnswerField.value) {
+        firstUserAnswerField.value = selectedOption.value;  // Set the first answer only if it's null
+    }
+
     // Enable the Next button
     document.getElementById('nextButton').disabled = false;
 }

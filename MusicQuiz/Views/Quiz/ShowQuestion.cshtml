@@ -3,18 +3,21 @@
     ViewData["Title"] = "Quiz";
     var currentQuestionIndex = ViewBag.CurrentQuestionIndex as int? ?? 0;
     var totalQuestions = ViewBag.TotalQuestions as int? ?? 0;
-    var score = (ViewBag.Score as decimal? ?? 0).ToString("F2");
     var answer = Model.UserAnswer;
     var feedback = ViewBag.Feedback;
+    var attemptNumber = Model.AttemptNumber;
+
+    var questionStatuses = ViewBag.QuestionStatuses as List<string> ?? new List<string>();
+    // Statuses: "correct-first", "correct-multiple", "incorrect", "unanswered"
 }
 
 <!-- Add a hidden input field to store the feedback value -->
 <input type="hidden" id="feedback" value="@feedback" />
 
 @section Scripts {
-    <script src="~/js/selectAnswer.js"></script>
-    <script src="~/js/submitAnswer.js"></script>
-    <script src="~/js/enableButtons.js"></script>
+    <script src="~/js/selectAnswer.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/js/submitAnswer.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/js/enableButtons.js?v=@DateTime.Now.Ticks"></script>
 }
 
 <h1>Topic: @Model.SelectedTopic, Difficulty: @Model.SelectedDifficulty</h1>
@@ -25,7 +28,7 @@
 {
     <div class="center-content">
         <div class="audio-player">
-            <p>Listen to the audio below and answer the question. The file below is at @Model.MusicReferenceName</p>
+            <p>Listen to the audio below and answer the question. The file below is <strong>@Model.MusicReferenceName</strong></p>
             <audio controls>
                 <source src="@Model.MusicReferenceFilePath" type="audio/*">
                 <source src="@Model.MusicReferenceFilePath" type="audio/mpeg">
@@ -57,6 +60,8 @@
         }
     </div>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
+    <input type="hidden" id="attemptNumber" name="attemptNumber" value="@attemptNumber" />
+    <input type="hidden" id="firstUserAnswer" name="firstUserAnswer" />
     <div id="feedbackSection"></div>
     <hr />
     <div class="button-container">
@@ -69,6 +74,48 @@
 
 <form id="previousForm" method="post" action="/Quiz/PreviousQuestion" style="display:none;"></form>
 
-<h3>Current Score: @score</h3>
+<h3 class="centered">Progress</h3>
 
+<div class="legend-container">
+    <h3>Legend</h3>
+    <div>
+        <div>
+            <span>🟢</span><span>Correct (First Attempt)</span>
+        </div>
+        <div>
+            <span>🟠</span><span>Correct (Multiple Attempts)</span>
+        </div>
+        <div>
+            <span>❌</span><span>Incorrect</span>
+        </div>
+        <div>
+            <span>➖</span><span>Unanswered</span>
+        </div>
+    </div>
+</div>
+<table class="progress-bar-table">
+    <thead>
+        <tr>
+            @for (int i = 0; i < questionStatuses.Count; i++)
+            {
+                <th class="progress-bar-header">Q@(i + 1)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var status in questionStatuses)
+            {
+                string icon = status switch
+                {
+                    "correct-first" => "🟢",
+                    "correct-multiple" => "🟠",
+                    "incorrect" => "❌",
+                    _ => "➖"
+                };
 
+                <td class="progress-bar-cell">@Html.Raw(icon)</td>
+            }
+        </tr>
+    </tbody>
+</table>

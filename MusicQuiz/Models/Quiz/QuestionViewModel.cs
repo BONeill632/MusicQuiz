@@ -75,7 +75,14 @@ namespace MusicQuiz.Web.Models.Quiz
         /// <summary>
         /// Users answer
         /// </summary>
+        [DisplayName("Users Final Answer")]
         public string UserAnswer { get; set; } = string.Empty;
+
+        /// <summary>
+        /// First answer to actually mark against
+        /// </summary>
+        [DisplayName("Users First Answer")]
+        public string FirstAnswer { get; set; } = string.Empty;
 
         /// <summary>
         /// This is used when going between next & previous to stop the
@@ -93,5 +100,21 @@ namespace MusicQuiz.Web.Models.Quiz
         /// If is Assessment, feedback is turned off
         /// </summary>
         public bool IsAssessment { get; set; }
+
+        /// <summary>
+        /// Attempt number for the question
+        /// </summary>
+        [DisplayName("Attempt Number")]
+        public int AttemptNumber { get; set; }
+
+        /// <summary>
+        /// EXP gained from the question, after number of attempts
+        /// </summary>
+        public int EXP { get; set; }
+
+        /// <summary>
+        /// List of available music file paths for dropdowns
+        /// </summary>
+        public List<string>? MusicFiles { get; set; }
     }
 }

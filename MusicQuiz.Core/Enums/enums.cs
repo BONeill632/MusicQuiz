@@ -74,11 +74,10 @@ namespace MusicQuiz.Core.Enums
         Harp = 3,
 
         /// <summary>
-        /// Miramba.
+        /// Marimba.
         /// </summary>
-        [Description("Miramba")]
-        Miramba = 4,
-
+        [Description("Marimba")]
+        Marimba = 4,
     }
 
     public enum Level
@@ -112,5 +111,32 @@ namespace MusicQuiz.Core.Enums
         /// </summary>
         [Description("Level 5")]
         Level5 = 1500
+    }
+
+    public enum EXP
+    {
+        /// <summary>
+        /// EXP/score on attempt 1
+        /// </summary>
+        [Description("First attempt:")]
+        One = 10,
+
+        /// <summary>
+        /// EXP/score on attempt 2
+        /// </summary>
+        [Description("Second Attempt")]
+        Two = 5,
+
+        /// <summary>
+        /// EXP/score on attempt 3
+        /// </summary>
+        [Description("Third attempt:")]
+        Three = 2,
+
+        /// <summary>
+        /// EXP/score on attempt 4/incorrect
+        /// </summary>
+        [Description("Fourth attempt/Incorrect:")]
+        Default = 0
     }
 }

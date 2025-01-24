@@ -1,8 +1,4 @@
-﻿@if (TempData["SuccessMessage"] != null)
-{
-    <input type="hidden" id="successMessage" value="@TempData["SuccessMessage"]" />
-}
-@model MusicQuiz.Web.Models.Quiz.QuestionViewModel
+﻿@model MusicQuiz.Web.Models.Quiz.QuestionViewModel
 
 @{
     ViewData["Title"] = "Add Question";
@@ -85,26 +81,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/js/addQuestion.js"></script>
-    <script>
-        async function loadMusicFiles() {
-            const response = await fetch('/Admin/GetMusicFiles');
-            const musicFiles = await response.json();
-
-            const musicQuestionFilePathDropdown = document.getElementById('musicQuestionFilePathDropdown');
-            const musicReferenceFilePathDropdown = document.getElementById('musicReferenceFilePathDropdown');
-            musicQuestionFilePathDropdown.innerHTML = '<option value="">Select a music file</option>';
-            musicReferenceFilePathDropdown.innerHTML = '<option value="">Select a reference file</option>';
-            musicFiles.forEach(file => {
-                const option = document.createElement('option');
-                option.value = file;
-                option.textContent = file;
-                musicQuestionFilePathDropdown.appendChild(option);
-                musicReferenceFilePathDropdown.appendChild(option.cloneNode(true));
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadMusicFiles);
-    </script>
+    <script src="~/js/AddQuestionPopUp.js"></script>
+    <script src="~/js/loadMusicFiles.js"></script>
 }
 

@@ -7,6 +7,7 @@ using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models;
 using MusicQuiz.Web.Models.Home;
 using MusicQuiz.Web.Models.Quiz;
+using System.ComponentModel;
 using System.Text.Json;
 
 namespace MusicQuiz.Web.Controllers
@@ -119,11 +120,16 @@ namespace MusicQuiz.Web.Controllers
 
             // Select 10 random questions
             var random = new Random();
+
+            //Select random questions from DB where the difficulty & topic match
             var selectedQuestions = questions.OrderBy(q => random.Next()).Take(10).ToList();
 
             var questionViewModels = selectedQuestions.Select(q =>
             {
+                //List options
                 var options = new List<string> { q.CorrectAnswer, q.WrongAnswerOne, q.WrongAnswerTwo, q.WrongAnswerThree };
+
+                //Randomize order so users cannot predict answer locations
                 options = [.. options.OrderBy(x => random.Next())];
 
                 return new QuestionViewModel
@@ -136,6 +142,8 @@ namespace MusicQuiz.Web.Controllers
                     MusicReferenceName = Path.GetFileNameWithoutExtension(q.ReferenceMusicFilePath),
                     OptionsForQuiz = options,
                     CorrectAnswer = q.CorrectAnswer,
+                    AttemptNumber = 0,
+                    EXP = 0
                 };
             }).ToList();
 
@@ -167,6 +175,30 @@ namespace MusicQuiz.Web.Controllers
                 return View("NoQuestions");
             }
 
+            // Update question statuses for all questions
+            var questionStatuses = questions.Select(q =>
+            {
+                if (!q.IsAnswered)
+                {
+                    return "unanswered";
+                }
+                else if (q.FirstAnswer == q.CorrectAnswer)
+                {
+                    return "correct-first";
+                }
+                else if (q.UserAnswer == q.CorrectAnswer && q.AttemptNumber > 1)
+                {
+                    return "correct-multiple";
+                }
+                else
+                {
+                    return "incorrect";
+                }
+            }).ToList();
+
+            // Store question statuses in ViewBag
+            ViewBag.QuestionStatuses = questionStatuses;
+
             var model = questions[currentIndex];
             ViewBag.CurrentQuestionIndex = currentIndex;
             ViewBag.TotalQuestions = questions.Count;
@@ -177,8 +209,16 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+
+        /// <summary>
+        /// Show the next question
+        /// </summary>
+        /// <param name="selectedOption"></param>
+        /// <param name="attemptNumber"></param>
+        /// <param name="firstUserAnswer"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult NextQuestion(string selectedOption)
+        public IActionResult NextQuestion(string selectedOption, int attemptNumber, string firstUserAnswer)
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
             var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : [];
@@ -189,14 +229,14 @@ namespace MusicQuiz.Web.Controllers
                 return View("NoQuestions");
             }
 
-            // Save the user's answer
-            SaveUserAnswer(questions, currentIndex, selectedOption);
+            // Save the user's answer and first answer
+            SaveUserAnswer(questions, currentIndex, selectedOption, attemptNumber, firstUserAnswer);
 
             // Move to the next question
             currentIndex++;
             if (currentIndex >= questions.Count)
             {
-                //Finishes Quiz
+                // Finish the quiz
                 return RedirectToAction("QuizResults");
             }
 
@@ -205,7 +245,15 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("ShowQuestion");
         }
 
-        private void SaveUserAnswer(List<QuestionViewModel> questions, int currentIndex, string selectedOption)
+        /// <summary>
+        /// Save user answer to the HTTPcontext
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <param name="currentIndex"></param>
+        /// <param name="selectedOption"></param>
+        /// <param name="attemptNumber"></param>
+        /// <param name="firstUserAnswer"></param>
+        private void SaveUserAnswer(List<QuestionViewModel> questions, int currentIndex, string selectedOption, int attemptNumber, string firstUserAnswer)
         {
             // Set selectedOption to "Not answered" if the user doesn't choose a radio button
             if (string.IsNullOrEmpty(selectedOption))
@@ -214,8 +262,16 @@ namespace MusicQuiz.Web.Controllers
             }
 
             var currentQuestion = questions[currentIndex];
-            var answer = currentQuestion.UserAnswer;
+            var answer = firstUserAnswer;
+            currentQuestion.AttemptNumber = attemptNumber;
+            currentQuestion.FirstAnswer = answer;
             currentQuestion.UserAnswer = selectedOption;
+
+            if (attemptNumber > 1)
+            {
+                // Reassign the answer to handle the retry case
+                currentQuestion.UserAnswer = selectedOption;
+            }
 
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
 
@@ -223,16 +279,20 @@ namespace MusicQuiz.Web.Controllers
             if (currentQuestion.IsAnswered)
             {
                 // If the question was previously answered, adjust the score based on the new answer
-                //Adjust the feedback
-                if (answer == currentQuestion.CorrectAnswer && selectedOption != currentQuestion.CorrectAnswer)
+                if (answer == currentQuestion.FirstAnswer && selectedOption != currentQuestion.CorrectAnswer)
                 {
                     currentQuestion.Feedback = "Try again. ✘";
                     correctAnswers--;
                 }
-                else if (answer != currentQuestion.CorrectAnswer && selectedOption == currentQuestion.CorrectAnswer)
+                else if (answer != currentQuestion.FirstAnswer && selectedOption == currentQuestion.CorrectAnswer)
                 {
                     currentQuestion.Feedback = "Correct! ✔";
-                    correctAnswers++;
+                    attemptNumber++;
+
+                    if (attemptNumber < 4)
+                    {
+                        correctAnswers++;
+                    }
                 }
             }
             else
@@ -241,24 +301,80 @@ namespace MusicQuiz.Web.Controllers
                 if (selectedOption == currentQuestion.CorrectAnswer)
                 {
                     currentQuestion.Feedback = "Correct! ✔";
+
+                    // Correct answer increases score
                     correctAnswers++;
                 }
                 else
                 {
                     currentQuestion.Feedback = "Try again. ✘";
+
+                    // Increment attempt number if answer is wrong
+                    attemptNumber++;
                 }
                 currentQuestion.IsAnswered = true;
             }
 
-            HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
+            //WORKING OUT SCORE
+            decimal score;
 
-            // Calculate the score
-            decimal score = Math.Round(correctAnswers / (decimal)questions.Count * 100, 2);
+            // Check if it's the first attempt
+            if (currentIndex == 0)
+            {
+                score = 0;
+            }
+            else
+            {
+                // If not the first attempt, retrieve the previous score from session
+                var scoreString = HttpContext.Session.GetString("Score");
+                score = scoreString != null ? decimal.Parse(scoreString) : 0;
+            }
+
+
+            // Update the attempt number and EXP based on the number of attempts
+            currentQuestion.AttemptNumber = attemptNumber;
+
+            // Calculate the score for the current attempt
+            decimal scoreForQuestion;
+
+            switch (attemptNumber)
+            {
+                case 1:
+                    currentQuestion.EXP = (int)MusicQuiz.Core.Enums.EXP.One;
+                    scoreForQuestion = Math.Round((decimal)100 / questions.Count, 2);
+                    break;
+                case 2:
+                    currentQuestion.EXP = (int)MusicQuiz.Core.Enums.EXP.Two;
+                    scoreForQuestion = Math.Round(((decimal)100 / questions.Count) / 2, 2);
+                    break;
+                case 3:
+                    currentQuestion.EXP = (int)MusicQuiz.Core.Enums.EXP.Three;
+                    scoreForQuestion = Math.Round(((decimal)100 / questions.Count) / 3, 2);
+                    break;
+                default:
+                    currentQuestion.EXP = (int)MusicQuiz.Core.Enums.EXP.Default;
+                    scoreForQuestion = 0;
+                    break;
+            }
+
+            // Add the score for the current question to the total score
+            //IF the answer has been answered correctly
+            score += currentQuestion.UserAnswer == currentQuestion.CorrectAnswer ? scoreForQuestion : 0;
+
+            // Save the updated score to session
             HttpContext.Session.SetString("Score", score.ToString());
 
+            // Save the total correct answers to session (assuming correctAnswers is already calculated elsewhere)
+            HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
+
+            // Save the updated questions back to session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
 
+        /// <summary>
+        /// Return to previous question in the list
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult PreviousQuestion()
         {
@@ -289,33 +405,78 @@ namespace MusicQuiz.Web.Controllers
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
             var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) ?? [] : [];
 
-            var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
             var scoreString = HttpContext.Session.GetString("Score");
 
+            var rightFirstTime = 0;
+            var rightSecondTime = 0;
+            var rightThirdTime = 0;
+            var rightFourthTime = 0;
+            var incorrectAnswers = 0;
+
             decimal score = 0;
+
             if (!string.IsNullOrEmpty(scoreString))
             {
                 score = decimal.TryParse(scoreString, out var parsedScore) ? parsedScore : 0;
             }
 
+            // Loop through all the questions and calculate the counts
+            foreach (var question in questions)
+            {
+                if (question.FirstAnswer == question.CorrectAnswer)
+                {
+                    rightFirstTime++;  // First answer was correct
+                }
+                else if (question.UserAnswer == question.CorrectAnswer && question.FirstAnswer != question.CorrectAnswer)
+                {
+                    switch (question.AttemptNumber)
+                    {
+                        case 1:
+                            rightFirstTime++;
+                            break;
+                        case 2:
+                            rightSecondTime++;
+                            break;
+                        case 3:
+                            rightThirdTime++;
+                            break;
+                        case 4:
+                            rightFourthTime++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    incorrectAnswers++;
+                }
+            }
+
             var model = new QuizResultsViewModel
             {
                 TotalQuestions = questions.Count,
-                CorrectAnswers = correctAnswers,
                 Score = score,
                 Questions = questions,
                 DateOfSubmission = DateTime.Now
             };
 
+            //ViewBag to populate JS
             ViewBag.Score = score;
             ViewBag.TotalQuestions = questions.Count;
-            ViewBag.CorrectAnswers = correctAnswers;
+            ViewBag.RightFirstTime = rightFirstTime;
+            ViewBag.RightSecondTime = rightSecondTime;
+            ViewBag.RightThirdTime = rightThirdTime;
+            ViewBag.RightFourthTime = rightFourthTime;
+            ViewBag.IncorrectAnswers = incorrectAnswers;
             ViewBag.DateOfSubmission = model.DateOfSubmission.ToString("dd/MM/yyyy HH:mm:ss");
 
             var userID = GetUserIdAsync().Result;
 
             if (questions.Count != 0)
             {
+                decimal percentage = (decimal)CalculatePercentage(questions);
+
                 var firstQuestion = questions.First();
                 resultsService.SaveQuizResults(score, model.DateOfSubmission, (int)firstQuestion.SelectedDifficulty, (int)firstQuestion.SelectedTopic, userID);
 
@@ -323,20 +484,44 @@ namespace MusicQuiz.Web.Controllers
                 var user = userManager.FindByIdAsync(userID).Result;
                 if (user != null)
                 {
-                    int expGained = CalculateExpGained(score, (int)firstQuestion.SelectedDifficulty);
+                    int expGained = CalculateExpGained(percentage, (int)firstQuestion.SelectedDifficulty);
                     user.EXP += expGained;
                     userManager.UpdateAsync(user).Wait();
                 }
             }
-
-            ClearQuizSession();
+            //ClearQuizSession();
 
             return View(model);
         }
 
-        private static int CalculateExpGained(decimal score, int difficultyLevel)
+        /// <summary>
+        /// Calculate the percentage of quiz gained by the user
+        /// </summary>
+        /// <param name="questions"></param>
+        /// <returns></returns>
+        private static int CalculatePercentage(List<QuestionViewModel> questions)
         {
-            int expGained = (int)score;
+            int percentage = 0;
+
+            foreach (var question in questions)
+            {
+                if (question.CorrectAnswer.Equals(question.UserAnswer))
+                {
+                    percentage += question.EXP;
+                }
+            }
+            return percentage;
+        }
+
+        /// <summary>
+        /// Calculate the EXP gained depending on the difficulty level
+        /// </summary>
+        /// <param name="expGained"></param>
+        /// <param name="difficultyLevel"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        private static int CalculateExpGained(decimal expGained, int difficultyLevel)
+        {
 
             switch (difficultyLevel)
             {
@@ -355,10 +540,7 @@ namespace MusicQuiz.Web.Controllers
                     throw new ArgumentOutOfRangeException(nameof(difficultyLevel), difficultyLevel, null);
             }
 
-            return expGained;
+            return (int)expGained;
         }
-
-
-
     }
 }
