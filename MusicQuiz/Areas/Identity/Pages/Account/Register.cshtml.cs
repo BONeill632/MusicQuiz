@@ -68,7 +68,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Academic year")]
-            public required string AcademicYear { get; set; }
+            public string? AcademicYear { get; set; }
 
             [Required]
             [EmailAddress]
@@ -137,6 +137,9 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+            // Repopulate the AcademicYearOptions in case of errors
+            AcademicYearOptions = GetAcademicYearOptions();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -200,9 +203,12 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // If we got here, something failed. Repopulate the AcademicYearOptions again just in case.
+            AcademicYearOptions = GetAcademicYearOptions();
+
             return Page();
         }
+
 
         private UserData CreateUser()
         {
