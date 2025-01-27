@@ -1,4 +1,5 @@
 using MusicQuiz.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicQuiz.Core.Entities
 {
@@ -36,5 +37,16 @@ namespace MusicQuiz.Core.Entities
         /// Gets or sets the selected difficulty
         /// </summary>
         public int SelectedDifficulty { get; set; }
+
+        /// <summary>
+        /// Gets or sets AssessmentId
+        /// </summary>
+        public int? AssessmentId { get; set; }
+
+        /// <summary>
+        /// FK constraint for AssessmentId
+        /// </summary>
+        [ForeignKey("AssessmentId")]
+        public Assessments? Assessment { get; set; }
     }
 }
