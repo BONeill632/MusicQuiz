@@ -57,30 +57,25 @@ else
 {
     <h3 class="centered">Your Current Data</h3>
 
-    @if (Model.UserRank != -1)
-    {
-        <table class="table table-modern">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>EXP</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Current user row with the 'row-primary' class applied -->
-                <tr class="row-primary">
-                    <td>@(Model.UserRank != -1 ? Model.UserRank : "Not Ranked")</td>
-                    <td><strong class="font-weight-bold">@Model.CurrentUser?.FirstName @Model.CurrentUser?.LastName</strong></td>
-                    <td><strong class="font-weight-bold">@Model.CurrentUser?.EXP</strong></td>
-                </tr>
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p class="text-center">No data to display. It looks like no users have registered for this year</p>
-    }
+    <table class="table table-modern">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>EXP</th>
+                <th>Academic Year</th> <!-- New column for the academic year -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Current user row with the 'row-primary' class applied -->
+            <tr class="row-primary">
+                <td>@(Model.UserRank != -1 ? Model.UserRank : "Not Ranked")</td>
+                <td><strong class="font-weight-bold">@Model.CurrentUser?.FirstName @Model.CurrentUser?.LastName</strong></td>
+                <td><strong class="font-weight-bold">@Model.CurrentUser?.EXP</strong></td>
+                <td>@Model.CurrentUser?.AcademicYear</td> <!-- Displaying the user's academic year -->
+            </tr>
+        </tbody>
+    </table>
 }
 else
 {
