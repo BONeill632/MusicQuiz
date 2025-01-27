@@ -8,7 +8,14 @@ namespace MusicQuiz.Core.Migrations
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<UserData>(options)
     {
+        /// <summary>
+        /// Quiz questions
+        /// </summary>
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
+
+        /// <summary>
+        /// The results of all quizzes. Name changed last minute
+        /// </summary>
         public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; } = null!;
 
         /// <summary>

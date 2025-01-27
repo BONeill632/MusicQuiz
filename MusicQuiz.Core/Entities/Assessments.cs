@@ -8,7 +8,7 @@ namespace MusicQuiz.Core.Entities
         /// <summary>
         /// Assessment ID
         /// </summary>
-        public required int AssessmentID { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// Academic Year
