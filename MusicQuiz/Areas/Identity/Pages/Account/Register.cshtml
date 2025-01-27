@@ -29,6 +29,17 @@
                 <span asp-validation-for="Input.StudentID" class="text-danger"></span>
             </div>
             <div class="form-floating p-1">
+                <select asp-for="Input.AcademicYear" class="form-control" aria-required="true">
+                    @foreach (var year in Model.AcademicYearOptions)
+                    {
+                        <option value="">@year</option>
+                    }
+                </select>
+                <label asp-for="Input.AcademicYear"></label>
+                <span asp-validation-for="Input.AcademicYear" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating p-1">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.Email"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>

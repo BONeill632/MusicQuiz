@@ -42,12 +42,15 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             StudentID = string.Empty,
             Email = string.Empty,
             Password = string.Empty,
-            ConfirmPassword = string.Empty
+            ConfirmPassword = string.Empty,
+            AcademicYear = string.Empty
         };
 
         public string ReturnUrl { get; set; } = string.Empty;
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; } = [];
+
+        public List<string> AcademicYearOptions { get; set; } = [];
 
         public class InputModel
         {
@@ -62,6 +65,10 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Student ID")]
             public required string StudentID { get; set; }
+
+            [Required]
+            [Display(Name = "Academic year")]
+            public required string AcademicYear { get; set; }
 
             [Required]
             [EmailAddress]
@@ -80,16 +87,56 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             public required string ConfirmPassword { get; set; }
         }
 
+        /// <summary>
+        /// Getting list of academic years, this year, the previous year and next
+        /// This is more of a just-in-case rather than necesscary
+        /// The users of the app will tpically be for the modue in that year.
+        /// They will need to change this in the user section if they use this application
+        /// for more than an academic year as this will be used for leaderboards and assessments
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAcademicYearOptions()
+        {
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+
+            // Adjust the logic to consider the current academic year as 24/25 for Sept - Aug
+            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12) 
+                ? currentYear
+                : (currentMonth >= 1 && currentMonth <= 8) ? currentYear - 1 : currentYear;
+
+            // Generate the correct academic year options
+            var options = new List<string>
+            {
+                // Previous academic year
+                $"{(currentAcademicYear - 1) % 100}/{currentAcademicYear % 100}",
+
+                // Current academic year
+                $"{currentAcademicYear % 100}/{(currentAcademicYear + 1) % 100}",
+
+                // Next academic year
+                $"{(currentAcademicYear + 1) % 100}/{(currentAcademicYear + 2) % 100}"
+            };
+
+            return options;
+        }
+
+
+
         public async Task OnGetAsync(string returnUrl)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            // Populate the Academic Year options
+            AcademicYearOptions = GetAcademicYearOptions();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -97,10 +144,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                // Set the Forename, Surname, and UserID
+                // Set the Forename, Surname, StudentID, and AcademicYear
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.StudentID = Input.StudentID;
+                user.AcademicYear = Input.AcademicYear;
 
                 // Increment the UserID
                 var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
@@ -132,6 +180,13 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                         }
                         return Page();
                     }
+
+                    // Set LastLoggedIn field to DateTime.Now
+                    user.LastLoggedIn = DateTime.Now;
+
+                    // Update the user in the database
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

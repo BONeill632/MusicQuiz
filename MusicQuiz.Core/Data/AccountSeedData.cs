@@ -36,9 +36,8 @@ namespace MusicQuiz.Core.Data
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
-                adminUser = new UserData { UserName = adminEmail, Email = adminEmail, FirstName = "Admin", LastName = "User", StudentID = "0", IntID = 1};
-                var result = await userManager.CreateAsync(adminUser, adminPassword);
-                if (result.Succeeded)
+                adminUser = new UserData { UserName = adminEmail, Email = adminEmail, FirstName = "Admin", LastName = "User", StudentID = "0", IntID = 1, AcademicYear = "00/01", LastLoggedIn = DateTime.Now };
+                if ((await userManager.CreateAsync(adminUser, adminPassword)).Succeeded)
                 {
                     await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
@@ -46,25 +45,24 @@ namespace MusicQuiz.Core.Data
 
             // "NotLoggedIn" user creation
             var notLoggedInUser = await userManager.FindByEmailAsync(notLoggedInEmail);
-            if (notLoggedInUser == null)
+            notLoggedInUser ??= new UserData
             {
-                notLoggedInUser = new UserData
-                {
-                    IntID = 0,
-                    UserName = notLoggedInEmail,
-                    Email = notLoggedInEmail,
-                    FirstName = "NotLoggedIn",
-                    LastName = "NotLoggedIn",
-                    StudentID = "0",
-                    LockoutEnabled = true, // Enable lockout
-                    LockoutEnd = DateTimeOffset.MinValue // Set lockout time to now, locked out indefinitely. Account is only used for reference purposes
-                };
+                IntID = 0,
+                UserName = notLoggedInEmail,
+                Email = notLoggedInEmail,
+                FirstName = "NotLoggedIn",
+                LastName = "NotLoggedIn",
+                StudentID = "0",
+                LockoutEnabled = true,
+                LockoutEnd = DateTimeOffset.MinValue,
+                AcademicYear = "00/01",
+                LastLoggedIn = DateTime.Now
+            }; ;
 
-                var result = await userManager.CreateAsync(notLoggedInUser, notLoggedInPassword);
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(notLoggedInUser, "User");
-                }
+            var result = await userManager.CreateAsync(notLoggedInUser, notLoggedInPassword);
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(notLoggedInUser, "User");
             }
         }
     }

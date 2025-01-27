@@ -33,6 +33,16 @@ namespace MusicQuiz.Core.Entities
         public int EXP { get; set; }
 
         /// <summary>
+        /// Academic year of the student to help guage assessments/leaderboards
+        /// </summary>
+        public required string AcademicYear { get; set; }
+
+        /// <summary>
+        /// Last logged in date
+        /// </summary>
+        public DateTime LastLoggedIn { get; set; }
+
+        /// <summary>
         /// WORK OUT USER LEVEL
         /// </summary>
         /// <returns></returns>

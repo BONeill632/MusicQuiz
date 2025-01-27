@@ -18,7 +18,7 @@ using MusicQuiz.Core.Entities;
 
 namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 {
-    public class LoginModel(SignInManager<UserData> signInManager, ILogger<LoginModel> logger) : PageModel
+    public class LoginModel(SignInManager<UserData> signInManager, ILogger<LoginModel> logger, UserManager<UserData> userManager) : PageModel
     {
 
         /// <summary>
@@ -108,6 +108,18 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User logged in.");
+
+                    // Get the user from the database
+                    var user = await userManager.FindByEmailAsync(Input.Email);
+                    if (user != null)
+                    {
+                        // Update the LastLoggedIn field to the current date and time
+                        user.LastLoggedIn = DateTime.Now;
+
+                        // Save changes to the database
+                        await userManager.UpdateAsync(user);
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -129,5 +141,6 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }
