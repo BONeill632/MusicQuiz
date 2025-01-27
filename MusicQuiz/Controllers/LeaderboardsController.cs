@@ -9,12 +9,14 @@ namespace MusicQuiz.Web.Controllers
 {
     public class LeaderboardsController(ApplicationDbContext context, UserManager<UserData> userManager) : BaseController
     {
-
-        // ViewModel for passing data to the view
         [BindProperty]
         public required LeaderboardViewModel ViewModel { get; set; }
 
-        // GET: /Leaderboards
+        /// <summary>
+        /// Leaderboards
+        /// </summary>
+        /// <param name="academicYear"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Index(string academicYear = "24/25")
         {
             // Get the current logged-in user (if any)
@@ -30,22 +32,26 @@ namespace MusicQuiz.Web.Controllers
             int userRank = allUsers
                 .OrderByDescending(u => u.EXP)
                 .Select((userData, index) => new { userData, index })
-                .FirstOrDefault(u => u.userData.IntID == user?.IntID)?.index + 1 ?? -1; // -1 if user is not in the list
+                .FirstOrDefault(u => u.userData.IntID == user?.IntID)?.index + 1 ?? -1;
 
             // Prepare ViewModel data to be passed to the view
             ViewModel = new LeaderboardViewModel
             {
                 TopUsers = topUsers,
-                CurrentUser = user, // User can be null if not logged in
+                CurrentUser = user,
                 SelectedAcademicYear = academicYear,
-                AcademicYearOptions = GetAcademicYearOptions(), // List of filter options
-                UserRank = userRank // Adding rank information for the current user
+                AcademicYearOptions = GetAcademicYearOptions(),
+                UserRank = userRank
             };
 
-            return View(ViewModel); // Use View() to return the model to the view
+            return View(ViewModel);
         }
 
-        // Fetch all users for the selected academic year (for rank calculation)
+        /// <summary>
+        /// Fetch all users for the selected academic year (for rank calculation)
+        /// </summary>
+        /// <param name="academicYear"></param>
+        /// <returns></returns>
         private async Task<List<UserData>> GetAllUsersByAcademicYearAsync(string academicYear)
         {
             if (academicYear == "All Time")
@@ -60,31 +66,40 @@ namespace MusicQuiz.Web.Controllers
             }
         }
 
-        // POST: /Leaderboards (for the filter buttons)
+        /// <summary>
+        /// Leaderboards (for the filter buttons)
+        /// </summary>
+        /// <param name="academicYear"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> IndexPost(string academicYear)
         {
             // Re-fetch data based on the selected academic year
-            return await Index(academicYear); // Recalling the GET method to reload the leaderboard
+            return await Index(academicYear);
         }
 
-        // Fetch top users for the selected academic year
+        /// <summary>
+        /// Fetch top users for the selected academic year
+        /// </summary>
+        /// <param name="academicYear"></param>
+        /// <returns></returns>
         private async Task<List<UserData>> GetTopUsersByAcademicYearAsync(string academicYear)
         {
             if (academicYear == "All Time")
             {
                 return await context.Users
                     //Leave out 'NOTLOGGED IN' & 'ADMIN'
-                    .Where(u => u.IntID != 0 || u.IntID != 1)
-                    .OrderByDescending(u => u.EXP ) // Ordering by EXP for all-time leaderboard
+                    .Where(u => u.IntID != 0 && u.IntID != 1)
+                    .OrderByDescending(u => u.EXP )
                     .Take(25)
                     .ToListAsync();
             }
             else
+            //Selected Year filter
             {
                 return await context.Users
-                    .Where(u => u.AcademicYear == academicYear && (u.IntID != 0 || u.IntID != 1)) // Filtering by the selected academic year
-                    .OrderByDescending(u => u.EXP) // Ordering by EXP for the selected year
+                    .Where(u => u.AcademicYear == academicYear && (u.IntID != 0 && u.IntID != 1))
+                    .OrderByDescending(u => u.EXP)
                     .Take(25)
                     .ToListAsync();
             }
