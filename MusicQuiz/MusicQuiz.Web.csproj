@@ -171,10 +171,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Assessment\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Content Update="wwwroot\favicon.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>

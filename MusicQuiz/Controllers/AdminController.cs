@@ -94,18 +94,6 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("UserList");
         }
 
-
-        //public IActionResult ViewQuestions()
-        //{
-        //    var model = new QuestionSearchViewModel
-        //    {
-        //        Topics = GetTopics(),
-        //        Difficulties = GetDifficulties()
-        //    };
-
-        //    return View(model);
-        //}
-
         [HttpGet]
         public async Task<IActionResult> ViewQuestions(int pageNumber = 1, int pageSize = 20, Topic? selectedTopic = null, DifficultyLevel? selectedDifficulty = null)
         {
@@ -365,6 +353,79 @@ namespace MusicQuiz.Web.Controllers
             }
 
             return View(model);
+        }
+
+        // GET: Create Assessment
+        public IActionResult CreateAssessment()
+        {
+            var model = new AssessmentViewModel
+            {
+                OpenFrom = DateTime.Now,
+                OpenTo = DateTime.Now.AddDays(1),
+                AcademicYearOptions = GetAcademicYearOptions()
+            };
+            return View(model);
+        }
+
+
+        // POST: Create Assessment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAssessment(AssessmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var assessment = new Assessments
+                {
+                    AcademicYear = model.AcademicYear,
+                    OpenFrom = model.OpenFrom,
+                    OpenTo = model.OpenTo,
+                    TopicId = (int)model.SelectedTopic,
+                    DateSubmitted = DateTime.Now // Auto-set submission date
+                };
+
+                context.Assessments.Add(assessment);
+                await context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Assessment created successfully!";
+                return RedirectToAction("Index"); // Redirect to a list page or wherever you need
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Getting list of academic years, this year, the previous year and next
+        /// This is more of a just-in-case rather than necesscary
+        /// The users of the app will tpically be for the modue in that year.
+        /// They will need to change this in the user section if they use this application
+        /// for more than an academic year as this will be used for leaderboards and assessments
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAcademicYearOptions()
+        {
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+
+            // Adjust the logic to consider the current academic year as 24/25 for Sept - Aug
+            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12)
+                ? currentYear
+                : (currentMonth >= 1 && currentMonth <= 8) ? currentYear - 1 : currentYear;
+
+            // Generate the correct academic year options
+            var options = new List<string>
+            {
+                // Previous academic year
+                $"{(currentAcademicYear - 1) % 100}/{currentAcademicYear % 100}",
+
+                // Current academic year
+                $"{currentAcademicYear % 100}/{(currentAcademicYear + 1) % 100}",
+
+                // Next academic year
+                $"{(currentAcademicYear + 1) % 100}/{(currentAcademicYear + 2) % 100}"
+            };
+
+            return options;
         }
 
     }

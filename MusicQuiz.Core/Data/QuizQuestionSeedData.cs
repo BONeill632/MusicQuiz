@@ -114,8 +114,8 @@ namespace MusicQuiz.Core.Data
                     ( 69, "800Hz", 3, "Identify the correct frequency of the sine wave.", "/Music/SineWave/800Hz.wav", "/Music/SineWave/400Hz.wav", 1, "785Hz", "810Hz", "805Hz" ),
 
                     ( 70, "80Hz", 1, "Identify the correct frequency of the sine wave.", "/Music/SineWave/80Hz.wav", "/Music/SineWave/400Hz.wav", 1, "40Hz", "120Hz", "160Hz" ),
-                    ( 71, "80Hz", 2, "Identify the correct frequency of the sine wave.", "/Music/SineWave/80Hz.wav", "", 1, "76Hz", "82Hz", "85Hz" ),
-                    ( 72, "80Hz", 3, "Identify the correct frequency of the sine wave.", "/Music/SineWave/80Hz.wav", "", 1, "78Hz", "81Hz", "80.5Hz" ),
+                    ( 71, "80Hz", 2, "Identify the correct frequency of the sine wave.", "/Music/SineWave/80Hz.wav", "/Music/SineWave/400Hz.wav", 1, "76Hz", "82Hz", "85Hz" ),
+                    ( 72, "80Hz", 3, "Identify the correct frequency of the sine wave.", "/Music/SineWave/80Hz.wav", "/Music/SineWave/400Hz.wav", 1, "78Hz", "81Hz", "80.5Hz" ),
 
                     ( 73, "8kHz", 1, "Identify the correct frequency of the sine wave.", "/Music/SineWave/8kHz.wav", "/Music/SineWave/6.3kHz.wav", 1, "4kHz", "12kHz", "16kHz" ),
                     ( 74, "8kHz", 2, "Identify the correct frequency of the sine wave.", "/Music/SineWave/8kHz.wav", "/Music/SineWave/400Hz.wav", 1, "7.7kHz", "8.2kHz", "8.5kHz" ),
@@ -211,7 +211,7 @@ namespace MusicQuiz.Core.Data
 
                     ( 142, "5000Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "2500Hz 3rd octave", "20000Hz 3rd octave", "10000Hz 3rd octave" ),
                     ( 143, "6300Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", 4, "3150Hz 3rd octave", "25000Hz 3rd octave", "12500Hz 3rd octave" ),
-                    ( 144, "8000Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/8000Hz_3rd Octave Noise.wav", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", 4, "4000Hz 3rd octave", "31500Hz 3rd octave", "16000Hz 3rd octave" ),
+                    ( 144, "8000Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/2000Hz 3rd Octave Noise.wav", 4, "4000Hz 3rd octave", "31500Hz 3rd octave", "16000Hz 3rd octave" ),
 
                     ( 145, "10000Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/3150Hz 3rd Octave Noise.wav", 4, "5000Hz 3rd octave", "40000Hz 3rd octave", "20000Hz 3rd octave" ),
                     ( 146, "12500Hz 3rd octave", 2, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", 4, "6300Hz 3rd octave", "50000Hz 3rd octave", "25000Hz 3rd octave" ),
@@ -243,7 +243,7 @@ namespace MusicQuiz.Core.Data
 
                     ( 166, "5000Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/5000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", 4, "4400Hz 3rd octave", "6300Hz 3rd octave", "5600Hz 3rd octave" ),
                     ( 167, "6300Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/6300Hz 3rd Octave Noise.wav", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", 4, "5600Hz 3rd octave", "8000Hz 3rd octave", "6800Hz 3rd octave" ),
-                    ( 168, "8000Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/8000Hz_3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "7000Hz 3rd octave", "10000Hz 3rd octave", "8800Hz 3rd octave" ),
+                    ( 168, "8000Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/8000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", 4, "7000Hz 3rd octave", "10000Hz 3rd octave", "8800Hz 3rd octave" ),
 
                     ( 169, "10000Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/10000Hz 3rd Octave Noise.wav", "/Music/Pink Noise/16000Hz 3rd Octave Noise.wav", 4, "8800Hz 3rd octave", "12500Hz 3rd octave", "11200Hz 3rd octave" ),
                     ( 170, "12500Hz 3rd octave", 3, "Identify the correct frequency of the pink noise.", "/Music/Pink Noise/12500Hz 3rd Octave Noise.wav", "/Music/Pink Noise/20000Hz 3rd Octave Noise.wav", 4, "11200Hz 3rd octave", "16000Hz 3rd octave", "14000Hz 3rd octave" ),

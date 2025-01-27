@@ -604,3 +604,22 @@ form thead green tick
     padding-right: 0px; /* Reduce the right padding */
     margin-right: 5px; /* Optionally adjust the margin as well */
 }
+
+
+/*Assessment*/
+.btn-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .btn-secondary i {
+        margin-right: 5px;
+    }

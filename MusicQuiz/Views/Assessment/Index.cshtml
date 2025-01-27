@@ -1,7 +1,47 @@
-﻿@{
+﻿@model List<MusicQuiz.Web.Models.Assessment.AssessmentViewModel>
+
+@{
     ViewData["Title"] = "Assessment";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<p>Welcome to the Assessment page. Here you can find various assessments related to the Music Quiz.</p>
+@if (!Model.Any())
+{
+    <p>No assessments available for your academic year.</p>
+}
+else
+{
+    <table class="table table-modern">
+        <thead>
+            <tr>
+                <th>Topic</th>
+                <th>Open From</th>
+                <th>Open To</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assessment in Model)
+            {
+                <tr>
+                    <td>@assessment.TopicName</td>
+                    <td>@assessment.OpenFrom.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@assessment.OpenTo.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        @if (assessment.IsUnlocked)
+                        {
+                            <a asp-action="StartAssessment" asp-route-id="@assessment.ID" class="btn btn-success">Start</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-lock"></i> Locked
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
