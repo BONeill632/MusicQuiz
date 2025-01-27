@@ -11,7 +11,16 @@ namespace MusicQuiz.Core.Migrations
         public DbSet<QuizQuestion> QuizQuestions { get; set; } = null!;
         public DbSet<UsersPracticeQuizResults> UsersPracticeQuizResults { get; set; } = null!;
 
+        /// <summary>
+        /// Set up to create a logged in user ID thats an int and easier to work with for the
+        /// purpose of seeding data and keeping the admin/not loggedin id consistent
+        /// </summary>
         public DbSet<LastAssignedUserID> LastAssignedUserID { get; set; }
+
+        /// <summary>
+        /// Assessments
+        /// </summary>
+        public DbSet<Assessments> Assessments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
