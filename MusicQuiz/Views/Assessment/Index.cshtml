@@ -8,10 +8,14 @@
 
 @if (!Model.Any())
 {
-    <p>No assessments available for your academic year.</p>
+    <h3 class="text-center text-red-bold">OOPS!</h3>
+    <p class="text-center">It looks like you have no assessments yet. If you're expecting an assessment to be available, please contact your tutor.</p>
 }
 else
 {
+
+    <p class="text-center">Below are all the available assements for you. If you're expecting a different assessment to be available, please contact your tutor.</p>
+
     <table class="table table-modern">
         <thead>
             <tr>
@@ -31,10 +35,12 @@ else
                     <td>
                         @if (assessment.IsUnlocked)
                         {
+                            <!--"Start" button -->
                             <a asp-action="StartAssessment" asp-route-id="@assessment.ID" class="btn btn-success">Start</a>
                         }
                         else
                         {
+                            <!--"Locked" button-->
                             <button class="btn btn-secondary" disabled>
                                 <i class="fas fa-lock"></i> Locked
                             </button>
