@@ -152,11 +152,6 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 
                 // Increment the UserID
                 var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
-                if (lastUserID == null)
-                {
-                    lastUserID = new LastAssignedUserID { LastUserID = 2 }; // Starting ID
-                    _context.LastAssignedUserID.Add(lastUserID);
-                }
 
                 // Set the new UserID and update the LastAssignedUserID
                 user.IntID = lastUserID.LastUserID + 1;

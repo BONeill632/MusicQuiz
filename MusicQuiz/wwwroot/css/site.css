@@ -6,9 +6,11 @@ html {
     html {
         font-size: 18px;
     }
+
     .legend-container div > div {
         flex: 1 1 30%;
     }
+
     .progress-bar-header, .progress-bar-cell {
         padding: 10px 15px;
     }
@@ -326,9 +328,7 @@ a {
     font-weight: bold;
 }
 
-/* Modern Table Styles
-    From Chat GPT
-*/
+/* Modern Table Styles */
 .table-modern {
     width: 100%;
     border-collapse: separate;
@@ -345,7 +345,7 @@ a {
 
     .table-modern tbody tr {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        background-color: whitesmoke;
+        background-color: whitesmoke; /* Default background for rows */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
@@ -358,6 +358,18 @@ a {
         padding: 15px;
         border-top: none;
     }
+
+    /* Highlight the current user's row */
+    .table-modern tbody tr.row-primary {
+        background-color: #d1ecf1;
+        font-weight: bold;
+    }
+
+        .table-modern tbody tr.row-primary:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
 
 /* Text Highlighting */
 /* Green text for correct answers */

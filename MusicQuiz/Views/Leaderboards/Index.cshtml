@@ -1,7 +1,95 @@
-﻿@{
+﻿@model MusicQuiz.Web.Models.Leaderboards.LeaderboardViewModel
+@{
     ViewData["Title"] = "Leaderboards";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>Welcome to the Leaderboards page. Here you can see the top scores and rankings for the Music Quiz.</p>
+
+<!-- Filter Buttons to change academic year view -->
+<form method="post" style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    @foreach (var year in Model.AcademicYearOptions)
+    {
+        <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
+            @year
+        </button>
+    }
+</form>
+
+<h3 class="centered">Top 25 Users - @Model.SelectedAcademicYear</h3>
+
+@if (Model.TopUsers != null && Model.TopUsers.Any())
+{
+    <table class="table table-modern">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>EXP</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.TopUsers)
+            {
+                // Check if the user is the current user
+                string rowClass = user.IntID == Model.CurrentUser?.IntID ? "row-primary" : "";
+
+                <tr class="@rowClass">
+                    <td>@(Model.TopUsers.IndexOf(user) + 1)</td>
+                    <td>
+                        @user.FirstName @user.LastName
+                    </td>
+                    <td>
+                        @user.EXP
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-center">No data to display. It looks like no users have registered for this year</p>
+}
+
+@if (Model.CurrentUser != null)
+{
+    <h3 class="centered">Your Current Data</h3>
+
+    @if (Model.UserRank != -1)
+    {
+        <table class="table table-modern">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>EXP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Current user row with the 'row-primary' class applied -->
+                <tr class="row-primary">
+                    <td>@(Model.UserRank != -1 ? Model.UserRank : "Not Ranked")</td>
+                    <td><strong class="font-weight-bold">@Model.CurrentUser?.FirstName @Model.CurrentUser?.LastName</strong></td>
+                    <td><strong class="font-weight-bold">@Model.CurrentUser?.EXP</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center">No data to display. It looks like no users have registered for this year</p>
+    }
+}
+else
+{
+    <h2 class="centered">Your data</h2>
+    <h3 class="text-center text-red-bold">OOPS!</h3>
+    <p class="text-center">It looks like you aren't logged in yet. Click here to get started!</p>
+
+    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <a class="btn btn-danger btn-lg" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <a class="btn btn-danger btn-lg" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </div>
+}
