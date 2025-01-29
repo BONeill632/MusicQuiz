@@ -14,7 +14,7 @@ using MusicQuiz.Application.Interfaces;
 namespace MusicQuiz.Web.Controllers
 {
     [Authorize]
-    public class AssessmentController(ApplicationDbContext context, UserManager<UserData> userManager, IResultsService resultsService, IAssessmentService assessmentService) : Controller
+    public class AssessmentController(ApplicationDbContext context, UserManager<UserData> userManager, IResultsService resultsService, IAssessmentService assessmentService) : BaseController
     {
         /// <summary>
         /// Assessment Index page
