@@ -1,28 +1,20 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    // Data for the chart
+    // Chart data
     const data = {
-        labels: ["Right First Time", "Right Second Time", "Right Third Time", "Right Fourth Time", "Incorrect Answers"],
+        labels: ["Right 1st Time", "Right 2nd Time", "Right 3rd Time", "Right 4th Time", "Incorrect"],
         datasets: [
             {
                 label: "Quiz Results",
                 data: [rightFirstTime, rightSecondTime, rightThirdTime, rightFourthTime, incorrectAnswers],
                 backgroundColor: [
-                    "#4CAF50", // Green for right first time
-                    "#FFC107", // Amber for right second time
-                    "#FF9800", // Darker amber for right third time
-                    "#FF5722", // Even darker amber for right fourth time
-                    "#F44336"  // Red for incorrect answers
+                    "#4CAF50", "#FFC107", "#FF9800", "#FF5722", "#F44336"
                 ],
-                borderRadius: 8, // Rounded corners for bars
+                borderRadius: 8,
                 borderWidth: 1,
                 hoverBackgroundColor: [
-                    "#66BB6A", // Lighter green on hover
-                    "#FFD54F", // Lighter amber on hover
-                    "#FFB74D", // Lighter dark amber on hover
-                    "#FF8A65", // Lighter darker amber on hover
-                    "#E57373"  // Lighter red on hover
+                    "#66BB6A", "#FFD54F", "#FFB74D", "#FF8A65", "#E57373"
                 ],
-                borderColor: "rgba(0,0,0,0.1)" // Subtle border for a sleek look
+                borderColor: "rgba(0,0,0,0.1)"
             }
         ]
     };
@@ -32,61 +24,62 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: {
-                display: false // Hides the legend for simplicity
-            },
+            legend: { display: false },
             tooltip: {
-                backgroundColor: "rgba(0, 0, 0, 0.7)", // Dark background for tooltips
-                titleColor: "#FFF", // White title text
-                bodyColor: "#FFF", // White body text
-                borderColor: "#CCC", // Light border
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                titleColor: "#FFF",
+                bodyColor: "#FFF",
+                borderColor: "#CCC",
                 borderWidth: 1,
                 cornerRadius: 6
             }
         },
-        layout: {
-            padding: {
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 20
-            }
-        },
+        layout: { padding: 0 },
         scales: {
             x: {
                 beginAtZero: true,
-                grid: {
-                    display: false
-                },
+                grid: { display: false },
                 ticks: {
                     color: "#666",
-                    font: {
-                        size: 14,
-                        family: "Arial, sans-serif",
-                        weight: "bold"
-                    }
+                    font: { size: 14, weight: "bold" }
                 }
             },
             y: {
                 beginAtZero: true,
-                max: totalQuestions, // Set the maximum height to total questions
+                max: totalQuestions,
                 grid: {
                     color: "#E0E0E0",
-                    borderDash: [5, 5] // Dashed grid lines for a modern touch
+                    borderDash: [5, 5]
                 },
                 ticks: {
                     stepSize: 1,
                     color: "#666",
-                    font: {
-                        size: 14,
-                        family: "Arial, sans-serif"
-                    }
+                    font: { size: 14 }
                 }
             }
         }
     };
 
-    // Create the chart
+    // Set chart size based on screen size
+    const chartContainer = document.getElementById("chartContainer");
+
+    function setChartSize() {
+        if (window.innerWidth <= 768) {
+            // For mobile screens
+            chartContainer.style.width = "100%";
+            chartContainer.style.height = "50vh";
+        } else {
+            // For desktop screens
+            chartContainer.style.width = "80%";
+            chartContainer.style.height = "400px";
+        }
+    }
+
+    // Resizing screen event listener
+    setChartSize();
+    window.addEventListener("resize", setChartSize);
+
+    // Create chart
     const ctx = document.getElementById("scoreChart").getContext("2d");
     new Chart(ctx, {
         type: "bar",

@@ -7,9 +7,6 @@ using MusicQuiz.Core.Enums;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models.Admin;
 using MusicQuiz.Web.Models.Quiz;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using QuestionViewModel = MusicQuiz.Web.Models.Quiz.QuestionViewModel;
 
 namespace MusicQuiz.Web.Controllers
@@ -355,7 +352,10 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-        // GET: Create Assessment
+        /// <summary>
+        /// Create an assessment for students to sit
+        /// </summary>
+        /// <returns></returns>
         public IActionResult CreateAssessment()
         {
             var model = new AssessmentViewModel
@@ -368,7 +368,11 @@ namespace MusicQuiz.Web.Controllers
         }
 
 
-        // POST: Create Assessment
+        /// <summary>
+        /// Create an assessment for students to sit
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAssessment(AssessmentViewModel model)

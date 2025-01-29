@@ -67,7 +67,9 @@
     <div class="button-container">
         <button type="button" onclick="submitPreviousForm()" class="btn btn-secondary btn-lg" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
         <button type="button" id="submitButton" onclick="submitAnswer(); enableNextButton();" class="btn btn-danger btn-lg">Submit</button>
-        <button type="submit" id="nextButton" class="btn btn-secondary btn-lg" @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next") disabled>Next</button>
+        <button type="submit" id="nextButton" class="btn btn-secondary btn-lg" @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next") disabled>
+            @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")
+        </button>
     </div>
     <hr />
 </form>

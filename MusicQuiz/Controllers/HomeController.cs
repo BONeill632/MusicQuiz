@@ -35,15 +35,6 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-        /// <summary>
-        /// Privacy page
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

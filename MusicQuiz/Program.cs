@@ -70,6 +70,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<UserRoleService>();
 builder.Services.AddScoped<IResultsService, ResultsService>();
 builder.Services.AddScoped<UserExpService>();
+builder.Services.AddScoped<IAssessmentService, AssessmentService>();
 
 var app = builder.Build();
 

@@ -13,8 +13,7 @@
 }
 else
 {
-
-    <p class="text-center">Below are all the available assements for you. If you're expecting a different assessment to be available, please contact your tutor.</p>
+    <p class="text-center">Below are all the available assessments for you. If you're expecting a different assessment to be available, please contact your tutor.</p>
 
     <table class="table table-modern">
         <thead>
@@ -33,14 +32,18 @@ else
                     <td>@assessment.OpenFrom.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@assessment.OpenTo.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>
-                        @if (assessment.IsUnlocked)
+                        @if (assessment.IsCompleted)
                         {
-                            <!--"Start" button -->
+                            <button class="btn btn-secondary" disabled>
+                                <i class="fas fa-check"></i> Completed
+                            </button>
+                        }
+                        else if (assessment.IsUnlocked)
+                        {
                             <a asp-action="StartAssessment" asp-route-id="@assessment.ID" class="btn btn-success">Start</a>
                         }
                         else
                         {
-                            <!--"Locked" button-->
                             <button class="btn btn-secondary" disabled>
                                 <i class="fas fa-lock"></i> Locked
                             </button>

@@ -9,21 +9,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-@section Scripts {
-    <script>
-        function toggleContent(header) {
-            const content = header.nextElementSibling;  // Get the next sibling which is the collapsible content
-            const arrow = header.querySelector('.arrow');  // Get the arrow element
-
-            // Toggle the visibility of the content (show/hide)
-            content.classList.toggle('open');
-
-            // Rotate the arrow when clicked
-            header.classList.toggle('open');
-        }
-    </script>
-}
-
 <div class="container">
     @if (User.Identity?.IsAuthenticated == true)
     {
@@ -32,12 +17,13 @@
 
         <div class="jumbotron text-center">
             <h1 class="display-4">Welcome back, @userName!</h1>
-            <p class="lead">Would you like to try a quiz?</p>
+            <p class="lead">Ready for your next challenge?</p>
             <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
         </div>
 
-        <div class="row my-5">
-            <div class="col-md-6">
+        <div class="row my-4">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+                <h3 class="text-center">Your Progress</h3>
                 @if (User.Identity?.IsAuthenticated == true)
                 {
                     user = UserManager.GetUserAsync(User).Result;
@@ -46,7 +32,6 @@
                     var progressText = isMaxLevel
                     ? $"{user?.EXP ?? 0}EXP"
                     : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
-                    <h3 class="text-center">Level Progress</h3>
 
                     <div class="progress-container-lg d-flex flex-column align-items-center text-center">
                         <div class="circular-progress-lg"
@@ -56,29 +41,21 @@
                         <span class="progress-text mt-2"><strong>@progressText!</strong></span>
                         @if (isMaxLevel)
                         {
-                            <p>
-                                Wow! You've reached max level! Congratulations on mastering the frequencies and identifying altered sounds with ease.
-                                You've truly developed your ear training skills to the highest level. Keep challenging yourself to maintain your sharpness and continue learning!
-                            </p>
+                            <p>You've reached max level!</p>
                         }
                         else
                         {
-                            <p>
-                                Making progress! Let's get to the next level! With each quiz, you're sharpening your ear and becoming better
-                                at identifying subtle changes in sounds. The journey towards perfect ear training never ends, and every level
-                                brings you closer to mastering your auditory skills. Keep going, you're doing great!
-                            </p>
+                            <p>Keep going, you're almost there!</p>
                         }
                     </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
                 <h2 class="text-center">Your Last Quiz Attempt</h2>
                 @if (Model != null && Model.LatestAttemptDate.HasValue)
                 {
                     <p class="text-center">
-                        Your last quiz attempt was on @Model.LatestAttemptDate.Value.ToString("dd MMM yyyy")
-                        at @Model.LatestAttemptDate.Value.ToString("hh:mm tt").
+                        Last attempt: @Model.LatestAttemptDate.Value.ToString("dd MMM yyyy") at @Model.LatestAttemptDate.Value.ToString("hh:mm tt").
                     </p>
                     <p class="text-center">Your score: @Model.LatestUserScore.GetValueOrDefault().ToString("F2")%</p>
                     <div class="text-center">
@@ -88,84 +65,59 @@
                 else
                 {
                     <h3 class="text-center text-red-bold">OOPS!</h3>
-                    <p class="text-center">It looks like you haven't tried any quizzes yet. Click here to get started!</p>
+                    <p class="text-center">No quiz attempts yet? Start now!</p>
                     <div class="text-center">
                         <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
                     </div>
-
                 }
             </div>
         </div>
 
-        <div class="row my-5 text-center">
-            <div class="col">
-                <h2>Let's see where you rank compared to friends</h2>
+        <div class="row my-4 text-center">
+            <div class="col d-flex flex-column justify-content-center align-items-center">
+                <h2>Compare with Friends</h2>
                 <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Leaderboards" asp-action="Index">View Leaderboards</a>
             </div>
         </div>
     }
     else
     {
-        <div class="row my-5">
-            <div class="col-md-6 justify-content-center">
-                <img src="~/img/LevelHomepage.png" class="img-fluid" alt="Max Quiz Level">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Can you reach the top?</h1>
+            <p class="lead">Test your skills and see how far you can go!</p>
+            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
+        </div>
+
+        <div class="row my-4">
+            <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <img src="~/img/LevelHomepage.png" class="img-fluid" alt="Max Quiz Level" style="max-height: 350px; object-fit: contain;"> <!-- Adjusted image size -->
             </div>
-            <div class="col-md-6">
-                <div class="collapsible-container">
-                    <div class="collapsible-header" onclick="toggleContent(this)">
-                        <span>About MusicQuiz</span>
-                        <span class="arrow">v</span> <!-- Down Arrow initially -->
-                    </div>
-                    <div class="collapsible-content">
-                        <p class="text-center">
-                            Test your music knowledge with our fun and challenging quizzes! As you progress through different levels,
-                            you'll train your ears to detect changes in sound frequencies and alterations that are critical for any music professional.
-                            Whether you're a beginner or already an aficionado, our quizzes will help refine your skills.
-                        </p>
-                    </div>
-                </div>
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+                <h3 class="text-center">Test your music knowledge</h3>
+                <p class="text-center">
+                    Test your music knowledge with fun quizzes! Progress through levels as you hone your skills.
+                </p>
             </div>
         </div>
 
-        <div class="row my-5">
-            <div class="col-md-6 order-md-2">
-                <img src="~/img/HomeImage2.png" class="img-fluid" alt="Quiz Image 2">
+        <div class="row my-4">
+            <div class="col-md-6 order-md-2 d-flex justify-content-center align-items-center">
+                <img src="~/img/HomeImage2.png" class="img-fluid" alt="Quiz Image 2" style="max-height: 350px; object-fit: contain;"> <!-- Adjusted image size -->
             </div>
-            <div class="col-md-6 order-md-1">
-                <div class="collapsible-container">
-                    <div class="collapsible-header" onclick="toggleContent(this)">
-                        <span>Why Join Us?</span>
-                        <span class="arrow">v</span>
-                    </div>
-                    <div class="collapsible-content">
-                        <p class="text-center">
-                            By creating an account, you can track your progress, compete with friends, and unlock more challenging levels.
-                            As you rise through the levels, you’ll become more adept at identifying changes in frequencies, and mastering
-                            your ear training will set you apart from others in the music world. Join our community of music lovers today and start honing your skills!
-                        </p>
-                    </div>
-                </div>
+            <div class="col-md-6 order-md-1 d-flex flex-column justify-content-center align-items-center">
+                <h3 class="text-center">Track your progress</h3>
+                <p class="text-center">
+                    Create an account to track your progress, compete with friends, and unlock more levels.
+                </p>
             </div>
         </div>
 
-        <div class="row my-5 text-center">
-            <div class="col">
-                <h2>Unsure whether to create an account?</h2>
-                <div class="collapsible-container">
-                    <div class="collapsible-header" onclick="toggleContent(this)">
-                        <span>Click to read more</span>
-                        <span class="arrow">v</span>
-                    </div>
-                    <div class="collapsible-content">
-                        <p>
-                            If you're not sure whether to create an account, take a no-strings-attached quiz to see what we have to offer! Test your ear training abilities and see how well you can identify changes in sound.
-                            This is just the start of your journey towards mastering your auditory skills—who knows? You might end up reaching the max level before you even realize it!
-                        </p>
-                    </div>
-                </div>
+        <div class="row my-4 text-center">
+            <div class="col d-flex flex-column justify-content-center align-items-center">
+                <h2>Not sure yet?</h2>
+                <p>Try a quiz with no strings attached to see what we offer!</p>
                 <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
             </div>
         </div>
-
     }
 </div>

@@ -26,5 +26,10 @@ namespace MusicQuiz.Web.Models.Quiz
         /// Date of submission
         /// </summary>
         public DateTime DateOfSubmission { get; set; }
+
+        /// <summary>
+        /// AssessmentId
+        /// </summary>
+        public int? AssessmentID { get; set; }
     }
 }

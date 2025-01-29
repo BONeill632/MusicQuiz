@@ -1,5 +1,18 @@
 html {
     font-size: 16px;
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    font-size: 1.125rem;
 }
 
 @media (min-width: 768px) {
@@ -14,22 +27,6 @@ html {
     .progress-bar-header, .progress-bar-cell {
         padding: 10px 15px;
     }
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    font-size: 1.125rem;
 }
 
 h1 {
@@ -50,9 +47,7 @@ h1 {
     height: auto;
 }
 
-/*Used for the correct/incorrect options
-    on the quiz practice page
-*/
+/* Styling for quiz options */
 .option {
     display: flex;
     align-items: center;
@@ -72,12 +67,10 @@ h1 {
 
     .option.correct {
         border: 2px solid green;
-        padding: 10px;
     }
 
     .option.incorrect {
         border: 2px solid red;
-        padding: 10px;
     }
 
     .option.selected {
@@ -88,44 +81,90 @@ h1 {
     margin-left: 10px;
 }
 
-
-/*LOCK FOR SELECTED DIFFICULTY WHEN NOT LOGGED IN*/
+/* Disables user interaction and dims opacity */
 .disabled {
     pointer-events: none;
     opacity: 0.5;
 }
 
-.fas.fa-lock {
-    margin-right: 5px;
-}
-
-/*Custom colours to more align with the QUB brand*/
+/* Custom colours for navbar */
 .custom-navbar-red {
     background-color: rgb(214, 0, 13);
 }
 
     .custom-navbar-red .navbar-brand,
     .custom-navbar-red .nav-link {
-        color: white !important;
+        color: white;
+    }
+
+    .custom-navbar-red .navbar-nav .nav-item:last-child {
+        border-right: none;
     }
 
     .custom-navbar-red .navbar-nav .nav-link {
-        font-size: 0.9rem; /* Keep the decreased font size */
-        padding-left: 0.1rem; /* Reduced padding for left side */
-        padding-right: 0.1rem; /* Reduced padding for right side */
+        font-size: 0.9rem;
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
     }
 
     .custom-navbar-red .navbar-nav .nav-item {
-        margin-right: 0.1rem; /* Decreased margin for tighter spacing */
+        margin-right: 0.1rem;
+        border-right: 1px solid #fff;
     }
 
 @media (max-width: 576px) {
     .custom-navbar-red .navbar-nav .nav-link {
-        padding-left: 0.1rem; /* Further reduce padding on smaller screens */
+        padding-left: 0.1rem;
         padding-right: 0.1rem;
     }
 }
-/*Making the layout look more like QUB*/
+
+.custom-navbar-red .navbar-nav .nav-link {
+    padding: 12px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    color: white;
+}
+
+    .custom-navbar-red .navbar-nav .nav-link:hover {
+        background-color: #fff;
+        color: #d6000d !important;
+    }
+
+    .custom-navbar-red .navbar-nav .nav-link.active {
+        background-color: #fff;
+        color: #d6000d !important;
+        font-weight: bold;
+    }
+
+.custom-navbar-red .navbar-nav .nav-item.active .nav-link {
+    background-color: #fff;
+    color: #d6000d;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .custom-navbar-red .navbar-nav .nav-link {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .custom-navbar-red .navbar-nav .nav-item {
+        border-right: none;
+        border-bottom: 1px solid #fff;
+    }
+}
+
+.custom-navbar-red .navbar-nav .nav-link:hover,
+.custom-navbar-red .navbar-nav .nav-item.active .nav-link {
+    background-color: #fff;
+    color: #d6000d;
+    font-weight: bold;
+}
+
+/* Footer and red bar styling */
 .red-bar {
     margin-top: auto;
     background-color: red;
@@ -136,13 +175,12 @@ h1 {
     flex: 1;
 }
 
-/*center footer text*/
 .footer {
     text-align: center;
     margin-top: auto;
 }
 
-/*QUESTION STUFF*/
+/* Question-related styles */
 .quiz-option {
     border: 1px solid #ccc;
     padding: 8px;
@@ -161,7 +199,7 @@ h1 {
     margin: 5px;
 }
 
-/*HOMEPAGE*/
+/* Homepage styling */
 .jumbotron {
     background-color: #f8f9fa;
     padding: 2rem 1rem;
@@ -175,10 +213,9 @@ h1 {
 .img-fluid {
     max-width: 100%;
     height: auto;
-    max-height: 100%; /* Prevents the image from stretching vertically */
-    object-fit: contain; /* Ensures it maintains aspect ratio */
+    max-height: 100%;
+    object-fit: contain;
 }
-
 
 .my-5 {
     margin-top: 3rem !important;
@@ -239,7 +276,7 @@ a {
     align-items: center;
 }
 
-/* level progress for nav bar */
+/* Level progress styles */
 .progress-container {
     display: flex;
     align-items: center;
@@ -279,8 +316,7 @@ a {
     color: white;
 }
 
-/*For the larger level on the index page*/
-/* Larger circular progress styles for webpage */
+/* Larger circular progress */
 .progress-container-lg {
     display: flex;
     align-items: center;
@@ -322,13 +358,13 @@ a {
     color: white;
 }
 
-/*OOPS on homepage*/
+/* Homepage Oops styles */
 .text-red-bold {
     color: red;
     font-weight: bold;
 }
 
-/* Modern Table Styles */
+/* Modern table styles */
 .table-modern {
     width: 100%;
     border-collapse: separate;
@@ -345,7 +381,7 @@ a {
 
     .table-modern tbody tr {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        background-color: whitesmoke; /* Default background for rows */
+        background-color: whitesmoke;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
@@ -356,10 +392,8 @@ a {
 
     .table-modern tbody td {
         padding: 15px;
-        border-top: none;
     }
 
-    /* Highlight the current user's row */
     .table-modern tbody tr.row-primary {
         background-color: #d1ecf1;
         font-weight: bold;
@@ -370,19 +404,15 @@ a {
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-
-/* Text Highlighting */
-/* Green text for correct answers */
+/* Text highlighting */
 .row-success {
     color: #28a745;
 }
 
-/* Amber text for partially correct answers */
 .row-warning {
     color: ORANGE;
 }
 
-/* Red text for incorrect answers */
 .row-danger {
     color: #dc3545;
 }
@@ -393,7 +423,6 @@ a {
 
 .score-container {
     text-align: center;
-    /* Adds some space between the header and score */
     margin-top: 10px;
 }
 
@@ -402,16 +431,16 @@ a {
     font-weight: bold;
 }
 
-form thead green tick
 .icon-green {
     color: green;
 }
-/*Quiz legend*/
+
+/* Quiz legend styles */
 .legend-container {
     margin-top: 10px;
     text-align: center;
     font-size: 0.9em;
-    width: 100%; /* Ensure the container takes full width */
+    width: 100%;
 }
 
     .legend-container h3 {
@@ -425,21 +454,20 @@ form thead green tick
         align-items: center;
         gap: 15px;
         flex-wrap: wrap;
-        width: 100%; /* Ensure the container takes full width */
+        width: 100%;
     }
 
         .legend-container div > div {
             display: flex;
             align-items: center;
             gap: 5px;
-            flex: 1 1 100%; /* Default to full width */
+            flex: 1 1 100%;
         }
 
     .legend-container span {
         font-size: 0.8em;
     }
 
-/* Adjust layout for larger screens */
 @media (min-width: 576px) {
     .legend-container div > div {
         flex: 1 1 45%;
@@ -452,17 +480,16 @@ form thead green tick
     }
 }
 
-/* Progress Table Styling */
+/* Progress table styles */
 .progress-bar-table {
-    margin: 20px auto; /* Center the table horizontally */
+    margin: 20px auto;
     border-collapse: collapse;
     text-align: center;
     width: 100%;
-    max-width: 100%; /* Ensure table width does not exceed the container */
+    max-width: 100%;
     box-sizing: border-box;
 }
 
-/* Table headers and cells */
 .progress-bar-header, .progress-bar-cell {
     padding: 5px 10px;
 }
@@ -472,7 +499,7 @@ form thead green tick
         display: block;
         overflow-x: auto;
         white-space: nowrap;
-        margin: 20px auto; /* Center the table on mobile */
+        margin: 20px auto;
     }
 
         .progress-bar-table thead, .progress-bar-table tbody {
@@ -484,7 +511,6 @@ form thead green tick
             text-align: center;
         }
 
-    /* Adjust padding for mobile */
     .progress-bar-header, .progress-bar-cell {
         padding: 2px 5px;
     }
@@ -496,16 +522,15 @@ form thead green tick
     }
 }
 
-/* Ensure full-width table is centered on larger screens */
 @media (min-width: 576px) {
     .progress-bar-table {
-        display: table; /* Use table display property for larger screens */
-        width: auto; /* Let the table size based on its content */
-        margin: 0 auto; /* Center the table horizontally */
+        display: table;
+        width: auto;
+        margin: 0 auto;
     }
 }
 
-/*Making the quiz index information pretty*/
+/* Quiz index page styling */
 .center-content {
     text-align: center;
     font-family: Arial, sans-serif;
@@ -538,12 +563,6 @@ form thead green tick
         margin-bottom: 8px;
     }
 
-
-
-
-/* Style for the collapsible section of homepage paragraphs */
-/* General Styling for Collapsible Content */
-/* General Styling for Collapsible Content */
 .collapsible-container {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -572,23 +591,21 @@ form thead green tick
 .arrow {
     font-size: 1.6rem;
     transform: rotate(0deg);
-    transition: transform 0.3s ease; /* Smooth rotation */
+    transition: transform 0.3s ease;
 }
 
-/* Rotate arrow up when expanded */
 .collapsible-header.open .arrow {
     transform: rotate(180deg);
 }
 
-/* Content section for smooth expansion/collapse */
 .collapsible-content {
-    max-height: 0; /* Initially collapsed */
-    overflow: hidden; /* Hide content that's not visible */
-    transition: max-height 0.5s ease; /* Smooth expand/collapse */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
 }
 
     .collapsible-content.open {
-        max-height: 1000px; /* Large enough to fit the full content */
+        max-height: 1000px;
     }
 
     .collapsible-content p {
@@ -601,12 +618,11 @@ form thead green tick
     }
 
 .navbar-brand {
-    padding-right: 0px; /* Reduce the right padding */
-    margin-right: 5px; /* Optionally adjust the margin as well */
+    padding-right: 0px;
+    margin-right: 0px;
 }
 
-
-/*Assessment*/
+/* Assessment-related styles */
 .btn-success {
     background-color: #28a745;
     border: none;
@@ -623,3 +639,16 @@ form thead green tick
     .btn-secondary i {
         margin-right: 5px;
     }
+
+/* Mobile text size for results table */
+@media (max-width: 576px) {
+    .table-modern thead th,
+    .table-modern tbody td {
+        font-size: 0.875rem;
+        padding: 8px;
+    }
+
+    .table-modern {
+        font-size: 0.875rem;
+    }
+}

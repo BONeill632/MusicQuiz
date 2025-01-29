@@ -86,31 +86,31 @@ namespace MusicQuiz.Core.Enums
         /// Level1
         /// </summary>
         [Description("Level 1")]
-        Level1 = 500, // Total: 500
+        Level1 = 500,
 
         /// <summary>
         /// Level2
         /// </summary>
         [Description("Level 2")]
-        Level2 = 1000, // Total: 1500
+        Level2 = 1000,
 
         /// <summary>
         /// Level3
         /// </summary>
         [Description("Level 3")]
-        Level3 = 1500, // Total: 3000
+        Level3 = 1500,
 
         /// <summary>
         /// Level4
         /// </summary>
         [Description("Level 4")]
-        Level4 = 2000, // Total: 5000
+        Level4 = 2000,
 
         /// <summary>
         /// Level5
         /// </summary>
         [Description("Level 5")]
-        Level5 = 5000 // Max level
+        Level5 = 5000
     }
 
     public enum EXP
@@ -138,5 +138,20 @@ namespace MusicQuiz.Core.Enums
         /// </summary>
         [Description("Fourth attempt/Incorrect:")]
         Default = 0
+    }
+
+    public enum QuestionQuantity
+    {
+        /// <summary>
+        /// number of questions for practice quiz
+        /// </summary>
+        [Description("Quiz")]
+        Quiz = 10,
+
+        /// <summary>
+        /// number of questions for assessment
+        /// </summary>
+        [Description("Assessment")]
+        Assessment = 12
     }
 }
