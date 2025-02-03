@@ -9,37 +9,46 @@
     @if (SignInManager.IsSignedIn(User))
     {
         var user = UserManager.GetUserAsync(User).Result;
-        var progressData = UserExpService.CalculateExpProgress(user);
-        var isMaxLevel = (user?.GetLevel() ?? 1) == 5;
-        var progressText = isMaxLevel
-        ? $"{user?.EXP ?? 0}EXP"
-        : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
+        if (user != null)
+        {
+            var progressData = UserExpService.CalculateExpProgress(user);
+            var isMaxLevel = (user.GetLevel() == 5);
+            var progressText = isMaxLevel
+            ? $"{user.EXP}EXP"
+            : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
 
-        <li class="nav-item d-flex align-items-center">
-            <div class="progress-container">
-                <div class="circular-progress"
-                     style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
-                    <span class="level-text">@user?.GetLevel()</span>
+            <li class="nav-item d-flex align-items-center">
+                <div class="progress-container">
+                    <div class="circular-progress"
+                         style="--progress: @progressData.progressPercentage; --fill-color: @(isMaxLevel ? "gold" : "blue")">
+                        <span class="level-text">@user.GetLevel()</span>
+                    </div>
+                    <span class="progress-info"><strong>@progressText</strong></span>
                 </div>
-                <span class="progress-info"><strong>@progressText</strong></span>
-            </div>
-        </li>
-        <!-- Account Dropdown -->
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Account
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown" style="background-color: red; border: 1px; border-radius: 5px;">
-                <li>
-                    <a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Manage/Index">Manage</a>
-                </li>
-                <li>
-                    <form class="dropdown-item m-0 p-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button type="submit" class="btn text-white w-100 text-start">Logout</button>
-                    </form>
-                </li>
-            </ul>
-        </li>
+            </li>
+            <!-- Account Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Account
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown" style="background-color: red; border: 1px; border-radius: 5px;">
+                    <li>
+                        <a class="dropdown-item text-white" asp-area="Identity" asp-page="/Account/Manage/Index">Manage</a>
+                    </li>
+                    <li>
+                        <form class="dropdown-item m-0 p-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="btn text-white w-100 text-start">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <span class="nav-link text-danger">Error loading user data</span>
+            </li>
+        }
     }
     else
     {

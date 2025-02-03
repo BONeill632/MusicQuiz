@@ -62,18 +62,14 @@
         <input asp-for="Options.WrongAnswerTwo" class="form-control" placeholder="Wrong Answer Two" />
         <span asp-validation-for="Options.WrongAnswerTwo" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="Options.WrongAnswerThree">Wrong Answer Three</label>
         <input asp-for="Options.WrongAnswerThree" class="form-control" placeholder="Wrong Answer Three" />
         <span asp-validation-for="Options.WrongAnswerThree" class="text-danger"></span>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <button type="submit" class="btn btn-danger btn-lg w-100">Save Changes</button>
-        </div>
-        <div class="col-md-10">
-            <a href="/" class="btn btn-light btn-lg w-100">Cancel</a>
-        </div>
+    <div class="d-flex flex-column align-items-center" style="width: 100%;">
+        <button type="submit" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Save Changes</button>
+        <a asp-action="ViewQuesitons" class="btn btn-secondary w-100" style="max-width: 300px;">Cancel</a>
     </div>
 </form>
 

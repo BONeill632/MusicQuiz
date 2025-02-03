@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Migrations;
 using System.ComponentModel.DataAnnotations;
-using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace MusicQuiz.Web.Areas.Identity.Pages.Account
@@ -17,21 +16,21 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         private readonly IUserStore<UserData> _userStore;
         private readonly IUserEmailStore<UserData> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly ApplicationDbContext _context; // Inject your DB context
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<UserData> userManager,
             IUserStore<UserData> userStore,
             SignInManager<UserData> signInManager,
             ILogger<RegisterModel> logger,
-            ApplicationDbContext context) // Inject your DB context
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _context = context; // Initialize the context
+            _context = context;
         }
 
         [BindProperty]
@@ -121,9 +120,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             return options;
         }
 
-
-
-        public async Task OnGetAsync(string returnUrl)
+        public async Task OnGetAsync(string? returnUrl = null)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -132,7 +129,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             AcademicYearOptions = GetAcademicYearOptions();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -151,15 +148,22 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.StudentID = Input.StudentID;
-                user.AcademicYear = Input.AcademicYear;
+                user.AcademicYear = Input.AcademicYear ?? "Unknown";
 
                 // Increment the UserID
                 var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
+                if (lastUserID == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to retrieve the last assigned user ID.");
+                    return Page();
+                }
 
                 // Set the new UserID and update the LastAssignedUserID
                 user.IntID = lastUserID.LastUserID + 1;
+                lastUserID.LastUserID = user.IntID;
 
                 // Save the updated student ID
+                _context.LastAssignedUserID.Update(lastUserID);
                 await _context.SaveChangesAsync();
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -214,14 +218,14 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<UserData>();
+                return Activator.CreateInstance<UserData>() ?? throw new InvalidOperationException($"Can't create an instance of '{nameof(UserData)}'.");
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(UserData)}'. " +
-                    $"Ensure that '{nameof(UserData)}' is not an abstract class and has a parameterless constructor.");
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(UserData)}'. Ensure that '{nameof(UserData)}' is not an abstract class and has a parameterless constructor.");
             }
         }
+
 
         private IUserEmailStore<UserData> GetEmailStore()
         {
@@ -229,7 +233,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<UserData>)_userStore;
+            return _userStore as IUserEmailStore<UserData> ?? throw new InvalidOperationException("User store does not support email.");
         }
     }
 }

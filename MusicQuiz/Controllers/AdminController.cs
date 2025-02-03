@@ -69,7 +69,7 @@ namespace MusicQuiz.Web.Controllers
             var userRoles = await userManager.GetRolesAsync(user);
             var selectedRole = model.SelectedRole;
 
-            if (!userRoles.Contains(selectedRole))
+            if (!string.IsNullOrEmpty(selectedRole) && !userRoles.Contains(selectedRole))
             {
                 var result = await userManager.AddToRoleAsync(user, selectedRole);
 
@@ -79,7 +79,7 @@ namespace MusicQuiz.Web.Controllers
                     return View(model);
                 }
 
-                result = await userManager.RemoveFromRolesAsync(user, userRoles.Except([selectedRole]));
+                result = await userManager.RemoveFromRolesAsync(user, userRoles.Except([selectedRole]).ToList());
 
                 if (!result.Succeeded)
                 {
@@ -90,6 +90,7 @@ namespace MusicQuiz.Web.Controllers
 
             return RedirectToAction("UserList");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> ViewQuestions(int pageNumber = 1, int pageSize = 20, Topic? selectedTopic = null, DifficultyLevel? selectedDifficulty = null)
@@ -106,14 +107,13 @@ namespace MusicQuiz.Web.Controllers
 
             if (selectedTopic.HasValue && selectedDifficulty.HasValue)
             {
-                var topic = (int?)model.SelectedTopic ?? default;
-                var difficulty = (int?)model.SelectedDifficulty ?? default;
+                var topic = selectedTopic.Value;
+                var difficulty = selectedDifficulty.Value;
 
-                var (questions, totalQuestions) = await SearchQuestionsAsync(topic, difficulty, model.PageNumber, model.PageSize);
+                var (questions, totalQuestions) = await SearchQuestionsAsync((int)topic, (int)difficulty, model.PageNumber, model.PageSize);
                 model.Questions = questions;
                 model.TotalQuestions = totalQuestions;
             }
-
 
             return View(model);
         }
@@ -122,8 +122,8 @@ namespace MusicQuiz.Web.Controllers
         public async Task<IActionResult> ViewQuestions(QuestionSearchViewModel model, int pageNumber = 1)
         {
             model.PageNumber = pageNumber;
-            var topic = (int?)model.SelectedTopic ?? default;
-            var difficulty = (int?)model.SelectedDifficulty ?? default;
+            var topic = model.SelectedTopic.HasValue ? (int)model.SelectedTopic.Value : default;
+            var difficulty = model.SelectedDifficulty.HasValue ? (int)model.SelectedDifficulty.Value : default;
 
             var (questions, totalQuestions) = await SearchQuestionsAsync(topic, difficulty, model.PageNumber, model.PageSize);
             model.Questions = questions;
@@ -136,10 +136,20 @@ namespace MusicQuiz.Web.Controllers
         }
 
 
+
         private async Task<(List<QuestionViewModel> Questions, int TotalQuestions)> SearchQuestionsAsync(int topic, int difficulty, int pageNumber, int pageSize)
         {
-            var query = context.QuizQuestions
-                .Where(q => q.TopicId == topic && q.DifficultyId == difficulty);
+            var query = context.QuizQuestions.AsQueryable();
+
+            if (topic != default)
+            {
+                query = query.Where(q => q.TopicId == topic);
+            }
+
+            if (difficulty != default)
+            {
+                query = query.Where(q => q.DifficultyId == difficulty);
+            }
 
             var totalQuestions = await query.CountAsync();
 
@@ -162,6 +172,7 @@ namespace MusicQuiz.Web.Controllers
 
             return (questions, totalQuestions);
         }
+
 
         private static List<string> GetTopics()
         {
@@ -356,7 +367,7 @@ namespace MusicQuiz.Web.Controllers
         /// Create an assessment for students to sit
         /// </summary>
         /// <returns></returns>
-        public IActionResult CreateAssessment()
+        public IActionResult AddAssessment()
         {
             var model = new AssessmentViewModel
             {
@@ -375,13 +386,13 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAssessment(AssessmentViewModel model)
+        public async Task<IActionResult> AddAssessment(AssessmentViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var assessment = new Assessments
                 {
-                    AcademicYear = model.AcademicYear,
+                    AcademicYear = model.AcademicYear ?? "Unknown",
                     OpenFrom = model.OpenFrom,
                     OpenTo = model.OpenTo,
                     TopicId = (int)model.SelectedTopic,
@@ -430,6 +441,203 @@ namespace MusicQuiz.Web.Controllers
             };
 
             return options;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewAssessments()
+        {
+            var model = new AssessmentSearchViewModel
+            {
+                AcademicYears = await context.Assessments
+                    .Select(a => a.AcademicYear)
+                    .Distinct()
+                    .OrderByDescending(y => y)
+                    .ToListAsync(),
+                Topics = GetTopics(),
+                Assessments = []
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ViewAssessments(AssessmentSearchViewModel model, int pageNumber = 1)
+        {
+            model.PageNumber = pageNumber;
+            model.PageSize = model.PageSize > 0 ? model.PageSize : 20;
+            var selectedYear = model.SelectedYear ?? "";
+            var selectedTopic = model.SelectedTopic.HasValue ? (int)model.SelectedTopic.Value : default;
+
+            var (assessments, totalAssessments) = await SearchAssessmentsAsync(selectedYear, selectedTopic, model.PageNumber, model.PageSize);
+            model.Assessments = assessments;
+            model.TotalAssessments = totalAssessments;
+
+            model.AcademicYears = await context.Assessments
+                .Select(a => a.AcademicYear)
+                .Distinct()
+                .OrderByDescending(y => y)
+                .ToListAsync();
+
+            model.Topics = GetTopics();
+
+            return View(model);
+        }
+
+        private async Task<(List<AssessmentViewModel> Assessments, int TotalAssessments)> SearchAssessmentsAsync(string selectedYear, int selectedTopic, int pageNumber, int pageSize)
+        {
+            var query = context.Assessments.AsQueryable();
+
+            if (!string.IsNullOrEmpty(selectedYear))
+            {
+                query = query.Where(a => a.AcademicYear == selectedYear);
+            }
+
+            if (selectedTopic != default)
+            {
+                query = query.Where(a => a.TopicId == selectedTopic);
+            }
+
+            var totalAssessments = await query.CountAsync();
+
+            var assessments = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new AssessmentViewModel
+                {
+                    ID = a.ID,
+                    AcademicYear = a.AcademicYear,
+                    SelectedTopic = (Topic)a.TopicId,
+                    OpenFrom = a.OpenFrom,
+                    OpenTo = a.OpenTo
+                })
+                .ToListAsync();
+
+            return (assessments, totalAssessments);
+        }
+
+        /// <summary>
+        /// Edit an existing assessment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> EditAssessment(int id)
+        {
+            var assessment = await context.Assessments.FindAsync(id);
+            if (assessment == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AssessmentViewModel
+            {
+                ID = assessment.ID,
+                AcademicYear = assessment.AcademicYear,
+                OpenFrom = assessment.OpenFrom,
+                OpenTo = assessment.OpenTo,
+                SelectedTopic = (MusicQuiz.Core.Enums.Topic)assessment.TopicId,
+                AcademicYearOptions = GetAcademicYearOptions()
+            };
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Edit an existing assessment (POST)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAssessment(int id, AssessmentViewModel model)
+        {
+            if (id != model.ID)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var assessment = await context.Assessments.FindAsync(id);
+                if (assessment == null)
+                {
+                    return NotFound();
+                }
+
+                assessment.AcademicYear = model.AcademicYear ?? "Unknown";
+                assessment.OpenFrom = model.OpenFrom;
+                assessment.OpenTo = model.OpenTo;
+                assessment.TopicId = (int)model.SelectedTopic;
+
+                await context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Assessment updated successfully!";
+                return RedirectToAction("Index");
+            }
+
+            model.AcademicYearOptions = GetAcademicYearOptions();
+            return View(model);
+        }
+
+        /// <summary>
+        /// Confirm deletion of an assessment, including the number of users who have taken it
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> DeleteAssessment(int id)
+        {
+            var assessment = await context.Assessments.FindAsync(id);
+            if (assessment == null)
+            {
+                return NotFound();
+            }
+
+            var takenCount = await context.UsersPracticeQuizResults
+                .CountAsync(ar => ar.AssessmentId == id);
+
+            var model = new DeleteAssessmentViewModel
+            {
+                AssessmentId = id,
+                AcademicYear = assessment.AcademicYear,
+                Topic = (Topic)assessment.TopicId,
+                TakenCount = takenCount,
+                OpenFrom = assessment.OpenFrom,
+                OpenTo = assessment.OpenTo
+            };
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Handle deletion of the assessment and optionally delete associated results
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAssessment(DeleteAssessmentViewModel model)
+        {
+            var assessment = await context.Assessments.FindAsync(model.AssessmentId);
+            if (assessment == null)
+            {
+                return NotFound();
+            }
+
+            // Optionally delete associated results
+            if (model.DeleteAssociatedResults)
+            {
+                var results = await context.UsersPracticeQuizResults
+                    .Where(ar => ar.AssessmentId == model.AssessmentId)
+                    .ToListAsync();
+
+                context.UsersPracticeQuizResults.RemoveRange(results);
+            }
+
+            // Delete the assessment
+            context.Assessments.Remove(assessment);
+            await context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Assessment and related data deleted successfully.";
+            return RedirectToAction("ViewAssessments");
         }
 
     }

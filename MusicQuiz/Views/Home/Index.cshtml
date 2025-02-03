@@ -24,19 +24,18 @@
         <div class="row my-4">
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
                 <h3 class="text-center">Your Progress</h3>
-                @if (User.Identity?.IsAuthenticated == true)
+                @if (user != null)
                 {
-                    user = UserManager.GetUserAsync(User).Result;
                     var progressData = UserExpService.CalculateExpProgress(user);
-                    var isMaxLevel = (user?.GetLevel() ?? 1) == 5;
+                    var isMaxLevel = (user.GetLevel() == 5);
                     var progressText = isMaxLevel
-                    ? $"{user?.EXP ?? 0}EXP"
+                    ? $"{user.EXP}EXP"
                     : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
 
                     <div class="progress-container-lg d-flex flex-column align-items-center text-center">
                         <div class="circular-progress-lg"
                              style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
-                            <span class="level-text-lg">@user?.GetLevel()</span>
+                            <span class="level-text-lg">@user.GetLevel()</span>
                         </div>
                         <span class="progress-text mt-2"><strong>@progressText!</strong></span>
                         @if (isMaxLevel)
@@ -48,6 +47,10 @@
                             <p>Keep going, you're almost there!</p>
                         }
                     </div>
+                }
+                else
+                {
+                    <p class="text-center text-danger">Unable to load user progress.</p>
                 }
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">

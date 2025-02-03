@@ -6,7 +6,9 @@
 
 <h1>View Questions</h1>
 
-<a asp-action="AddQuestion" class="btn btn-success">Add Question</a>
+<div class="d-flex flex-column align-items-center" style="width: 100%;">
+    <a asp-action="AddQuestion" class="btn btn-success w-100" style="max-width: 300px;">Add Question</a>
+</div>
 
 <form asp-action="ViewQuestions" method="post">
     <div class="form-group">
@@ -15,13 +17,16 @@
             <option value="">Select a topic</option>
         </select>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="SelectedDifficulty">Difficulty</label>
         <select asp-for="SelectedDifficulty" class="form-control" asp-items="@(new SelectList(Model.Difficulties))">
             <option value="">Select a difficulty</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+
+    <div class="d-flex flex-column align-items-center" style="width: 100%;">
+        <button type="submit" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Search</button>
+    </div>
 </form>
 
 @if (Model.Questions != null && Model.Questions.Any())

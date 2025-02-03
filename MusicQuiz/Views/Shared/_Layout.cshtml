@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable=md navbar-light border-bottom box-shadow mb-3 custom-navbar-red">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3 custom-navbar-red">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/img/Queens White Logo - Landscape.png" alt="MusicQuiz Logo" style="height: 40px;">
@@ -22,22 +22,22 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item @(ViewData["ActiveNav"] == "Quiz" ? "active" : "")">
+                        <li class="nav-item @(ViewData["ActiveNav"] as string == "Quiz" ? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Quiz" asp-action="Index">Quiz</a>
                         </li>
-                        <li class="nav-item @(ViewData["ActiveNav"] == "Assessment" ? "active" : "")">
+                        <li class="nav-item @(ViewData["ActiveNav"] as string == "Assessment" ? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Assessment" asp-action="Index">Assessment</a>
                         </li>
-                        <li class="nav-item @(ViewData["ActiveNav"] == "Leaderboards" ? "active" : "")">
+                        <li class="nav-item @(ViewData["ActiveNav"] as string == "Leaderboards" ? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Leaderboards" asp-action="Index">Leaderboards</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item @(ViewData["ActiveNav"] == "Admin" ? "active" : "")">
+                            <li class="nav-item @(ViewData["ActiveNav"] as string == "Admin" ? "active" : "")">
                                 <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
                             </li>
                         }
-                        <li class="nav-item @(ViewData["ActiveNav"] == "Privacy" ? "active" : "")">
+                        <li class="nav-item @(ViewData["ActiveNav"] as string == "Privacy" ? "active" : "")">
                             <a class="nav-link" asp-area="" asp-controller="Privacy" asp-action="Index">Privacy</a>
                         </li>
                     </ul>

@@ -11,7 +11,7 @@ namespace MusicQuiz.Application.Services
         {
             if (assessmentID <= 0)
             {
-                return null;
+                return Task.FromResult<Assessments?>(null);
             }
 
             return context.Assessments

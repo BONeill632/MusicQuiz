@@ -31,26 +31,29 @@
 <h1>Select a difficulty</h1>
 
 <form method="post" action="/Quiz/Start" onsubmit="return validateForm()">
-    <div>
+    <ul class="quiz-options-list">
         @foreach (var difficulty in Model.Difficulty)
         {
             var isDisabled = (User.Identity == null || !User.Identity.IsAuthenticated) && difficulty.DifficultyLevel != MusicQuiz.Core.Enums.DifficultyLevel.Easy;
             if (isDisabled)
             {
-                <div class="quiz-option text-center disabled" id="@difficulty.DifficultyLevel">
+                <li class="quiz-option text-center disabled" id="@difficulty.DifficultyLevel">
                     <i class="fas fa-lock"></i> @difficulty.Description
                     <p>Please log in or create an account to access these levels.</p>
-                </div>
+                </li>
             }
             else
             {
-                <div class="quiz-option text-center" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
+                <li class="quiz-option text-center" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
                     @difficulty.Description
-                </div>
+                </li>
             }
         }
-    </div>
+    </ul>
     <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />
     <input type="hidden" id="selectedDifficulty" name="selectedDifficulty" value="@Model.SelectedDifficulty" />
-    <button type="submit" id="submitButton" class="btn btn-danger btn-lg w-100" disabled>Select</button>
+    <div class="d-flex flex-column align-items-center" style="width: 100%;">
+        <button type="submit" id="submitButton" class="btn btn-danger w-100 mb-2" style="max-width: 300px;" disabled>Select</button>
+        <a asp-action="Index" class="btn btn-secondary w-100" style="max-width: 300px;">Cancel</a>
+    </div>
 </form>

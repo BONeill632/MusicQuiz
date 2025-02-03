@@ -50,31 +50,30 @@
 }
 
 <form method="post" action="/Quiz/NextQuestion">
-    <div>
+    <ul class="quiz-options-list">
         @foreach (var option in Model.OptionsForQuiz)
         {
-            <div class="option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option">
+            <li class="quiz-option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option" onclick="document.getElementById('@option-radio').checked = true; selectOption('@option', 'quiz-option')">
                 <input type="radio" id="@option-radio" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "") style="display: none;">
                 <label for="@option-radio">@option</label>
-            </div>
+            </li>
         }
-    </div>
+    </ul>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
     <input type="hidden" id="attemptNumber" name="attemptNumber" value="@attemptNumber" />
     <input type="hidden" id="firstUserAnswer" name="firstUserAnswer" />
     <div id="feedbackSection"></div>
-    <hr />
-    <div class="button-container">
-        <button type="button" onclick="submitPreviousForm()" class="btn btn-secondary btn-lg" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
-        <button type="button" id="submitButton" onclick="submitAnswer(); enableNextButton();" class="btn btn-danger btn-lg">Submit</button>
-        <button type="submit" id="nextButton" class="btn btn-secondary btn-lg" @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next") disabled>
-            @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")
-        </button>
+    <div class="d-flex flex-column align-items-center" style="width: 100%;">
+        <button type="button" id="submitButton" onclick="submitAnswer(); enableNextButton();" class="btn btn-danger w-100 mb-2">Submit</button>
+        <div class="d-flex w-100" style="max-width: 300px;">
+            <button type="button" onclick="submitPreviousForm()" class="btn btn-secondary w-50 me-1" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
+            <button type="submit" id="nextButton" class="btn btn-secondary w-50 ms-1" @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next") disabled>
+                @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")
+            </button>
+        </div>
     </div>
     <hr />
 </form>
-
-<form id="previousForm" method="post" action="/Quiz/PreviousQuestion" style="display:none;"></form>
 
 <h3 class="centered">Progress</h3>
 
