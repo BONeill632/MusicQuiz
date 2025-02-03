@@ -46,22 +46,24 @@
     </div>
 }
 
+<hr />
 
 <form method="post" action="/Quiz/NextQuestion">
-    <div>
+
+    <ul class="quiz-options-list">
         @foreach (var option in Model.OptionsForQuiz)
         {
-            <div class="option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option">
+            <div class="option text-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option" style="width: 100%; max-width: 100%;">
                 <input type="radio" id="@option-radio" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "") style="display: none;">
                 <label for="@option-radio">@option</label>
             </div>
+
         }
-    </div>
+    </ul>
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
     <input type="hidden" id="attemptNumber" name="attemptNumber" value="@attemptNumber" />
     <input type="hidden" id="firstUserAnswer" name="firstUserAnswer" />
     <div id="feedbackSection"></div>
-    <hr />
     <div class="button-container">
         <button type="button" onclick="submitPreviousForm()" class="btn btn-secondary btn-lg" @(currentQuestionIndex == 0 ? "disabled" : "")>Previous</button>
         <button type="button" id="submitButton" onclick="submitAnswer(); enableNextButton();" class="btn btn-danger btn-lg">Submit</button>
@@ -69,8 +71,13 @@
             @(currentQuestionIndex == totalQuestions - 1 ? "Complete" : "Next")
         </button>
     </div>
-    <hr />
 </form>
+
+
+<form id="previousForm" method="post" action="/Quiz/PreviousQuestion" style="display:none;"></form>
+
+
+<hr />
 
 <h3 class="centered">Progress</h3>
 

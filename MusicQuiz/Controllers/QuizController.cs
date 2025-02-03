@@ -182,11 +182,11 @@ namespace MusicQuiz.Web.Controllers
                 {
                     return "unanswered";
                 }
-                else if (q.FirstAnswer == q.CorrectAnswer)
+                else if (q.FirstAnswer == q.CorrectAnswer && q.AttemptNumber == 1)
                 {
                     return "correct-first";
                 }
-                else if (q.UserAnswer == q.CorrectAnswer && q.AttemptNumber > 1)
+                else if (q.UserAnswer == q.CorrectAnswer && q.AttemptNumber > 1 && q.AttemptNumber < 4)
                 {
                     return "correct-multiple";
                 }
@@ -217,7 +217,7 @@ namespace MusicQuiz.Web.Controllers
         /// <param name="attemptNumber"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult NextQuestion(string selectedOption, int attemptNumber, string firstUserAnswer)
+        public IActionResult NextQuestion(string selectedOption, int attemptNumber)
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");
             var questions = questionsJson != null ? JsonSerializer.Deserialize<List<QuestionViewModel>>(questionsJson) : [];
@@ -260,27 +260,34 @@ namespace MusicQuiz.Web.Controllers
 
             var currentQuestion = questions[currentIndex];
 
-            // Only set the first answer if it's the first attempt
             if (string.IsNullOrEmpty(currentQuestion.FirstAnswer))
             {
                 currentQuestion.FirstAnswer = selectedOption;
             }
 
+            var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
+
+            // Check if the previous answer was correct
+            var wasPreviouslyCorrect = currentQuestion.UserAnswer == currentQuestion.CorrectAnswer;
+
             currentQuestion.AttemptNumber = attemptNumber;
             currentQuestion.UserAnswer = selectedOption;
-
-            var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
 
             if (currentQuestion.IsAnswered)
             {
                 if (selectedOption != currentQuestion.CorrectAnswer)
                 {
                     currentQuestion.Feedback = "Try again. ✘";
+
+                    if (wasPreviouslyCorrect)
+                    {
+                        correctAnswers--;
+                    }
                 }
                 else
                 {
                     currentQuestion.Feedback = "Correct! ✔";
-                    if (attemptNumber < 4)
+                    if (attemptNumber < 4 && !wasPreviouslyCorrect)
                     {
                         correctAnswers++;
                     }
@@ -352,9 +359,10 @@ namespace MusicQuiz.Web.Controllers
             // Save the total correct answers to session (assuming correctAnswers is already calculated elsewhere)
             HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
 
-            // Save the updated questions back to sessionHttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
+            // Save the updated questions back to session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
+
 
 
         /// <summary>

@@ -256,19 +256,18 @@ namespace MusicQuiz.Web.Controllers
             }
 
             var currentQuestion = questions[currentIndex];
-            currentQuestion.UserAnswer = selectedOption;
-
+            var previousAnswer = currentQuestion.UserAnswer;
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
 
             // Update the running total of correct answers
             if (currentQuestion.IsAnswered)
             {
                 // If the question was previously answered, adjust the score based on the new answer
-                if (selectedOption != currentQuestion.CorrectAnswer)
+                if (previousAnswer == currentQuestion.CorrectAnswer && selectedOption != currentQuestion.CorrectAnswer)
                 {
                     correctAnswers--;
                 }
-                else if (selectedOption == currentQuestion.CorrectAnswer)
+                else if (previousAnswer != currentQuestion.CorrectAnswer && selectedOption == currentQuestion.CorrectAnswer)
                 {
                     correctAnswers++;
                 }
@@ -283,12 +282,17 @@ namespace MusicQuiz.Web.Controllers
 
                 currentQuestion.IsAnswered = true;
             }
+
+            // Update the user's answer
+            currentQuestion.UserAnswer = selectedOption;
+
             // Save the total correct answers to session
             HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
 
             // Save the updated questions back to session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
+
 
         /// <summary>
         /// Return to previous question in the list
@@ -320,16 +324,21 @@ namespace MusicQuiz.Web.Controllers
 
 
         /// <summary>
-        /// Calculate the percentage of quiz gained by the user
+        /// Calculate the percentage of users assessment
         /// </summary>
         /// <param name="questions"></param>
         /// <returns></returns>
-        private decimal CalculatePercentage(List<QuestionViewModel> questions)
+        private static decimal CalculatePercentage(List<QuestionViewModel> questions)
         {
-            // Get the total correct answers from session
-            var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
+            decimal correctAnswers = 0;
+            foreach(var question in questions)
+            {
+                if(question.UserAnswer == question.CorrectAnswer)
+                {
+                    correctAnswers++;
+                }
+            }
 
-            // Start the calculated percentage at 0
             decimal percentage = (correctAnswers / questions.Count) * 100;
 
             return percentage;
