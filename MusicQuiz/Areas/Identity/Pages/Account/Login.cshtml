@@ -6,23 +6,23 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<hr />
 <div class="row justify-content-center">
     <div class="col-md-8">
         <form id="account" method="post">
-            <hr />
             <h2 class="row justify-content-center">Login to your account</h2>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating p-1">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+            <div class="form-group" style="width: 100%; max-width: 100%;">
                 <label asp-for="Input.Email" class="form-label"></label>
+                <input asp-for="Input.Email" class="form-control w-100 w-md-75" autocomplete="username" aria-required="true" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-floating p-1">
-                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+            <div class="form-group" style="width: 100%; max-width: 100%;">
                 <label asp-for="Input.Password" class="form-label"></label>
+                <input asp-for="Input.Password" class="form-control w-100 w-md-75" autocomplete="current-password" aria-required="true" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
-            <div>
+            <div class="form-group" style="width: 100%; max-width: 100%;">
                 <div class="checkbox">
                     <label asp-for="Input.RememberMe" class="form-label">
                         <input class="form-check-input" asp-for="Input.RememberMe" />
@@ -32,8 +32,8 @@
             </div>
 
             <div class="d-flex flex-column align-items-center" style="width: 100%;">
-                <button type="submit" id="login-submit" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Log in</button>
-                <a href="/" class="btn btn-secondary w-100" style="max-width: 300px;">Cancel</a>
+                <button type="submit" id="login-submit" class="btn btn-danger w-100 w-md-75 mb-2" style="max-width: 300px;">Log in</button>
+                <a href="/" class="btn btn-secondary w-100 w-md-75" style="max-width: 300px;">Cancel</a>
             </div>
 
             <div>

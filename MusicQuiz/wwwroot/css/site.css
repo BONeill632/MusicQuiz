@@ -680,7 +680,7 @@ a {
     }
 }
 
-/* Added styles for centring the UL */
+/* Updated styles for centering the UL and setting the width */
 .quiz-options-list {
     display: flex;
     flex-direction: column;
@@ -688,6 +688,7 @@ a {
     padding: 0;
     list-style: none;
     width: 100%;
+    max-width: 80%;
 }
 
 .quiz-option {
@@ -698,9 +699,10 @@ a {
     font-weight: bold;
     border-radius: 5px;
     width: 100%;
-    max-width: 300px;
+    max-width: 80%;
     text-align: center;
 }
+
 
     .quiz-option.selected {
         background-color: #d3d3d3;
@@ -728,9 +730,4 @@ form {
 .form-floating {
     width: 100%;
     max-width: 300px;
-}
-
-.form-control,
-.form-select {
-    width: 100%;
 }

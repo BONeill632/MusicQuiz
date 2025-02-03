@@ -44,14 +44,14 @@
     <ul class="quiz-options-list">
         @foreach (var option in Model.OptionsForQuiz)
         {
-            <li class="quiz-option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option" onclick="document.getElementById('@option-radio').checked = true; selectOption('@option', 'quiz-option')">
+            <li class="quiz-option option-center @(answer?.Equals(option) ?? false ? "selected" : "")" id="@option" onclick="selectOption('@option', 'quiz-option')">
                 <input type="radio" id="@option-radio" name="selectedOption" value="@option" @(answer?.Equals(option) ?? false ? "checked" : "") style="display: none;">
                 <label for="@option-radio">@option</label>
             </li>
         }
     </ul>
     <input type="hidden" name="assessmentID" value="@ViewBag.AssessmentID" />
-    <input type="hidden" id="selectedOption" name="selectedOption" value="" />
+    <input type="hidden" id="selectedOption" name="selectedOption" value="@answer" />
     <input type="hidden" name="correctAnswer" value="@Model.CorrectAnswer" />
 
     <div class="d-flex flex-column align-items-center" style="width: 100%;">

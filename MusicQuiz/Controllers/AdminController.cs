@@ -135,8 +135,6 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-
-
         private async Task<(List<QuestionViewModel> Questions, int TotalQuestions)> SearchQuestionsAsync(int topic, int difficulty, int pageNumber, int pageSize)
         {
             var query = context.QuizQuestions.AsQueryable();
@@ -378,7 +376,6 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-
         /// <summary>
         /// Create an assessment for students to sit
         /// </summary>
@@ -411,8 +408,8 @@ namespace MusicQuiz.Web.Controllers
 
         /// <summary>
         /// Getting list of academic years, this year, the previous year and next
-        /// This is more of a just-in-case rather than necesscary
-        /// The users of the app will tpically be for the modue in that year.
+        /// This is more of a just-in-case rather than necessary
+        /// The users of the app will typically be for the module in that year.
         /// They will need to change this in the user section if they use this application
         /// for more than an academic year as this will be used for leaderboards and assessments
         /// </summary>
@@ -443,7 +440,6 @@ namespace MusicQuiz.Web.Controllers
             return options;
         }
 
-
         [HttpGet]
         public async Task<IActionResult> ViewAssessments()
         {
@@ -455,12 +451,11 @@ namespace MusicQuiz.Web.Controllers
                     .OrderByDescending(y => y)
                     .ToListAsync(),
                 Topics = GetTopics(),
-                Assessments = []
+                Assessments = new List<AssessmentViewModel>()
             };
 
             return View(model);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> ViewAssessments(AssessmentSearchViewModel model, int pageNumber = 1)
@@ -516,6 +511,7 @@ namespace MusicQuiz.Web.Controllers
 
             return (assessments, totalAssessments);
         }
+
 
         /// <summary>
         /// Edit an existing assessment

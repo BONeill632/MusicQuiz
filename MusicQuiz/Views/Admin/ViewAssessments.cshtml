@@ -10,24 +10,30 @@
     <a asp-action="AddAssessment" class="btn btn-success w-100" style="max-width: 300px;">Add Assessment</a>
 </div>
 
-<form asp-action="ViewAssessments" method="post" class="mb-3">
-    <div class="form-group">
+<form asp-action="ViewAssessments" method="post" class="form mb-3">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label for="SelectedYear">Academic Year</label>
-        <select asp-for="SelectedYear" class="form-control" asp-items="@(new SelectList(Model.AcademicYears))">
-            <option value="">-- Select Academic Year --</option>
+        <select asp-for="SelectedYear" class="form-control form-select">
+            <option value="">Select Academic Year</option>
+            @foreach (var year in Model.AcademicYears)
+            {
+                <option value="@year">@year</option>
+            }
         </select>
     </div>
 
-    <div class="form-group mb-3">
+    <div class="form-group mb-3" style="width: 100%; max-width: 100%;">
         <label for="SelectedTopic">Topic</label>
-        <select asp-for="SelectedTopic" class="form-control" asp-items="@(new SelectList(Model.Topics))">
-            <option value="">-- Select Topic --</option>
+        <select asp-for="SelectedTopic" class="form-control form-select">
+            <option value="">Select Topic</option>
+            @foreach (var topic in Model.Topics)
+            {
+                <option value="@topic">@topic</option>
+            }
         </select>
     </div>
 
-    <div class="d-flex flex-column align-items-center" style="width: 100%;">
-        <button type="submit" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Search</button>
-    </div>
+    <button type="submit" class="btn btn-danger w-100 mb-2 max-width-300">Search</button>
 </form>
 
 @if (Model.Assessments != null && Model.Assessments.Any())

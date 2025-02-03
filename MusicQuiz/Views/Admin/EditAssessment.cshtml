@@ -5,33 +5,34 @@
 }
 
 <h1>Edit Assessment</h1>
+<hr />
 
 <form asp-action="EditAssessment" method="post" class="form">
     <input type="hidden" asp-for="ID" />
 
-    <div class="form-group">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label asp-for="AcademicYear" class="control-label">Academic Year</label>
-        <select asp-for="AcademicYear" class="form-control" asp-items="@(new SelectList(Model.AcademicYearOptions))">
+        <select asp-for="AcademicYear" class="form-control form-select" asp-items="@(new SelectList(Model.AcademicYearOptions))">
             <option value="">-- Select Academic Year --</option>
         </select>
         <span asp-validation-for="AcademicYear" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label asp-for="OpenFrom" class="control-label">Open From</label>
         <input asp-for="OpenFrom" class="form-control" type="datetime-local" value="@Model.OpenFrom.ToString("yyyy-MM-ddTHH:mm")" />
         <span asp-validation-for="OpenFrom" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label asp-for="OpenTo" class="control-label">Open To</label>
         <input asp-for="OpenTo" class="form-control" type="datetime-local" value="@Model.OpenTo.ToString("yyyy-MM-ddTHH:mm")" />
         <span asp-validation-for="OpenTo" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3" style="width: 100%; max-width: 100%;">
         <label asp-for="SelectedTopic" class="control-label">Topic</label>
-        <select asp-for="SelectedTopic" class="form-control" asp-items="Html.GetEnumSelectList<MusicQuiz.Core.Enums.Topic>()">
+        <select asp-for="SelectedTopic" class="form-control form-select" asp-items="Html.GetEnumSelectList<MusicQuiz.Core.Enums.Topic>()">
             <option value="">-- Select Topic --</option>
         </select>
         <span asp-validation-for="SelectedTopic" class="text-danger"></span>

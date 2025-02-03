@@ -1,6 +1,6 @@
 ﻿@model MusicQuiz.Web.Models.Home.MusicQuizViewModel
 @{
-    ViewData["Title"] = "Quiz select";
+    ViewData["Title"] = "Quiz";
 }
 @section Scripts {
     <script src="~/js/selectTopic.js"></script>
@@ -27,8 +27,10 @@
         }
     </script>
 }
+<h1>@ViewData["Title"]</h1>
+<hr />
 
-<h1>Before you proceed</h1>
+<h2 class="centered">Before you proceed</h2>
 
 <div class="center-content">
     <p>This is the practice quiz section. Here, you can try all the questions we have to offer.</p>
