@@ -1,4 +1,3 @@
-using MusicQuiz.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicQuiz.Core.Entities
