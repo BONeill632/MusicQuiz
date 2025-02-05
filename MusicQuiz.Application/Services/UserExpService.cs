@@ -5,6 +5,11 @@ namespace MusicQuiz.Application.Services
 {
     public class UserExpService
     {
+        /// <summary>
+        /// Calculate the user's experience points progress.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public static (int expProgress, int expNeeded, double progressPercentage) CalculateExpProgress(UserData user)
         {
             int exp = user?.EXP ?? 0;

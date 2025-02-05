@@ -55,6 +55,11 @@ namespace MusicQuiz.Application.Services
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Get the most recent quiz result
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<UsersPracticeQuizResults?> GetMostRecentQuizResultAsync(string userId)
         {
             return await context.UsersPracticeQuizResults

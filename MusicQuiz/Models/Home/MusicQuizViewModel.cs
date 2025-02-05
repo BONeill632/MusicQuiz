@@ -1,6 +1,5 @@
 ﻿using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Enums;
-using MusicQuiz.Enums;
 
 namespace MusicQuiz.Web.Models.Home
 {

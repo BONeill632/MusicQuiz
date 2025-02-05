@@ -1,12 +1,15 @@
 namespace MusicQuiz.Core.Entities
 {
-
-    /// <summary>
-    /// 
-    /// </summary>
     public class LastAssignedUserID
     {
-        public int Id { get; set; }  // Primary key
-        public int LastUserID { get; set; }  // The last used user ID
+        /// <summary>
+        /// ID of the new user
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// ID of the last assigned user
+        /// </summary>
+        public int LastUserID { get; set; }
     }
 }

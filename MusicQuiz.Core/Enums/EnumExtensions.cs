@@ -1,10 +1,15 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace MusicQuiz.Enums
+namespace MusicQuiz.Core.Enums
 {
     public static class EnumExtensions
     {
+        /// <summary>
+        /// Get the description of an enum value
+        /// </summary>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
         public static string GetDescription(this Enum enumValue)
         {
             if (enumValue == null)

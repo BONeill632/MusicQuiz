@@ -7,7 +7,6 @@ using MusicQuiz.Web.Models.Quiz;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using MusicQuiz.Application.Services;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Application.Interfaces;
 
@@ -23,7 +22,7 @@ namespace MusicQuiz.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userID = await GetUserIdAsync();
-            var userAcademicYear = await GetCurrentUserAcademicYearAsync(); 
+            var userAcademicYear = await GetCurrentUserAcademicYearAsync();
 
             string year = userAcademicYear;
 
@@ -53,7 +52,6 @@ namespace MusicQuiz.Web.Controllers
 
             return View(viewModel);
         }
-
 
         /// <summary>
         /// Fetch the current user's academic year to fetch assessment data.
@@ -95,7 +93,6 @@ namespace MusicQuiz.Web.Controllers
             // Save AssessmentID in session
             HttpContext.Session.SetInt32("AssessmentID", id);
 
-            // Load the quiz data based on the selected topic. Difficulty for assessment is set to hard.
             var questions = context.QuizQuestions
                 .Where(q => q.TopicId == (int)assessment.TopicId && q.DifficultyId == (int)DifficultyLevel.Hard)
                 .ToList();
@@ -127,13 +124,11 @@ namespace MusicQuiz.Web.Controllers
                 };
             }).ToList();
 
-            // Save questions in session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questionViewModels));
             HttpContext.Session.SetInt32("CurrentQuestionIndex", 0);
 
             return RedirectToAction("ShowQuestion");
         }
-
 
         /// <summary>
         /// Displays the current question.
@@ -159,9 +154,8 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-
         /// <summary>
-        /// Show the next question
+        /// Show the next question. Finish & Save and return home
         /// </summary>
         /// <param name="selectedOption"></param>
         /// <returns></returns>
@@ -183,7 +177,6 @@ namespace MusicQuiz.Web.Controllers
             currentIndex++;
             if (currentIndex >= questions.Count)
             {
-                // Finish the quiz
                 return RedirectToAction("QuizFinished", new { assessmentID });
             }
 
@@ -191,7 +184,6 @@ namespace MusicQuiz.Web.Controllers
 
             return RedirectToAction("ShowQuestion");
         }
-
 
         /// <summary>
         /// Finish the assessment
@@ -201,10 +193,8 @@ namespace MusicQuiz.Web.Controllers
         {
             var assessmentID = HttpContext.Session.GetInt32("AssessmentID") ?? 0;
 
-            // Await the asynchronous method call
             var assessment = await assessmentService.GetAssessmentByIdAsync(assessmentID);
 
-            // Check if the assessment is null (it might not be found in the DB)
             if (assessment == null)
             {
                 TempData["ErrorMessage"] = "Assessment not found.";
@@ -223,13 +213,10 @@ namespace MusicQuiz.Web.Controllers
                 percentage = CalculatePercentage(questions);
             }
 
-            // Save to DB
             resultsService.SaveAssessmentResults(percentage, DateTime.Now, (int)DifficultyLevel.Hard, assessment.TopicId, userID, assessmentID);
 
             return View("QuizFinished");
         }
-
-
 
         /// <summary>
         /// Get user ID
@@ -259,10 +246,8 @@ namespace MusicQuiz.Web.Controllers
             var previousAnswer = currentQuestion.UserAnswer;
             var correctAnswers = HttpContext.Session.GetInt32("CorrectAnswers") ?? 0;
 
-            // Update the running total of correct answers
             if (currentQuestion.IsAnswered)
             {
-                // If the question was previously answered, adjust the score based on the new answer
                 if (previousAnswer == currentQuestion.CorrectAnswer && selectedOption != currentQuestion.CorrectAnswer)
                 {
                     correctAnswers--;
@@ -274,7 +259,6 @@ namespace MusicQuiz.Web.Controllers
             }
             else
             {
-                // If the question was not previously answered, update the score based on the new answer
                 if (selectedOption == currentQuestion.CorrectAnswer)
                 {
                     correctAnswers++;
@@ -283,16 +267,11 @@ namespace MusicQuiz.Web.Controllers
                 currentQuestion.IsAnswered = true;
             }
 
-            // Update the user's answer
             currentQuestion.UserAnswer = selectedOption;
 
-            // Save the total correct answers to session
             HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
-
-            // Save the updated questions back to session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
-
 
         /// <summary>
         /// Return to previous question in the list
@@ -322,7 +301,6 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("ShowQuestion");
         }
 
-
         /// <summary>
         /// Calculate the percentage of users assessment
         /// </summary>
@@ -331,9 +309,9 @@ namespace MusicQuiz.Web.Controllers
         private static decimal CalculatePercentage(List<QuestionViewModel> questions)
         {
             decimal correctAnswers = 0;
-            foreach(var question in questions)
+            foreach (var question in questions)
             {
-                if(question.UserAnswer == question.CorrectAnswer)
+                if (question.UserAnswer == question.CorrectAnswer)
                 {
                     correctAnswers++;
                 }

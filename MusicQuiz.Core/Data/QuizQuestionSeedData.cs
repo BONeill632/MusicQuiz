@@ -5,6 +5,10 @@ namespace MusicQuiz.Core.Data
 {
     public static class QuizQuestionSeedData
     {
+        /// <summary>
+        /// Seeds the database with quiz questions.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         public static void Seed(ModelBuilder modelBuilder)
         {
             var seedData = GenerateSeedData();

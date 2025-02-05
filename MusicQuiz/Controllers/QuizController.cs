@@ -103,25 +103,21 @@ namespace MusicQuiz.Web.Controllers
         {
             if (model.SelectedTopic == default || model.SelectedDifficulty == default)
             {
-                // Handle the case where selectedTopic or selectedDifficulty is null or empty
                 return BadRequest("Selected topic and difficulty are required.");
             }
 
-            // Load the quiz data based on the selected topic and difficulty
             var questions = context.QuizQuestions
                 .Where(q => q.TopicId == (int)model.SelectedTopic && q.DifficultyId == (int)model.SelectedDifficulty)
                 .ToList();
 
             if (questions.Count == 0)
             {
-                // Handle the case where no questions are found
                 return View("NoQuestions");
             }
 
             // Select 10 random questions
             var random = new Random();
 
-            //Select random questions from DB where the difficulty & topic match
             var selectedQuestions = questions.OrderBy(q => random.Next()).Take((int)QuestionQuantity.Quiz).ToList();
 
             var questionViewModels = selectedQuestions.Select(q =>
@@ -196,7 +192,6 @@ namespace MusicQuiz.Web.Controllers
                 }
             }).ToList();
 
-            // Store question statuses in ViewBag
             ViewBag.QuestionStatuses = questionStatuses;
 
             var model = questions[currentIndex];
@@ -208,7 +203,6 @@ namespace MusicQuiz.Web.Controllers
 
             return View(model);
         }
-
 
         /// <summary>
         /// Show the next question
@@ -228,10 +222,8 @@ namespace MusicQuiz.Web.Controllers
                 return View("NoQuestions");
             }
 
-            // Save the user's answer and first answer
             SaveUserAnswer(questions, currentIndex, selectedOption, attemptNumber);
 
-            // Move to the next question
             currentIndex++;
             if (currentIndex >= questions.Count)
             {
@@ -312,22 +304,18 @@ namespace MusicQuiz.Web.Controllers
             //WORKING OUT SCORE
             decimal score;
 
-            // Check if it's the first attempt
             if (currentIndex == 0)
             {
                 score = 0;
             }
             else
             {
-                // If not the first attempt, retrieve the previous score from session
                 var scoreString = HttpContext.Session.GetString("Score");
                 score = scoreString != null ? decimal.Parse(scoreString) : 0;
             }
 
-            // Update the attempt number and EXP based on the number of attempts
             currentQuestion.AttemptNumber = attemptNumber;
 
-            // Calculate the score for the current attempt
             decimal scoreForQuestion;
 
             switch (attemptNumber)
@@ -350,20 +338,12 @@ namespace MusicQuiz.Web.Controllers
                     break;
             }
 
-            //IF the answer has been answered correctly
             score += currentQuestion.UserAnswer == currentQuestion.CorrectAnswer ? scoreForQuestion : 0;
 
-            // Save the updated score to session
             HttpContext.Session.SetString("Score", score.ToString());
-
-            // Save the total correct answers to session (assuming correctAnswers is already calculated elsewhere)
             HttpContext.Session.SetInt32("CorrectAnswers", correctAnswers);
-
-            // Save the updated questions back to session
             HttpContext.Session.SetString("QuizQuestions", JsonSerializer.Serialize(questions));
         }
-
-
 
         /// <summary>
         /// Return to previous question in the list
@@ -388,11 +368,9 @@ namespace MusicQuiz.Web.Controllers
                 currentIndex = 0;
             }
 
-            // Store the current question index
             HttpContext.Session.SetInt32("CurrentQuestionIndex", currentIndex);
-            ViewBag.Feedback = questions[currentIndex].Feedback;
 
-            // Pass first user answer back to the front-end
+            ViewBag.Feedback = questions[currentIndex].Feedback;
             ViewBag.FirstUserAnswer = questions[currentIndex].FirstAnswer;
 
             return RedirectToAction("ShowQuestion");
@@ -490,8 +468,6 @@ namespace MusicQuiz.Web.Controllers
                     userManager.UpdateAsync(user).Wait();
                 }
             }
-            //if you refreshed the page it lost the data. taking this out for now until I find out where I need it
-            //ClearQuizSession();
 
             return View(model);
         }
@@ -543,7 +519,6 @@ namespace MusicQuiz.Web.Controllers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(difficultyLevel), difficultyLevel, null);
             }
-
             return (int)exp;
         }
     }

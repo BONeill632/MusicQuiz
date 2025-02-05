@@ -6,6 +6,10 @@ namespace MusicQuiz.Web.Controllers
 {
     public class BaseController : Controller
     {
+        /// <summary>
+        /// Set the IsLoggedIn and UserId values for the model
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
@@ -22,6 +26,10 @@ namespace MusicQuiz.Web.Controllers
             SetActiveNav(context);
         }
 
+        /// <summary>
+        /// Set the active navigation value for the navbar
+        /// </summary>
+        /// <param name="context"></param>
         private void SetActiveNav(ActionExecutingContext context)
         {
             // Ger controllers

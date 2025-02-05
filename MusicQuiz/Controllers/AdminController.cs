@@ -14,11 +14,19 @@ namespace MusicQuiz.Web.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController(UserManager<UserData> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context) : BaseController
     {
+        /// <summary>
+        /// Admin index page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Populate list of users
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> UserList()
         {
             var users = await userManager.Users.ToListAsync();
@@ -32,6 +40,11 @@ namespace MusicQuiz.Web.Controllers
             return View(userListViewModel);
         }
 
+        /// <summary>
+        /// Manage users roles
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Manage(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -56,6 +69,11 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Manage users roles (POST)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Manage(ManageUserRolesViewModel model)
         {
@@ -91,7 +109,14 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("UserList");
         }
 
-
+        /// <summary>
+        /// View questions for editing
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="selectedTopic"></param>
+        /// <param name="selectedDifficulty"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ViewQuestions(int pageNumber = 1, int pageSize = 20, Topic? selectedTopic = null, DifficultyLevel? selectedDifficulty = null)
         {
@@ -118,6 +143,12 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View questions for editing (POST)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ViewQuestions(QuestionSearchViewModel model, int pageNumber = 1)
         {
@@ -135,6 +166,14 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Search for questions based on topic and difficulty
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="difficulty"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         private async Task<(List<QuestionViewModel> Questions, int TotalQuestions)> SearchQuestionsAsync(int topic, int difficulty, int pageNumber, int pageSize)
         {
             var query = context.QuizQuestions.AsQueryable();
@@ -171,7 +210,10 @@ namespace MusicQuiz.Web.Controllers
             return (questions, totalQuestions);
         }
 
-
+        /// <summary>
+        /// Get list of topics
+        /// </summary>
+        /// <returns></returns>
         private static List<string> GetTopics()
         {
             return Enum.GetValues(typeof(Topic))
@@ -180,6 +222,10 @@ namespace MusicQuiz.Web.Controllers
                        .ToList();
         }
 
+        /// <summary>
+        /// Get list of difficulties
+        /// </summary>
+        /// <returns></returns>
         private static List<string> GetDifficulties()
         {
             return Enum.GetValues(typeof(DifficultyLevel))
@@ -188,6 +234,11 @@ namespace MusicQuiz.Web.Controllers
                        .ToList();
         }
 
+        /// <summary>
+        /// Edit question from Admin page
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> EditQuestion(int id)
         {
@@ -219,6 +270,11 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit question from Admin page (POST)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> EditQuestion(QuestionViewModel model)
         {
@@ -250,9 +306,10 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
-
-
-
+        /// <summary>
+        /// Get list of music files
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetMusicFiles()
         {
@@ -264,6 +321,11 @@ namespace MusicQuiz.Web.Controllers
             return Json(musicFiles);
         }
 
+        /// <summary>
+        /// Upload music file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UploadMusicFile(IFormFile file)
         {
@@ -440,6 +502,10 @@ namespace MusicQuiz.Web.Controllers
             return options;
         }
 
+        /// <summary>
+        /// View assessments
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ViewAssessments()
         {
@@ -457,6 +523,12 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// View assessments (POST)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ViewAssessments(AssessmentSearchViewModel model, int pageNumber = 1)
         {
@@ -480,6 +552,14 @@ namespace MusicQuiz.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Search for assessments based on year and topic
+        /// </summary>
+        /// <param name="selectedYear"></param>
+        /// <param name="selectedTopic"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         private async Task<(List<AssessmentViewModel> Assessments, int TotalAssessments)> SearchAssessmentsAsync(string selectedYear, int selectedTopic, int pageNumber, int pageSize)
         {
             var query = context.Assessments.AsQueryable();
@@ -511,7 +591,6 @@ namespace MusicQuiz.Web.Controllers
 
             return (assessments, totalAssessments);
         }
-
 
         /// <summary>
         /// Edit an existing assessment
@@ -578,8 +657,10 @@ namespace MusicQuiz.Web.Controllers
         }
 
         /// <summary>
-        /// Confirm deletion of an assessment, including the number of users who have taken it
+        /// Delete an assessment
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> DeleteAssessment(int id)
         {
@@ -606,8 +687,10 @@ namespace MusicQuiz.Web.Controllers
         }
 
         /// <summary>
-        /// Handle deletion of the assessment and optionally delete associated results
+        /// Delete an assessment (POST)
         /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAssessment(DeleteAssessmentViewModel model)
@@ -635,6 +718,5 @@ namespace MusicQuiz.Web.Controllers
             TempData["SuccessMessage"] = "Assessment and related data deleted successfully.";
             return RedirectToAction("ViewAssessments");
         }
-
     }
 }

@@ -77,6 +77,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
+        /// <summary>
+        ///    This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -94,6 +99,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        /// <summary>
+        ///    This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");

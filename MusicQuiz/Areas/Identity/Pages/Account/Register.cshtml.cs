@@ -18,6 +18,14 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="userStore"></param>
+        /// <param name="signInManager"></param>
+        /// <param name="logger"></param>
+        /// <param name="context"></param>
         public RegisterModel(
             UserManager<UserData> userManager,
             IUserStore<UserData> userStore,
@@ -33,6 +41,9 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             _context = context;
         }
 
+        /// <summary>
+        /// Input model
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel
         {
@@ -45,41 +56,74 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             AcademicYear = string.Empty
         };
 
+        /// <summary>
+        /// Return URL
+        /// </summary>
         public string ReturnUrl { get; set; } = string.Empty;
 
+        /// <summary>
+        /// External logins
+        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; } = [];
 
+        /// <summary>
+        /// Academic year options
+        /// </summary>
         public List<string> AcademicYearOptions { get; set; } = [];
 
+        /// <summary>
+        /// Input model
+        /// </summary>
         public class InputModel
         {
+            /// <summary>
+            /// Forename
+            /// </summary>
             [Required]
             [Display(Name = "Forename")]
             public required string FirstName { get; set; }
 
+            /// <summary>
+            /// Surname
+            /// </summary>
             [Required]
             [Display(Name = "Surname")]
             public required string LastName { get; set; }
 
+            /// <summary>
+            /// Student ID
+            /// </summary>
             [Required]
             [Display(Name = "Student ID")]
             public required string StudentID { get; set; }
 
+            /// <summary>
+            /// Academic year
+            /// </summary>
             [Required]
             [Display(Name = "Academic year")]
             public string? AcademicYear { get; set; }
 
+            /// <summary>
+            /// Email
+            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public required string Email { get; set; }
 
+            /// <summary>
+            /// Password
+            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public required string Password { get; set; }
 
+            /// <summary>
+            /// Confirm password
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -120,6 +164,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             return options;
         }
 
+        /// <summary>
+        /// On get async
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task OnGetAsync(string? returnUrl = null)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
@@ -129,6 +178,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             AcademicYearOptions = GetAcademicYearOptions();
         }
 
+        /// <summary>
+        /// On post async
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -213,7 +267,11 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-
+        /// <summary>
+        /// Create a new instance of UserData
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         private UserData CreateUser()
         {
             try
@@ -226,7 +284,12 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             }
         }
 
-
+        /// <summary>
+        /// Get the email store
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
         private IUserEmailStore<UserData> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)

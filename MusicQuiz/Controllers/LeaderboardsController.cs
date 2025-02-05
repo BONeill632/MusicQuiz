@@ -74,7 +74,6 @@ namespace MusicQuiz.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> IndexPost(string academicYear)
         {
-            // Re-fetch data based on the selected academic year
             return await Index(academicYear);
         }
 
@@ -95,7 +94,6 @@ namespace MusicQuiz.Web.Controllers
                     .ToListAsync();
             }
             else
-            //Selected Year filter
             {
                 return await context.Users
                     .Where(u => u.AcademicYear == academicYear && (u.IntID != 0 && u.IntID != 1))
