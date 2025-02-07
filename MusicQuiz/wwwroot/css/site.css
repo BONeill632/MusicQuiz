@@ -365,6 +365,7 @@ a {
         background-color: #f8f9fa;
         border-bottom: 2px solid #dee2e6;
         padding: 10px;
+        white-space: nowrap; /* Prevents column headers from wrapping */
     }
 
     .table-modern tbody tr {
@@ -379,7 +380,8 @@ a {
         }
 
     .table-modern tbody td {
-        padding: 15px;
+        padding: 12px; /* Slightly reduced padding for smaller screens */
+        text-align: left;
     }
 
     .table-modern tbody tr.row-primary {
@@ -632,20 +634,31 @@ a {
 @media (max-width: 576px) {
     .table-modern thead th,
     .table-modern tbody td {
-        font-size: 0.875rem;
-        padding: 8px;
+        font-size: 0.8125rem; /* Slightly smaller font for better fit */
+        padding: 6px; /* Reduce padding to avoid excessive width */
     }
 
     .table-modern {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
+    }
+
+        .table-modern tbody td {
+            white-space: normal !important; /* Allow text to wrap */
+            word-break: break-word; /* Ensure long words wrap properly */
+        }
+
+    .table-responsive {
+        overflow-x: auto; /* Ensure horizontal scrolling if necessary */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
     }
 }
 
 /* Make the table responsive */
 .table-responsive {
+    width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
-
 /* Adjust table styles for small screens */
 @media (max-width: 375px) {
     th, td {
@@ -728,3 +741,20 @@ form {
     width: 100%;
     max-width: 300px;
 }
+
+
+    .table-modern tbody tr.recent {
+        background-color: rgba(76, 175, 80, 0.2);
+    }
+    .table-modern tbody tr.last-week {
+        background-color: rgba(255, 193, 7, 0.2);
+    }
+    .table-modern tbody tr.two-weeks {
+        background-color: rgba(255, 152, 0, 0.2);
+    }
+    .table-modern tbody tr.three-weeks {
+        background-color: rgba(255, 87, 34, 0.2);
+    }
+    .table-modern tbody tr.older {
+        background-color: rgba(244, 67, 54, 0.2);
+    }

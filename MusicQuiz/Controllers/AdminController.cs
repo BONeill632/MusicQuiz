@@ -7,6 +7,7 @@ using MusicQuiz.Core.Enums;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models.Admin;
 using MusicQuiz.Web.Models.Quiz;
+using MySqlX.XDevAPI.CRUD;
 using QuestionViewModel = MusicQuiz.Web.Models.Quiz.QuestionViewModel;
 
 namespace MusicQuiz.Web.Controllers
@@ -517,7 +518,7 @@ namespace MusicQuiz.Web.Controllers
                     .OrderByDescending(y => y)
                     .ToListAsync(),
                 Topics = GetTopics(),
-                Assessments = new List<AssessmentViewModel>()
+                Assessments = []
             };
 
             return View(model);
@@ -717,6 +718,63 @@ namespace MusicQuiz.Web.Controllers
 
             TempData["SuccessMessage"] = "Assessment and related data deleted successfully.";
             return RedirectToAction("ViewAssessments");
+        }
+
+        public IActionResult UserLogins()
+        {
+            // Get the Role ID for the "Admin" role
+            var adminRoleId = context.Roles
+                .Where(r => r.Name == "Admin")
+                .Select(r => r.Id)
+                .FirstOrDefault();
+
+            //Remove admins and older dates, admin should have min date but
+            //best to be safe
+            var userLogins = context.Users
+                .Where(u => u.LastLoggedIn != DateTime.MinValue)
+                .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
+                .OrderByDescending(u => u.LastLoggedIn)
+                .Select(u => new UserLoginsViewModel
+                {
+                    Id = u.Id,
+                    UserName = $"{u.FirstName} {u.LastName}",
+                    StudentID = u.StudentID,
+                    Email = u.Email,
+                    LastLoginDate = u.LastLoggedIn
+                })
+                .ToList();
+
+            // Get the current week's Monday
+            DateTime today = DateTime.UtcNow;
+            DateTime currentWeekStart = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+
+            // Get all login dates, excluding admins
+            var loginDates = context.Users
+                .Where(u => u.LastLoggedIn != DateTime.MinValue)
+                .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
+                .Select(u => u.LastLoggedIn)
+                .ToList();
+
+            // Process weekly data (Monday-Sunday grouping)
+            int[] weeklyCounts = new int[5];
+
+            for (int i = 0; i < 4; i++)
+            {
+                DateTime weekStart = currentWeekStart.AddDays(-7 * i);
+                DateTime weekEnd = weekStart.AddDays(6);
+                weeklyCounts[i] = loginDates.Count(l => l >= weekStart && l <= weekEnd);
+            }
+
+            // Count all logins older than 4 weeks
+            weeklyCounts[4] = loginDates.Count(l => l < currentWeekStart.AddDays(-28));
+
+            // Add login statistics to the first item in the list (since the list itself represents the model)
+            if (userLogins.Count != 0)
+            {
+                userLogins.First().WeeklyLoginCounts = weeklyCounts;
+            }
+
+            return View(userLogins);
         }
     }
 }
