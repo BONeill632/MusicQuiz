@@ -17,8 +17,17 @@ namespace MusicQuiz.Web.Controllers
         /// </summary>
         /// <param name="academicYear"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string academicYear = "24/25")
+        public async Task<IActionResult> Index(string academicYear = null)
         {
+            // Adjust the logic to consider the current academic year dynamically for Sept - Aug
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12)
+                ? $"{currentYear % 100}/{(currentYear + 1) % 100}"
+                : $"{(currentYear - 1) % 100}/{currentYear % 100}";
+
+            academicYear ??= currentAcademicYear;
+
             // Get the current logged-in user (if any)
             var user = await userManager.GetUserAsync(User);
 
@@ -39,13 +48,14 @@ namespace MusicQuiz.Web.Controllers
             {
                 TopUsers = topUsers,
                 CurrentUser = user,
-                SelectedAcademicYear = academicYear,
+                SelectedAcademicYear = academicYear.Equals("All Time") ? academicYear : $"20{academicYear}",
                 AcademicYearOptions = GetAcademicYearOptions(),
                 UserRank = userRank
             };
 
             return View(ViewModel);
         }
+
 
         /// <summary>
         /// Fetch all users for the selected academic year (for rank calculation)
@@ -90,7 +100,7 @@ namespace MusicQuiz.Web.Controllers
                     //Leave out 'NOTLOGGED IN' & 'ADMIN'
                     .Where(u => u.IntID != 0 && u.IntID != 1)
                     .OrderByDescending(u => u.EXP )
-                    .Take(25)
+                    .Take(10)
                     .ToListAsync();
             }
             else
@@ -98,7 +108,7 @@ namespace MusicQuiz.Web.Controllers
                 return await context.Users
                     .Where(u => u.AcademicYear == academicYear && (u.IntID != 0 && u.IntID != 1))
                     .OrderByDescending(u => u.EXP)
-                    .Take(25)
+                    .Take(10)
                     .ToListAsync();
             }
         }
@@ -124,14 +134,8 @@ namespace MusicQuiz.Web.Controllers
             // Generate the correct academic year options
             var options = new List<string>
             {
-                // Previous academic year
-                $"{(currentAcademicYear - 1) % 100}/{currentAcademicYear % 100}",
-
                 // Current academic year
                 $"{currentAcademicYear % 100}/{(currentAcademicYear + 1) % 100}",
-
-                // Next academic year
-                $"{(currentAcademicYear + 1) % 100}/{(currentAcademicYear + 2) % 100}",
 
                 //Overall leaderboard
                 "All Time"

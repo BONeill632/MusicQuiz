@@ -3,52 +3,26 @@
 }
 
 <h1>Manage Music Files</h1>
-
-<h3>Upload Music File</h3>
+<hr />
+<h3 class="text-center">Upload Music File</h3>
 <form id="uploadForm" enctype="multipart/form-data">
     <input type="file" id="fileInput" />
-    <button type="button" onclick="uploadFile()">Upload</button>
+    <br />
+    <button type="button" class="btn btn-primary" onclick="uploadFile()">Upload</button>
 </form>
 
-<h3>Browse Music Files</h3>
-<select id="musicFilesDropdown" class="form-control">
+<hr />
+
+<h3 class="text-center">Browse Music Files</h3>
+<select id="musicFilesDropdown" class="form-select form-control">
     <option value="">Select a music file</option>
 </select>
+<br />
+<div class="d-flex flex-column align-items-center" style="width: 100%;">
+    <button type="submit" id="login-submit" class="btn btn-primary w-100 w-md-75 mb-2" style="max-width: 300px;" onclick="deleteFile()">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary w-100" style="max-width: 300px;">Back</a>
+</div>
 
 @section Scripts {
-    <script>
-        async function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-
-            const response = await fetch('/Admin/UploadMusicFile', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                alert('File uploaded successfully');
-                loadMusicFiles();
-            } else {
-                alert('Failed to upload file');
-            }
-        }
-
-        async function loadMusicFiles() {
-            const response = await fetch('/Admin/GetMusicFiles');
-            const musicFiles = await response.json();
-
-            const dropdown = document.getElementById('musicFilesDropdown');
-            dropdown.innerHTML = '<option value="">Select a music file</option>';
-            musicFiles.forEach(file => {
-                const option = document.createElement('option');
-                option.value = file;
-                option.textContent = file;
-                dropdown.appendChild(option);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadMusicFiles);
-    </script>
+    <script src="~/js/UploadFile.js"></script>
 }

@@ -98,6 +98,11 @@ h1 {
     background-color: rgb(214, 0, 13);
 }
 
+/* Custom colors for admin navbar */
+.custom-navbar-admin {
+    background-color: blue;
+}
+
     .custom-navbar-red .navbar-brand,
     .custom-navbar-red .nav-link {
         color: white;
@@ -169,12 +174,27 @@ h1 {
     font-weight: bold;
 }
 
-/* Footer and red bar styling */
+    .custom-navbar-red .navbar-nav .nav-link.admin:hover,
+    .custom-navbar-red .navbar-nav .nav-item.active .nav-link.admin {
+        background-color: #fff;
+        color: blue;
+        font-weight: bold;
+    }
+
+
+/* Footer and red/blue bar styling */
 .red-bar {
     margin-top: auto;
     background-color: red;
     height: 40px;
 }
+
+.blue-bar {
+    margin-top: auto;
+    background-color: blue;
+    height: 40px;
+}
+
 
 .container {
     flex: 1;
@@ -758,3 +778,27 @@ form {
     .table-modern tbody tr.older {
         background-color: rgba(244, 67, 54, 0.2);
     }
+
+.gold-rank {
+    background-color: palegoldenrod !important;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.silver-rank {
+    background-color: #c0c0c0 !important;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.bronze-rank {
+    background-color: #b08d57 !important;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.rank-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

@@ -7,17 +7,7 @@
 <hr />
 <p>Welcome to the Leaderboards page. Here you can see the top scores and rankings for the Music Quiz.</p>
 
-<!-- Filter Buttons to change academic year view -->
-<form method="post" style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-    @foreach (var year in Model.AcademicYearOptions)
-    {
-        <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
-            @year
-        </button>
-    }
-</form>
-
-<h3 class="centered">Top 25 Users - @Model.SelectedAcademicYear</h3>
+<h3 class="centered">Top 10 Users - @(Model.SelectedAcademicYear)</h3>
 
 @if (Model.TopUsers != null && Model.TopUsers.Any())
 {
@@ -30,19 +20,34 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model.TopUsers)
+            @for (int i = 0; i < Model.TopUsers.Count; i++)
             {
-                // Check if the user is the current user
+                var user = Model.TopUsers[i];
                 string rowClass = user.IntID == Model.CurrentUser?.IntID ? "row-primary" : "";
 
-                <tr class="@rowClass">
-                    <td>@(Model.TopUsers.IndexOf(user) + 1)</td>
-                    <td>
-                        @user.FirstName @user.LastName
-                    </td>
-                    <td>
-                        @user.EXP
-                    </td>
+                string rankClass = "";
+                string trophy = "";
+
+                if (i == 0)
+                {
+                    rankClass = "gold-rank";
+                    trophy = "🏆";
+                }
+                else if (i == 1)
+                {
+                    rankClass = "silver-rank";
+                    trophy = "🥈";
+                }
+                else if (i == 2)
+                {
+                    rankClass = "bronze-rank";
+                    trophy = "🥉";
+                }
+
+                <tr class="@rankClass @rowClass">
+                    <td>@(i + 1)</td>
+                    <td class="rank-name">@trophy @user.FirstName @user.LastName</td>
+                    <td>@user.EXP</td>
                 </tr>
             }
         </tbody>
@@ -52,6 +57,17 @@ else
 {
     <p class="text-center">No data to display. It looks like no users have registered for this year</p>
 }
+
+<form method="post" style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    @foreach (var year in Model.AcademicYearOptions)
+    {
+        <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
+            @year
+        </button>
+    }
+</form>
+
+<hr />
 
 @if (Model.CurrentUser != null)
 {
@@ -63,16 +79,15 @@ else
                 <th>Rank</th>
                 <th>Name</th>
                 <th>EXP</th>
-                <th>Academic Year</th> <!-- New column for the academic year -->
+                <th>Academic Year</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Current user row with the 'row-primary' class applied -->
             <tr class="row-primary">
                 <td>@(Model.UserRank != -1 ? Model.UserRank : "Not Ranked")</td>
                 <td><strong class="font-weight-bold">@Model.CurrentUser?.FirstName @Model.CurrentUser?.LastName</strong></td>
                 <td><strong class="font-weight-bold">@Model.CurrentUser?.EXP</strong></td>
-                <td>@Model.CurrentUser?.AcademicYear</td> <!-- Displaying the user's academic year -->
+                <td>@Model.CurrentUser?.AcademicYear</td>
             </tr>
         </tbody>
     </table>

@@ -45,6 +45,7 @@ namespace MusicQuiz.Web.Controllers
                 "Assessment" => "Assessment",
                 "Leaderboards" => "Leaderboards",
                 "Privacy" => "Privacy",
+                "Admin" => "Admin",
                 _ => "Home"
             };
 

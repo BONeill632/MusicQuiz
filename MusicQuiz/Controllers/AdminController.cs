@@ -776,5 +776,40 @@ namespace MusicQuiz.Web.Controllers
 
             return View(userLogins);
         }
+
+        [HttpGet]
+        public IActionResult ManageMusicFiles()
+        {
+            return View();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMusicFile(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return BadRequest("File name is required");
+            }
+
+            var musicFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Music");
+            var filePath = Path.Combine(musicFolder, fileName.Replace("/Music/", ""));
+
+            if (System.IO.File.Exists(filePath))
+            {
+                // Delete the file
+                System.IO.File.Delete(filePath);
+
+                // Delete corresponding questions
+                var questionsToDelete = await context.QuizQuestions
+                    .Where(q => q.QuestionMusicFilePath == fileName || q.ReferenceMusicFilePath == fileName)
+                    .ToListAsync();
+
+                context.QuizQuestions.RemoveRange(questionsToDelete);
+                await context.SaveChangesAsync();
+
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }
