@@ -768,7 +768,6 @@ namespace MusicQuiz.Web.Controllers
             // Count all logins older than 4 weeks
             weeklyCounts[4] = loginDates.Count(l => l < currentWeekStart.AddDays(-28));
 
-            // Add login statistics to the first item in the list (since the list itself represents the model)
             if (userLogins.Count != 0)
             {
                 userLogins.First().WeeklyLoginCounts = weeklyCounts;
