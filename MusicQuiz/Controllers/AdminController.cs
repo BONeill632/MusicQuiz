@@ -98,7 +98,7 @@ namespace MusicQuiz.Web.Controllers
                     return View(model);
                 }
 
-                result = await userManager.RemoveFromRolesAsync(user, userRoles.Except([selectedRole]).ToList());
+                result = await userManager.RemoveFromRolesAsync(user, [.. userRoles.Except([selectedRole])]);
 
                 if (!result.Succeeded)
                 {
@@ -217,10 +217,9 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         private static List<string> GetTopics()
         {
-            return Enum.GetValues(typeof(Topic))
+            return [.. Enum.GetValues(typeof(Topic))
                        .Cast<Topic>()
-                       .Select(t => t.ToString())
-                       .ToList();
+                       .Select(t => t.ToString())];
         }
 
         /// <summary>
@@ -229,10 +228,9 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         private static List<string> GetDifficulties()
         {
-            return Enum.GetValues(typeof(DifficultyLevel))
+            return [.. Enum.GetValues(typeof(DifficultyLevel))
                        .Cast<DifficultyLevel>()
-                       .Select(d => d.ToString())
-                       .ToList();
+                       .Select(d => d.ToString())];
         }
 
         /// <summary>
@@ -728,8 +726,7 @@ namespace MusicQuiz.Web.Controllers
                 .Select(r => r.Id)
                 .FirstOrDefault();
 
-            //Remove admins and older dates, admin should have min date but
-            //best to be safe
+            // Get all non-admin users with a valid last login date
             var userLogins = context.Users
                 .Where(u => u.LastLoggedIn != DateTime.MinValue)
                 .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
@@ -744,11 +741,11 @@ namespace MusicQuiz.Web.Controllers
                 })
                 .ToList();
 
-            // Get the current week's Monday
+            // Get the start of the current week (Monday)
             DateTime today = DateTime.UtcNow;
-            DateTime currentWeekStart = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+            DateTime currentWeekStart = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday).Date;
 
-            // Get all login dates, excluding admins
+            // Fetch all non-admin login dates
             var loginDates = context.Users
                 .Where(u => u.LastLoggedIn != DateTime.MinValue)
                 .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
@@ -761,13 +758,16 @@ namespace MusicQuiz.Web.Controllers
             for (int i = 0; i < 4; i++)
             {
                 DateTime weekStart = currentWeekStart.AddDays(-7 * i);
-                DateTime weekEnd = weekStart.AddDays(6);
-                weeklyCounts[i] = loginDates.Count(l => l >= weekStart && l <= weekEnd);
+                DateTime weekEnd = currentWeekStart.AddDays(-7 * (i - 1)).AddTicks(-1); // End of the week (Sunday 23:59:59.9999999)
+
+                weeklyCounts[i] = loginDates.Count(l => l >= weekStart && l < weekEnd);
             }
 
-            // Count all logins older than 4 weeks
-            weeklyCounts[4] = loginDates.Count(l => l < currentWeekStart.AddDays(-28));
+            // Count all logins older than the end of week 3
+            DateTime threeWeeksAgoEnd = currentWeekStart.AddDays(-21);
+            weeklyCounts[4] = loginDates.Count(l => l < threeWeeksAgoEnd);
 
+            // Assign the computed weekly counts to the first user in the list
             if (userLogins.Count != 0)
             {
                 userLogins.First().WeeklyLoginCounts = weeklyCounts;
@@ -775,6 +775,7 @@ namespace MusicQuiz.Web.Controllers
 
             return View(userLogins);
         }
+
 
         [HttpGet]
         public IActionResult ManageMusicFiles()
