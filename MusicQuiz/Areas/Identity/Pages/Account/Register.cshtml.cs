@@ -172,7 +172,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string? returnUrl = null)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = [.. (await _signInManager.GetExternalAuthenticationSchemesAsync())];
 
             // Populate the Academic Year options
             AcademicYearOptions = GetAcademicYearOptions();
@@ -186,7 +186,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = [.. (await _signInManager.GetExternalAuthenticationSchemesAsync())];
 
             // Repopulate the AcademicYearOptions in case of errors
             AcademicYearOptions = GetAcademicYearOptions();
@@ -215,6 +215,10 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                 // Set the new UserID and update the LastAssignedUserID
                 user.IntID = lastUserID.LastUserID + 1;
                 lastUserID.LastUserID = user.IntID;
+
+                //Used to bypass email verification for password reset.
+                //Proving tricky to implement verification
+                user.EmailConfirmed = true;
 
                 // Save the updated student ID
                 _context.LastAssignedUserID.Update(lastUserID);

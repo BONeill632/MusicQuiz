@@ -71,6 +71,7 @@ builder.Services.AddScoped<UserRoleService>();
 builder.Services.AddScoped<IResultsService, ResultsService>();
 builder.Services.AddScoped<UserExpService>();
 builder.Services.AddScoped<IAssessmentService, AssessmentService>();
+builder.Services.AddTransient<MusicQuiz.Application.Interfaces.IEmailSender, EmailSender>();
 
 var app = builder.Build();
 

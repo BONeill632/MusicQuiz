@@ -726,10 +726,9 @@ namespace MusicQuiz.Web.Controllers
                 .Select(r => r.Id)
                 .FirstOrDefault();
 
-            // Get all non-admin users with a valid last login date
+            // Get all non-admin users with a valid last login date and their login dates
             var userLogins = context.Users
-                .Where(u => u.LastLoggedIn != DateTime.MinValue)
-                .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
+                .Where(u => u.LastLoggedIn != DateTime.MinValue && !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
                 .OrderByDescending(u => u.LastLoggedIn)
                 .Select(u => new UserLoginsViewModel
                 {
@@ -741,16 +740,11 @@ namespace MusicQuiz.Web.Controllers
                 })
                 .ToList();
 
+            var loginDates = userLogins.Select(u => u.LastLoginDate).ToList();
+
             // Get the start of the current week (Monday)
             DateTime today = DateTime.UtcNow;
             DateTime currentWeekStart = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday).Date;
-
-            // Fetch all non-admin login dates
-            var loginDates = context.Users
-                .Where(u => u.LastLoggedIn != DateTime.MinValue)
-                .Where(u => !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
-                .Select(u => u.LastLoggedIn)
-                .ToList();
 
             // Process weekly data (Monday-Sunday grouping)
             int[] weeklyCounts = new int[5];
@@ -758,7 +752,9 @@ namespace MusicQuiz.Web.Controllers
             for (int i = 0; i < 4; i++)
             {
                 DateTime weekStart = currentWeekStart.AddDays(-7 * i);
-                DateTime weekEnd = currentWeekStart.AddDays(-7 * (i - 1)).AddTicks(-1); // End of the week (Sunday 23:59:59.9999999)
+
+                // End of the week (Sunday 23:59:59.9999999)
+                DateTime weekEnd = currentWeekStart.AddDays(-7 * (i - 1)).AddTicks(-1);
 
                 weeklyCounts[i] = loginDates.Count(l => l >= weekStart && l < weekEnd);
             }
@@ -775,7 +771,6 @@ namespace MusicQuiz.Web.Controllers
 
             return View(userLogins);
         }
-
 
         [HttpGet]
         public IActionResult ManageMusicFiles()
