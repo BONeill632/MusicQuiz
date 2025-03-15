@@ -5,7 +5,7 @@
 @section Scripts {
     <script src="~/js/selectTopic.js"></script>
 
-    @* will not work when in any JS file *@
+@* will not work when in any JS file *@
     <script>
         function selectOption(topic, className) {
             document.getElementById("selectedTopic").value = topic;
@@ -14,7 +14,7 @@
                 options[i].classList.remove("selected");
             }
             document.getElementById(topic).classList.add("selected");
-            document.getElementById("submitButton").disabled = false;
+            document.getElementById("quizForm").submit(); // Submit the form automatically
         }
 
         function validateForm() {
@@ -30,45 +30,9 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<h2 class="centered">Before you proceed</h2>
-
-<div class="center-content">
-    <p>This is the practice quiz section. Here, you can try all the questions we have to offer.</p>
-
-    <p>There are a number of things you might want to note.</p>
-    <ol class="info-list">
-        <li>
-            There is a pool of questions for each topic. Each quiz is randomized.
-        </li>
-        <li>
-            The answers to the quiz are in a random order, so you can't predict where the next answer will be.
-        </li>
-        <li>
-            EXP/percentage will greatly vary. As this is a practice quiz, you will get the following points per answer attempt:
-            <ul class="exp-list">
-                <li>
-                    Attempt 1: @(MusicQuiz.Core.Enums.EXP.One.ToString("D")) EXP / Full marks
-                </li>
-                <li>
-                    Attempt 2: @(MusicQuiz.Core.Enums.EXP.Two.ToString("D")) EXP / 1/2 marks
-                </li>
-                <li>
-                    Attempt 3: @(MusicQuiz.Core.Enums.EXP.Three.ToString("D")) EXP / 1/3 marks
-                </li>
-                <li>
-                    Attempt 4/Incorrect: @(MusicQuiz.Core.Enums.EXP.Default.ToString("D")) EXP / 0 marks
-                </li>
-
-            </ul>
-        </li>
-    </ol>
-</div>
-
-<hr />
-
 <h2 class="centered">Select a topic</h2>
 
-<form method="post" action="/Quiz/SelectDifficulty" onsubmit="return validateForm()">
+<form id="quizForm" method="post" action="/Quiz/SelectDifficulty" onsubmit="return validateForm()">
     <ul class="quiz-options-list">
         @foreach (var topic in Model.Topics)
         {
@@ -79,7 +43,6 @@
     </ul>
     <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />
     <div class="d-flex flex-column align-items-center" style="width: 100%;">
-        <button type="submit" id="submitButton" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Select</button>
         <a asp-controller="Home" asp-action="Index" class="btn btn-secondary w-100" style="max-width: 300px;">Cancel</a>
     </div>
 </form>

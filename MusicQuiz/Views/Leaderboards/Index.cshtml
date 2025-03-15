@@ -61,9 +61,19 @@ else
 <form method="post" style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
     @foreach (var year in Model.AcademicYearOptions)
     {
-        <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
-            @year
-        </button>
+        if (year.Equals("All Time"))
+        {
+            <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
+                @year
+            </button>
+        }
+        else
+        {
+            <button type="submit" name="academicYear" value="@year" class="btn btn-danger @(year == Model.SelectedAcademicYear ? "active" : "")">
+                Year @year
+            </button>
+        }
+
     }
 </form>
 
