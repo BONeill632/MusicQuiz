@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Quiz Analytics";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<p class="text-center">Explore quiz performance and trends.</p>
+
+<!-- Buttons to Toggle Between Logged-In and Not Logged-In Results and a Back Button -->
+<div class="text-center mb-4">
+    <div class="btn-group-vertical" style="display: flex; flex-direction: column; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button id="loggedInBtn" class="btn btn-primary" onclick="showLoggedIn()">Logged In Results</button>
+        <button id="notLoggedInBtn" class="btn btn-primary" onclick="showNotLoggedIn()">Not Logged In Results</button>
+        <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+
+<!-- Hidden Inputs for Chart Data -->
+<input type="hidden" id="scoreDataLoggedIn" value='@Html.Raw(Json.Serialize(ViewBag.ScoreDataLoggedIn))' />
+<input type="hidden" id="userNamesLoggedIn" value='@Html.Raw(Json.Serialize(ViewBag.UserNamesLoggedIn))' />
+<input type="hidden" id="scoreDataNotLoggedIn" value='@Html.Raw(Json.Serialize(ViewBag.ScoreDataNotLoggedIn))' />
+<input type="hidden" id="userNamesNotLoggedIn" value='@Html.Raw(Json.Serialize(ViewBag.UserNamesNotLoggedIn))' />
+
+<!-- Add JS to Toggle Between Results -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+
+<script>
+    let scoreChart;
+
+    function showLoggedIn() {
+        document.getElementById("loggedInResults").style.display = "block";
+        document.getElementById("notLoggedInResults").style.display = "none";
+        renderCharts("loggedIn");
+    }
+
+    function showNotLoggedIn() {
+        document.getElementById("loggedInResults").style.display = "none";
+        document.getElementById("notLoggedInResults").style.display = "block";
+        renderCharts("notLoggedIn");
+    }
+
+    function renderCharts(dataType) {
+        const scoreData = dataType === "loggedIn" ? JSON.parse(document.getElementById('scoreDataLoggedIn').value) : JSON.parse(document.getElementById('scoreDataNotLoggedIn').value);
+        const userNames = dataType === "loggedIn" ? JSON.parse(document.getElementById('userNamesLoggedIn').value) : JSON.parse(document.getElementById('userNamesNotLoggedIn').value);
+
+        // Update Score Distribution Chart
+        if (scoreChart) {
+            scoreChart.data.labels = userNames;
+            scoreChart.data.datasets[0].data = scoreData;
+            scoreChart.update();
+        } else {
+            const ctxScore = document.getElementById("scoreChart").getContext("2d");
+            scoreChart = new Chart(ctxScore, {
+                type: "bar",
+                data: {
+                    labels: userNames,
+                    datasets: [{
+                        label: "Score (%)",
+                        data: scoreData,
+                        backgroundColor: "rgba(75, 192, 192, 0.6)"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Initial render for logged-in results
+    document.addEventListener("DOMContentLoaded", function () {
+        renderCharts("loggedIn");
+    });
+</script>
+
+<!-- Debugging purposes: Check if data is being passed -->
+<script>
+    console.log('Logged In Score Data:', @Html.Raw(Json.Serialize(ViewBag.ScoreDataLoggedIn)));
+    console.log('Not Logged In Score Data:', @Html.Raw(Json.Serialize(ViewBag.ScoreDataNotLoggedIn)));
+</script>
+
+<!-- Create placeholders for the charts -->
+<div class="mt-4">
+    <h4 class="text-center">Quiz Score Distribution</h4>
+    <canvas id="scoreChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Quiz Results Section for Logged In Users -->
+<div id="loggedInResults" style="display:block;">
+    <h3 class="centered mt-4">Logged In User Quiz Attempts</h3>
+    @if (ViewBag.LoggedInResults != null && ((List<MusicQuiz.Web.Models.Admin.QuizResultModel>)ViewBag.LoggedInResults).Any())
+    {
+        <table class="table table-modern">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                    <th>Topic</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quiz in ViewBag.LoggedInResults)
+                {
+                    string scoreClass = quiz.UserScore >= 80 ? "high-score" : quiz.UserScore >= 50 ? "mid-score" : "low-score";
+                    <tr class="@scoreClass">
+                        <td>@quiz.Forename @quiz.Surname</td>
+                        <td>@quiz.UserScore.ToString("0.00")%</td>
+                        <td>@quiz.DateOfSubmission.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@quiz.SelectedTopic</td>
+                        <td>@quiz.SelectedDifficulty</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center">No logged-in quiz results available.</p>
+    }
+</div>
+
+<!-- Quiz Results Section for Not Logged In Users -->
+<div id="notLoggedInResults" style="display:none;">
+    <h3 class="centered mt-4">Not Logged In User Quiz Attempts</h3>
+    @if (ViewBag.NotLoggedInResults != null && ((List<MusicQuiz.Web.Models.Admin.QuizResultModel>)ViewBag.NotLoggedInResults).Any())
+    {
+        <table class="table table-modern">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                    <th>Topic</th>
+                    <th>Difficulty</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var quiz in ViewBag.NotLoggedInResults)
+                {
+                    string scoreClass = quiz.UserScore >= 80 ? "high-score" : quiz.UserScore >= 50 ? "mid-score" : "low-score";
+                    <tr class="@scoreClass">
+                        <td>@quiz.Forename @quiz.Surname</td>
+                        <td>@quiz.UserScore.ToString("0.00")%</td>
+                        <td>@quiz.DateOfSubmission.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@quiz.SelectedTopic</td>
+                        <td>@quiz.SelectedDifficulty</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center">No not-logged-in quiz results available.</p>
+    }
+</div>

@@ -479,7 +479,7 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         private static decimal CalculatePercentage(List<QuestionViewModel> questions)
         {
-            decimal percentagePerQuestion = (1 / (decimal)questions.Count()) * 100;
+            decimal percentagePerQuestion = (1 / (decimal)questions.Count) * 100;
 
             decimal percentage = 0;
 

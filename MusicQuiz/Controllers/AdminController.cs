@@ -8,6 +8,7 @@ using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models.Admin;
 using MusicQuiz.Web.Models.Quiz;
 using MySqlX.XDevAPI.CRUD;
+using System.ComponentModel;
 using QuestionViewModel = MusicQuiz.Web.Models.Quiz.QuestionViewModel;
 
 namespace MusicQuiz.Web.Controllers
@@ -806,5 +807,120 @@ namespace MusicQuiz.Web.Controllers
             }
             return NotFound();
         }
+
+        public IActionResult ViewQuizResults()
+        {
+            // Fetch quiz results with a join to the Users table
+            var quizResultsLoggedIn = context.UsersPracticeQuizResults
+                .Join(context.Users,
+                      quiz => quiz.UserID,
+                      user => user.Id,
+                      (quiz, user) => new
+                      {
+                          quiz,
+                          user.FirstName,
+                          user.LastName
+                      })
+                .Where(q => q.quiz.AssessmentId == null) // Add condition to filter by NULL AssessmentId
+                .OrderByDescending(q => q.quiz.DateOfSubmission)
+                .ToList();
+
+            // Fetch quiz results not logged in. treated differently to users
+            var quizResultsNotLoggedIn = context.UsersPracticeQuizResults
+                .Where(q => q.AssessmentId == null && q.UserID == "0")
+                .OrderByDescending(q => q.DateOfSubmission)
+                .ToList();
+
+            // Separate the results into logged-in and non-logged-in users
+            var loggedInResults = quizResultsLoggedIn.Where(q => q.quiz.UserID != "0")  // Compare with "0" as a string
+                .Select(q => new QuizResultModel
+                {
+                    UserID = q.quiz.UserID, // Treat UserID as string
+                    Forename = q.FirstName,
+                    Surname = q.LastName,
+                    UserScore = q.quiz.UserScore,
+                    DateOfSubmission = q.quiz.DateOfSubmission,
+                    SelectedTopic = (Topic)q.quiz.SelectedTopic,
+                    SelectedDifficulty = (DifficultyLevel)q.quiz.SelectedDifficulty
+                })
+                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
+                .ToList();
+
+            var notLoggedInResults = quizResultsNotLoggedIn
+                .Select(q => new QuizResultModel
+                {
+                    UserID = q.UserID,
+                    Forename = "Not",
+                    Surname = "Logged In",
+                    UserScore = q.UserScore,
+                    DateOfSubmission = q.DateOfSubmission,
+                    SelectedTopic = (Topic)q.SelectedTopic,
+                    SelectedDifficulty = (DifficultyLevel)q.SelectedDifficulty
+                })
+                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
+                .ToList();
+
+            // Prepare data for charts
+            var scoreDataLoggedIn = loggedInResults.Select(q => q.UserScore).ToList();
+            var userNamesLoggedIn = loggedInResults.Select(q => $"{q.Forename} {q.Surname}").ToList();
+
+            var scoreDataNotLoggedIn = notLoggedInResults.Select(q => q.UserScore).ToList();
+            var userNamesNotLoggedIn = notLoggedInResults.Select(q => $"{q.Forename} {q.Surname}").ToList();
+
+            // Pass data to the view
+            ViewBag.LoggedInResults = loggedInResults;
+            ViewBag.NotLoggedInResults = notLoggedInResults;
+            ViewBag.ScoreDataLoggedIn = scoreDataLoggedIn;
+            ViewBag.UserNamesLoggedIn = userNamesLoggedIn;
+            ViewBag.ScoreDataNotLoggedIn = scoreDataNotLoggedIn;
+            ViewBag.UserNamesNotLoggedIn = userNamesNotLoggedIn;
+
+            return View();
+        }
+
+        public IActionResult ViewAssessmentResults()
+        {
+            // Fetch quiz results for users and filter by AssessmentId
+            var quizResults = context.UsersPracticeQuizResults
+                .Join(context.Users,
+                      quiz => quiz.UserID,
+                      user => user.Id,
+                      (quiz, user) => new
+                      {
+                          quiz,
+                          user.FirstName,
+                          user.LastName
+                      })
+                .Where(x => x.quiz.AssessmentId != null)
+                .OrderByDescending(q => q.quiz.DateOfSubmission) // Sort by the most recent date first
+                .ToList();
+
+            // Map the results
+            var results = quizResults
+                .Select(q => new QuizResultModel
+                {
+                    UserID = q.quiz.UserID,
+                    Forename = q.FirstName,
+                    Surname = q.LastName,
+                    UserScore = q.quiz.UserScore,
+                    DateOfSubmission = q.quiz.DateOfSubmission,
+                    SelectedTopic = (Topic)q.quiz.SelectedTopic,
+                    AssessmentId = q.quiz.AssessmentId
+                })
+                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
+                .ToList();
+
+            // Prepare data for charts
+            var scoreData = results.Select(q => q.UserScore).ToList();
+            var userNames = results.Select(q => $"{q.Forename} {q.Surname}").ToList();
+
+            // Pass data to the view
+            ViewBag.AllResults = results;  // Corrected to match the view
+            ViewBag.ScoreData = scoreData;
+            ViewBag.UserNames = userNames;
+
+            return View();
+        }
+
     }
 }
