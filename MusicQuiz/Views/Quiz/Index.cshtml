@@ -14,7 +14,7 @@
                 options[i].classList.remove("selected");
             }
             document.getElementById(topic).classList.add("selected");
-            document.getElementById("quizForm").submit(); // Submit the form automatically
+            document.getElementById("quizForm").submit();
         }
 
         function validateForm() {
@@ -36,9 +36,11 @@
     <ul class="quiz-options-list">
         @foreach (var topic in Model.Topics)
         {
-            <div class="quiz-option text-center" id="@topic.Topic" onclick="selectOption('@topic.Topic', 'quiz-option')">
-                @topic.Description
-            </div>
+            <li>
+                <div class="quiz-option text-center" id="@topic.Topic" onclick="selectOption('@topic.Topic', 'quiz-option')">
+                    @topic.Description
+                </div>
+            </li>
         }
     </ul>
     <input type="hidden" id="selectedTopic" name="selectedTopic" value="@Model.SelectedTopic" />

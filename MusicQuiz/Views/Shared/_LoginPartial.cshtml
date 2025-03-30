@@ -20,8 +20,8 @@
             <li class="nav-item d-flex align-items-center">
                 <div class="progress-container">
                     <div class="circular-progress"
-                         style="--progress: @progressData.progressPercentage; --fill-color: @(isMaxLevel ? "gold" : "blue")">
-                        <span class="level-text">@user.GetLevel()</span>
+                         style="--progress: @progressData.progressPercentage; --fill-color: @(isMaxLevel ? "#8B6914" : "#002E9E")">
+                        <span class="level-text @(isMaxLevel ? "gold" : "")">@user.GetLevel()</span>
                     </div>
                     <span class="progress-info"><strong>@progressText</strong></span>
                 </div>

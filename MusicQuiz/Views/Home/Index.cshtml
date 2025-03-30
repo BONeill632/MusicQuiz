@@ -23,7 +23,7 @@
 
         <div class="row my-4">
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <h3 class="text-center">Your Progress</h3>
+                <h2 class="text-center">Your Progress</h2>
                 @if (user != null)
                 {
                     var progressData = UserExpService.CalculateExpProgress(user);
@@ -34,8 +34,8 @@
 
                     <div class="progress-container-lg d-flex flex-column align-items-center text-center">
                         <div class="circular-progress-lg"
-                             style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "gold" : "blue")">
-                            <span class="level-text-lg">@user.GetLevel()</span>
+                             style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "#8B6914" : "#002E9E")">
+                            <span class="level-text-lg @(isMaxLevel ? "gold" : "")">@user.GetLevel()</span>
                         </div>
                         <span class="progress-text mt-2"><strong>@progressText!</strong></span>
                         @if (isMaxLevel)

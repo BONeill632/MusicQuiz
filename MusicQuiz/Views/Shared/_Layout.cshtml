@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <!-- Add skip link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3 custom-navbar-red @(ViewData["ActiveNav"] as string == "Admin" ? "custom-navbar-admin" : "")">
             <div class="container-fluid">
@@ -47,7 +50,8 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <!-- Add id and tabindex for skip link target -->
+        <main id="main-content" role="main" class="pb-3" tabindex="-1">
             @RenderBody()
         </main>
     </div>
@@ -56,7 +60,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - MusicQuiz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - MusicQuiz
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

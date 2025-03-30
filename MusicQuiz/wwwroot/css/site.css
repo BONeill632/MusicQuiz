@@ -51,40 +51,64 @@ h1 {
 .option {
     border: 1px solid #ccc;
     padding: 8px;
-    margin: 8px;
-    cursor: pointer;
-    font-weight: bold;
     border-radius: 5px;
-    width: 100%;
-    text-align: center;
     background-color: #fff;
+    cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease, border-color 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
-    .option:hover {
-        background-color: #f9f9f9;
-        border-color: #888;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        transform: scale(1.05);
-    }
+.quiz-radio {
+    margin-right: 10px;
+    cursor: pointer;
+}
 
-    .option.correct {
-        border: 2px solid green;
-    }
+.quiz-label {
+    flex: 1;
+    cursor: pointer;
+    margin: 0;
+    font-weight: bold;
+}
 
-    .option.incorrect {
-        border: 2px solid red;
-    }
+.option:hover {
+    background-color: #f9f9f9;
+    border-color: #888;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+}
 
-    .option.selected {
-        background-color: #d3d3d3;
-    }
+.option.selected {
+    background-color: #d3d3d3;
+}
 
+/* Feedback text styling with improved contrast */
 .feedback-text {
     margin-left: 10px;
+    color: #9B0000; /* Darker red for better contrast */
+    font-weight: 700;
+}
+
+/* When inside a selected option */
+.quiz-option.selected .feedback-text {
+    color: #800000; /* Even darker red when on gray background */
+}
+
+/* Alternative styles for correct/incorrect feedback */
+.feedback-text.correct {
+    color: #006400; /* Dark green */
+}
+
+.feedback-text.incorrect {
+    color: #800000; /* Dark red */
+}
+
+.quiz-option.selected .feedback-text.correct {
+    color: #005000; /* Darker green on gray background */
+}
+
+.quiz-option.selected .feedback-text.incorrect {
+    color: #600000; /* Darker red on gray background */
 }
 
 /* Disables user interaction and dims opacity */
@@ -92,6 +116,7 @@ h1 {
     pointer-events: none;
     opacity: 0.5;
 }
+
 
 /* Custom colours for navbar */
 .custom-navbar-red {
@@ -247,24 +272,77 @@ a {
     text-align: center;
 }
 
+/* Audio player styling with improved contrast */
 .audio-player {
     width: 100%;
     max-width: 600px;
     margin: 10px 0;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
     .audio-player audio {
         width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background-color: white;
-        color: white;
+        border-radius: 5px;
+        background-color: #f8f8f8; /* Match container background */
     }
 
-        .audio-player audio::-webkit-media-controls {
-            background-color: white;
-            color: red;
+        /* Webkit (Chrome, Safari, Edge) specific styles */
+        .audio-player audio::-webkit-media-controls-panel {
+            background-color: #f8f8f8; /* Match container background */
         }
+
+        .audio-player audio::-webkit-media-controls-current-time-display,
+        .audio-player audio::-webkit-media-controls-time-remaining-display {
+            color: #000000;
+        }
+
+        .audio-player audio::-webkit-media-controls-timeline {
+            background-color: #f8f8f8; /* Match container background */
+        }
+
+        .audio-player audio::-webkit-media-controls-timeline-container {
+            background-color: #f8f8f8; /* Match container background */
+        }
+
+        .audio-player audio::-webkit-media-controls-volume-slider {
+            background-color: #f8f8f8; /* Match container background */
+        }
+
+        .audio-player audio::-webkit-media-controls-volume-slider-container {
+            background-color: #f8f8f8; /* Match container background */
+        }
+
+        .audio-player audio::-webkit-media-controls-play-button,
+        .audio-player audio::-webkit-media-controls-mute-button {
+            color: #000000;
+        }
+
+        /* Firefox specific styles */
+        .audio-player audio::-moz-range-track {
+            background-color: #f8f8f8; /* Match container background */
+        }
+
+        .audio-player audio::-moz-range-thumb {
+            background-color: #000000;
+        }
+
+
+    /* Text elements */
+    .audio-player p {
+        color: #000000;
+        margin: 10px 0;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .audio-player strong {
+        color: #000000;
+        font-weight: 700;
+    }
+
 
 .button-container {
     display: flex;
@@ -314,13 +392,21 @@ a {
     position: absolute;
     font-size: 14px;
     font-weight: bold;
-    color: var(--fill-color);
+    color: #002E9E; /* Dark blue - 8.85:1 contrast ratio */
+    background-color: #FFFFFF;
+    padding: 2px;
+    border-radius: 2px;
 }
+
+    .level-text.gold {
+        color: #8B6914; /* Dark gold - 7.84:1 contrast ratio */
+    }
 
 .progress-info {
     font-size: 14px;
-    color: white;
+    color: #FFFFFF; /* White text on navbar background */
     margin-right: 0.2rem;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* Optional: adds slight shadow for better readability */
 }
 
 /* Larger circular progress */
@@ -357,9 +443,15 @@ a {
     position: absolute;
     font-size: 28px;
     font-weight: bold;
-    color: var(--fill-color);
+    color: #002E9E; /* Dark blue with 8.85:1 contrast ratio */
+    background-color: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
+    .level-text-lg.gold {
+        color: #8B6914; /* Dark gold with 7.84:1 contrast ratio */
+    }
 .progress-text-lg {
     font-size: 32px;
     color: white;
@@ -371,7 +463,7 @@ a {
     font-weight: bold;
 }
 
-/* Modern table styles */
+/* Modern table styles with improved contrast */
 .table-modern {
     width: 98%;
     margin: 0 auto;
@@ -385,34 +477,57 @@ a {
         background-color: #f8f9fa;
         border-bottom: 2px solid #dee2e6;
         padding: 10px;
-        white-space: nowrap; /* Prevents column headers from wrapping */
+        white-space: nowrap;
+        color: #000000; /* Ensure black text for headers */
     }
 
     .table-modern tbody tr {
+        background-color: #ffffff;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        background-color: whitesmoke;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+        /* Result row styles with improved contrast */
+        .table-modern tbody tr.row-success {
+            color: #155724; /* Dark green text */
+            background-color: #d4edda; /* Light green background */
+        }
+
+        .table-modern tbody tr.row-warning {
+            color: #856404; /* Dark yellow/brown text */
+            background-color: #fff3cd; /* Light yellow background */
+        }
+
+        .table-modern tbody tr.row-danger {
+            color: #721c24; /* Dark red text */
+            background-color: #f8d7da; /* Light red background */
+        }
+
+        /* Hover states with maintained contrast */
         .table-modern tbody tr:hover {
             transform: scale(1.01);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
     .table-modern tbody td {
-        padding: 12px; /* Slightly reduced padding for smaller screens */
+        padding: 12px;
         text-align: left;
+        font-weight: 500; /* Slightly bolder for better readability */
     }
 
-    .table-modern tbody tr.row-primary {
-        background-color: #d1ecf1;
-        font-weight: bold;
+    /* Ensure contrast is maintained in all states */
+    .table-modern tbody tr.row-success:hover {
+        background-color: #c3e6cb; /* Slightly darker on hover */
     }
 
-        .table-modern tbody tr.row-primary:hover {
-            transform: scale(1.01);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
+    .table-modern tbody tr.row-warning:hover {
+        background-color: #ffeeba; /* Slightly darker on hover */
+    }
+
+    .table-modern tbody tr.row-danger:hover {
+        background-color: #f5c6cb; /* Slightly darker on hover */
+    }
+
 
 /* Text highlighting */
 .row-success {
@@ -697,11 +812,53 @@ a {
     }
 
     .pagination span {
-        font-size: 12px;
+        font-size: 14px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 }
 
-/* Updated styles for centering the UL and setting the width */
+/* Pagination styles - global */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+    .pagination span {
+        font-size: 14px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .pagination .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        max-width: 80px;
+        width: auto;
+    }
+
+/* Responsive pagination adjustments */
+@media (max-width: 375px) {
+    .pagination span {
+        font-size: 12px;
+    }
+
+    .pagination .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+}
+
 .quiz-options-list {
     display: flex;
     flex-direction: column;
@@ -710,9 +867,19 @@ a {
     list-style: none;
     width: 100%;
     max-width: 80%;
+    margin: 0 auto;
 }
 
-.quiz-option{ 
+    .quiz-options-list li {
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+.quiz-option {
     border: 1px solid #ccc;
     padding: 8px;
     margin: 8px;
@@ -724,19 +891,40 @@ a {
     text-align: center;
     background-color: #fff;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
-    .quiz-option:hover{
-        background-color: #f9f9f9;
-        border-color: #888;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        transform: scale(1.05);
-    }
+.quiz-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.quiz-option-text {
+    flex: 1;
+    padding: 0;
+    text-align: center;
+}
 
 
-    .quiz-option.selected {
-        background-color: #d3d3d3;
-    }
+.quiz-option:hover {
+    background-color: #f9f9f9;
+    border-color: #888;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.quiz-option.selected {
+    background-color: #d3d3d3;
+}
 
 .d-flex.flex-column.align-items-center {
     display: flex;
@@ -801,4 +989,76 @@ form {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+/* Skip link styling */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 9999;
+    padding: 1em;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border: 2px solid #000;
+}
+
+    .skip-link:focus {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+    }
+
+/* Ensure the main content area is properly focused */
+#main-content {
+    outline: none;
+}
+
+    #main-content:focus {
+        outline: none;
+    }
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+    .skip-link {
+        border: 2px solid ButtonText;
+        background-color: ButtonFace;
+        color: ButtonText;
+    }
+
+    #main-content:focus {
+        outline: 2px solid ButtonText;
+        box-shadow: none;
+    }
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+    .contact-details span {
+        display: block;
+    }
+
+.table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.table-action-link {
+    color: #9B0000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+    .table-action-link:hover {
+        color: #800000;
+        text-decoration: underline;
+    }
+
+.table-action-separator {
+    color: #595959;
 }

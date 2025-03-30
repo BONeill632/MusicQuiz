@@ -132,15 +132,13 @@ namespace MusicQuiz.Web.Controllers
                 Difficulties = GetDifficulties()
             };
 
-            if (selectedTopic.HasValue && selectedDifficulty.HasValue)
-            {
-                var topic = selectedTopic.Value;
-                var difficulty = selectedDifficulty.Value;
+            // Load all questions when no filters are applied
+            var topic = selectedTopic.HasValue ? (int)selectedTopic.Value : default;
+            var difficulty = selectedDifficulty.HasValue ? (int)selectedDifficulty.Value : default;
 
-                var (questions, totalQuestions) = await SearchQuestionsAsync((int)topic, (int)difficulty, model.PageNumber, model.PageSize);
-                model.Questions = questions;
-                model.TotalQuestions = totalQuestions;
-            }
+            var (questions, totalQuestions) = await SearchQuestionsAsync(topic, difficulty, model.PageNumber, model.PageSize);
+            model.Questions = questions;
+            model.TotalQuestions = totalQuestions;
 
             return View(model);
         }
@@ -433,7 +431,7 @@ namespace MusicQuiz.Web.Controllers
             {
                 OpenFrom = DateTime.Now,
                 OpenTo = DateTime.Now.AddDays(1),
-                AcademicYearOptions = GetAcademicYearOptions()
+                AcademicYearOptions = GetAcademicYearOptions(),
             };
             return View(model);
         }
@@ -808,34 +806,93 @@ namespace MusicQuiz.Web.Controllers
             return NotFound();
         }
 
-        public IActionResult ViewQuizResults()
+        public async Task<IActionResult> ViewQuizResults(
+            int pageNumber = 1,
+            int pageSize = 20,
+            int? topicFilter = null,
+            int? difficultyFilter = null,
+            string dateFilter = null)
         {
-            // Fetch quiz results with a join to the Users table
-            var quizResultsLoggedIn = context.UsersPracticeQuizResults
+            // Execute database queries asynchronously for better performance
+            var pageNumberForLoggedIn = pageNumber;
+            var pageNumberForNonLoggedIn = pageNumber;
+            var pageSizeForLoggedIn = pageSize;
+            var pageSizeForNonLoggedIn = pageSize;
+
+            // Base queries with common filter for AssessmentId being null
+            var loggedInBaseQuery = context.UsersPracticeQuizResults
+                .Where(q => q.AssessmentId == null && q.UserID != "0");
+
+            var notLoggedInBaseQuery = context.UsersPracticeQuizResults
+                .Where(q => q.AssessmentId == null && q.UserID == "0");
+
+            // Apply topic filter if specified
+            if (topicFilter.HasValue)
+            {
+                loggedInBaseQuery = loggedInBaseQuery.Where(q => q.SelectedTopic == topicFilter.Value);
+                notLoggedInBaseQuery = notLoggedInBaseQuery.Where(q => q.SelectedTopic == topicFilter.Value);
+            }
+
+            // Apply difficulty filter if specified
+            if (difficultyFilter.HasValue)
+            {
+                loggedInBaseQuery = loggedInBaseQuery.Where(q => q.SelectedDifficulty == difficultyFilter.Value);
+                notLoggedInBaseQuery = notLoggedInBaseQuery.Where(q => q.SelectedDifficulty == difficultyFilter.Value);
+            }
+
+            // Apply date filter if specified
+            if (!string.IsNullOrEmpty(dateFilter))
+            {
+                try
+                {
+                    var parts = dateFilter.Split('-');
+                    if (parts.Length == 2)
+                    {
+                        int month = int.Parse(parts[0]);
+                        int year = int.Parse(parts[1]);
+
+                        loggedInBaseQuery = loggedInBaseQuery.Where(q => q.DateOfSubmission.Month == month && q.DateOfSubmission.Year == year);
+                        notLoggedInBaseQuery = notLoggedInBaseQuery.Where(q => q.DateOfSubmission.Month == month && q.DateOfSubmission.Year == year);
+                    }
+                }
+                catch (Exception)
+                {
+                    // Handle parsing exception silently - just don't apply filter
+                }
+            }
+
+            // Get total count for pagination with filters applied
+            var totalLoggedInCount = await loggedInBaseQuery.CountAsync();
+            var totalNonLoggedInCount = await notLoggedInBaseQuery.CountAsync();
+
+            // Fetch logged-in quiz results with pagination and filters
+            var quizResultsLoggedIn = await loggedInBaseQuery
                 .Join(context.Users,
-                      quiz => quiz.UserID,
-                      user => user.Id,
-                      (quiz, user) => new
-                      {
-                          quiz,
-                          user.FirstName,
-                          user.LastName
-                      })
-                .Where(q => q.quiz.AssessmentId == null) // Add condition to filter by NULL AssessmentId
+                        quiz => quiz.UserID,
+                        user => user.Id,
+                        (quiz, user) => new
+                        {
+                            quiz,
+                            user.FirstName,
+                            user.LastName
+                        })
                 .OrderByDescending(q => q.quiz.DateOfSubmission)
-                .ToList();
+                .Skip((pageNumberForLoggedIn - 1) * pageSizeForLoggedIn)
+                .Take(pageSizeForLoggedIn)
+                .ToListAsync();
 
-            // Fetch quiz results not logged in. treated differently to users
-            var quizResultsNotLoggedIn = context.UsersPracticeQuizResults
-                .Where(q => q.AssessmentId == null && q.UserID == "0")
+            // Fetch non-logged-in quiz results with pagination and filters
+            var quizResultsNotLoggedIn = await notLoggedInBaseQuery
                 .OrderByDescending(q => q.DateOfSubmission)
-                .ToList();
+                .Skip((pageNumberForNonLoggedIn - 1) * pageSizeForNonLoggedIn)
+                .Take(pageSizeForNonLoggedIn)
+                .ToListAsync();
 
-            // Separate the results into logged-in and non-logged-in users
-            var loggedInResults = quizResultsLoggedIn.Where(q => q.quiz.UserID != "0")  // Compare with "0" as a string
+            // Map to view models
+            var loggedInResults = quizResultsLoggedIn
                 .Select(q => new QuizResultModel
                 {
-                    UserID = q.quiz.UserID, // Treat UserID as string
+                    UserID = q.quiz.UserID,
                     Forename = q.FirstName,
                     Surname = q.LastName,
                     UserScore = q.quiz.UserScore,
@@ -843,7 +900,6 @@ namespace MusicQuiz.Web.Controllers
                     SelectedTopic = (Topic)q.quiz.SelectedTopic,
                     SelectedDifficulty = (DifficultyLevel)q.quiz.SelectedDifficulty
                 })
-                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
                 .ToList();
 
             var notLoggedInResults = quizResultsNotLoggedIn
@@ -857,15 +913,22 @@ namespace MusicQuiz.Web.Controllers
                     SelectedTopic = (Topic)q.SelectedTopic,
                     SelectedDifficulty = (DifficultyLevel)q.SelectedDifficulty
                 })
-                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
                 .ToList();
 
             // Prepare data for charts
             var scoreDataLoggedIn = loggedInResults.Select(q => q.UserScore).ToList();
-            var userNamesLoggedIn = loggedInResults.Select(q => $"{q.Forename} {q.Surname}").ToList();
+            var userNamesLoggedIn = loggedInResults
+                .Select(q => $"{q.Forename} {q.Surname} ({q.DateOfSubmission:dd/MM/yyyy})")
+                .ToList();
 
             var scoreDataNotLoggedIn = notLoggedInResults.Select(q => q.UserScore).ToList();
-            var userNamesNotLoggedIn = notLoggedInResults.Select(q => $"{q.Forename} {q.Surname}").ToList();
+            var userNamesNotLoggedIn = notLoggedInResults
+                .Select(q => $"{q.Forename} {q.Surname} ({q.DateOfSubmission:dd/MM/yyyy})")
+                .ToList();
+
+            // Generate color data based on topic for the charts
+            var loggedInTopicColors = loggedInResults.Select(q => GetTopicColor((int)q.SelectedTopic)).ToList();
+            var notLoggedInTopicColors = notLoggedInResults.Select(q => GetTopicColor((int)q.SelectedTopic)).ToList();
 
             // Pass data to the view
             ViewBag.LoggedInResults = loggedInResults;
@@ -875,52 +938,222 @@ namespace MusicQuiz.Web.Controllers
             ViewBag.ScoreDataNotLoggedIn = scoreDataNotLoggedIn;
             ViewBag.UserNamesNotLoggedIn = userNamesNotLoggedIn;
 
+            // Pass color data to the view
+            ViewBag.LoggedInTopicColors = loggedInTopicColors;
+            ViewBag.NotLoggedInTopicColors = notLoggedInTopicColors;
+
+            // Create a color mapping for legend
+            ViewBag.TopicColorMap = new Dictionary<string, string>
+    {
+        { nameof(Topic.SineWave), GetTopicColor(1) },
+        { nameof(Topic.Ensemble), GetTopicColor(2) },
+        { nameof(Topic.Instrument), GetTopicColor(3) },
+        { nameof(Topic.PinkNoise), GetTopicColor(4) }
+    };
+
+            // Pagination data for the view
+            ViewBag.PageNumberLoggedIn = pageNumberForLoggedIn;
+            ViewBag.PageNumberNonLoggedIn = pageNumberForNonLoggedIn;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalLoggedInCount = totalLoggedInCount;
+            ViewBag.TotalNonLoggedInCount = totalNonLoggedInCount;
+            ViewBag.TotalLoggedInPages = (int)Math.Ceiling(totalLoggedInCount / (double)pageSize);
+            ViewBag.TotalNonLoggedInPages = (int)Math.Ceiling(totalNonLoggedInCount / (double)pageSize);
+
+            // Pass filter values for view repopulation
+            ViewBag.SelectedTopic = topicFilter;
+            ViewBag.SelectedDifficulty = difficultyFilter;
+            ViewBag.SelectedMonth = dateFilter;
+
             return View();
         }
 
-        public IActionResult ViewAssessmentResults()
+        /// <summary>
+        /// Get a color for a specific topic
+        /// </summary>
+        /// <param name="topicId">Topic ID (1-4)</param>
+        /// <returns>RGBA color string</returns>
+        private static string GetTopicColor(int topicId)
         {
-            // Fetch quiz results for users and filter by AssessmentId
-            var quizResults = context.UsersPracticeQuizResults
-                .Join(context.Users,
-                      quiz => quiz.UserID,
-                      user => user.Id,
-                      (quiz, user) => new
-                      {
-                          quiz,
-                          user.FirstName,
-                          user.LastName
-                      })
-                .Where(x => x.quiz.AssessmentId != null)
-                .OrderByDescending(q => q.quiz.DateOfSubmission) // Sort by the most recent date first
-                .ToList();
-
-            // Map the results
-            var results = quizResults
-                .Select(q => new QuizResultModel
-                {
-                    UserID = q.quiz.UserID,
-                    Forename = q.FirstName,
-                    Surname = q.LastName,
-                    UserScore = q.quiz.UserScore,
-                    DateOfSubmission = q.quiz.DateOfSubmission,
-                    SelectedTopic = (Topic)q.quiz.SelectedTopic,
-                    AssessmentId = q.quiz.AssessmentId
-                })
-                .OrderByDescending(q => q.DateOfSubmission) // Order by most recent date first
-                .ToList();
-
-            // Prepare data for charts
-            var scoreData = results.Select(q => q.UserScore).ToList();
-            var userNames = results.Select(q => $"{q.Forename} {q.Surname}").ToList();
-
-            // Pass data to the view
-            ViewBag.AllResults = results;  // Corrected to match the view
-            ViewBag.ScoreData = scoreData;
-            ViewBag.UserNames = userNames;
-
-            return View();
+            return topicId switch
+            {
+                1 => "rgba(75, 192, 192, 0.8)",   // Teal for SineWave
+                2 => "rgba(153, 102, 255, 0.8)",  // Purple for Ensemble
+                3 => "rgba(255, 159, 64, 0.8)",   // Orange for Instrument
+                4 => "rgba(255, 99, 132, 0.8)",   // Pink for PinkNoise
+                _ => "rgba(201, 203, 207, 0.8)"   // Grey for unknown
+            };
         }
 
+        /// <summary>
+        /// View assessment results with filtering and pagination
+        /// </summary>
+        /// <param name="pageNumber">Current page number</param>
+        /// <param name="pageSize">Number of results per page</param>
+        /// <param name="academicYearFilter">Filter by academic year</param>
+        /// <param name="topicFilter">Filter by topic</param>
+        /// <param name="studentFilter">Filter by student ID</param>
+        /// <returns>View with assessment results</returns>
+        public async Task<IActionResult> ViewAssessmentResults(
+            int pageNumber = 1,
+            int pageSize = 20,
+            string? academicYearFilter = null,
+            int? topicFilter = null,
+            string? studentFilter = null)
+        {
+            try
+            {
+                // Base query with filter for AssessmentId not being null
+                var baseQuery = context.UsersPracticeQuizResults
+                    .Where(q => q.AssessmentId != null);
+
+                // Apply academic year filter if specified
+                if (!string.IsNullOrEmpty(academicYearFilter))
+                {
+                    baseQuery = baseQuery.Join(
+                        context.Assessments,
+                        result => result.AssessmentId,
+                        assessment => assessment.ID,
+                        (result, assessment) => new { Result = result, Assessment = assessment })
+                        .Where(joined => joined.Assessment.AcademicYear == academicYearFilter)
+                        .Select(joined => joined.Result);
+                }
+
+                // Apply topic filter if specified
+                if (topicFilter.HasValue)
+                {
+                    baseQuery = baseQuery.Where(q => q.SelectedTopic == topicFilter.Value);
+                }
+
+                // Apply student filter if specified
+                if (!string.IsNullOrEmpty(studentFilter))
+                {
+                    baseQuery = baseQuery.Where(q => q.UserID == studentFilter);
+                }
+
+                // Get total count for pagination
+                var totalCount = await baseQuery.CountAsync();
+
+                // Fetch results with pagination
+                var resultsQuery = await baseQuery
+                    .OrderByDescending(q => q.DateOfSubmission)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Get user details for the results
+                var userIds = resultsQuery.Select(r => r.UserID).Distinct().ToList();
+                var usersDict = await context.Users
+                    .Where(u => userIds.Contains(u.Id))
+                    .ToDictionaryAsync(u => u.Id, u => new { u.FirstName, u.LastName });
+
+                // Get assessment details
+                var assessmentIds = resultsQuery.Where(r => r.AssessmentId.HasValue)
+                    .Select(r => r.AssessmentId.Value).Distinct().ToList();
+                var assessmentsDict = await context.Assessments
+                    .Where(a => assessmentIds.Contains(a.ID))
+                    .ToDictionaryAsync(a => a.ID, a => a.AcademicYear);
+
+                // Map to view models
+                var results = resultsQuery.Select(r => new AssessmentResultModel
+                {
+                    UserID = r.UserID,
+                    Forename = usersDict.ContainsKey(r.UserID) ? usersDict[r.UserID].FirstName : "Unknown",
+                    Surname = usersDict.ContainsKey(r.UserID) ? usersDict[r.UserID].LastName : "User",
+                    UserScore = r.UserScore,
+                    DateOfSubmission = r.DateOfSubmission,
+                    SelectedTopic = (Topic)r.SelectedTopic,
+                    AssessmentId = r.AssessmentId,
+                    AcademicYear = r.AssessmentId.HasValue && assessmentsDict.ContainsKey(r.AssessmentId.Value)
+                        ? assessmentsDict[r.AssessmentId.Value] : "Unknown"
+                }).ToList();
+
+                // Get academic years for dropdown
+                var academicYears = await context.Assessments
+                    .Select(a => a.AcademicYear)
+                    .Distinct()
+                    .OrderByDescending(y => y)
+                    .ToListAsync();
+
+                // Get students for dropdown
+                var students = await context.Users
+                    .Where(u => context.UsersPracticeQuizResults.Any(r => r.UserID == u.Id && r.AssessmentId != null))
+                    .Select(u => new { Id = u.Id, FullName = $"{u.FirstName} {u.LastName}" })
+                    .OrderBy(u => u.FullName)
+                    .ToListAsync();
+
+                // Calculate statistics
+                var allScores = await baseQuery.Select(r => r.UserScore).ToListAsync();
+                decimal? averageScore = allScores.Any() ? allScores.Average() : null;
+                decimal? highestScore = allScores.Any() ? allScores.Max() : null;
+                decimal? passRate = allScores.Any() ? (decimal)allScores.Count(s => s >= 50) / allScores.Count * 100 : null;
+
+                // Chart data
+                var scoreData = results.Select(q => q.UserScore).ToList();
+                var userNames = results
+                    .Select(q => $"{q.Forename} {q.Surname} ({q.DateOfSubmission:dd/MM/yyyy})")
+                    .ToList();
+                var topicColors = results.Select(q => GetTopicColor((int)q.SelectedTopic)).ToList();
+
+                // Create topic color map for legend
+                var topicColorMap = new Dictionary<string, string>
+        {
+            { nameof(Topic.SineWave), GetTopicColor(1) },
+            { nameof(Topic.Ensemble), GetTopicColor(2) },
+            { nameof(Topic.Instrument), GetTopicColor(3) },
+            { nameof(Topic.PinkNoise), GetTopicColor(4) }
+        };
+
+                // Pass data to the view
+                ViewBag.AcademicYears = academicYears;
+                ViewBag.Students = students;
+                ViewBag.AllResults = results;
+                ViewBag.ScoreData = scoreData;
+                ViewBag.UserNames = userNames;
+                ViewBag.TopicColors = topicColors;
+                ViewBag.TopicColorMap = topicColorMap;
+
+                // Pagination data
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageSize = pageSize;
+                ViewBag.TotalCount = totalCount;
+                ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+                // Filter values for form repopulation
+                ViewBag.SelectedYear = academicYearFilter;
+                ViewBag.SelectedTopic = topicFilter;
+                ViewBag.SelectedStudent = studentFilter;
+
+                // Statistics data
+                ViewBag.TotalAssessments = assessmentIds.Count;
+                ViewBag.AverageScore = averageScore;
+                ViewBag.HighestScore = highestScore;
+                ViewBag.PassRate = passRate;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                // Handle errors gracefully
+                TempData["ErrorMessage"] = "An error occurred while processing the results: " + ex.Message;
+
+                // Return view with empty data
+                ViewBag.AcademicYears = await context.Assessments
+                    .Select(a => a.AcademicYear)
+                    .Distinct()
+                    .OrderByDescending(y => y)
+                    .ToListAsync();
+
+                ViewBag.AllResults = new List<AssessmentResultModel>();
+                ViewBag.ScoreData = new List<decimal>();
+                ViewBag.UserNames = new List<string>();
+                ViewBag.TopicColors = new List<string>();
+                ViewBag.TopicColorMap = new Dictionary<string, string>();
+                ViewBag.TotalPages = 1;
+                ViewBag.PageNumber = 1;
+
+                return View();
+            }
+        }
     }
 }

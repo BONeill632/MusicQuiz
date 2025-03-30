@@ -12,7 +12,7 @@
 
     <div class="form-group" style="width: 100%; max-width: 100%;">
         <label asp-for="AcademicYear" class="control-label">Academic Year</label>
-        <select asp-for="AcademicYear" class="form-control form-select" asp-items="@(new SelectList(Model.AcademicYearOptions))">
+        <select asp-for="AcademicYear" class="form-control form-select" asp-items="@(new SelectList(Model.AcademicYearOptions))" autocomplete="off">
             <option value="">-- Select Academic Year --</option>
         </select>
         <span asp-validation-for="AcademicYear" class="text-danger"></span>
@@ -32,14 +32,14 @@
 
     <div class="form-group mb-3" style="width: 100%; max-width: 100%;">
         <label asp-for="SelectedTopic" class="control-label">Topic</label>
-        <select asp-for="SelectedTopic" class="form-control form-select" asp-items="Html.GetEnumSelectList<MusicQuiz.Core.Enums.Topic>()">
+        <select asp-for="SelectedTopic" class="form-control form-select" asp-items="Html.GetEnumSelectList<MusicQuiz.Core.Enums.Topic>()" autocomplete="off">
             <option value="">-- Select Topic --</option>
         </select>
         <span asp-validation-for="SelectedTopic" class="text-danger"></span>
     </div>
 
     <div class="d-flex flex-column align-items-center" style="width: 100%;">
-        <button type="submit" class="btn btn-danger w-100 mb-2" style="max-width: 300px;">Save Changes</button>
+        <button type="submit" class="btn btn-primary w-100 mb-2" style="max-width: 300px;">Save Changes</button>
         <a asp-action="Index" class="btn btn-secondary w-100" style="max-width: 300px;">Cancel</a>
     </div>
 </form>

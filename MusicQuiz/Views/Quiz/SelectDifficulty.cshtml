@@ -75,15 +75,19 @@
             var isDisabled = (User.Identity == null || !User.Identity.IsAuthenticated) && difficulty.DifficultyLevel != MusicQuiz.Core.Enums.DifficultyLevel.Easy;
             if (isDisabled)
             {
-                <li class="quiz-option text-center disabled" id="@difficulty.DifficultyLevel">
-                    <i class="fas fa-lock"></i> @difficulty.Description
-                    <p>Please log in or create an account to access these levels.</p>
+                <li>
+                    <div class="quiz-option text-center disabled" id="@difficulty.DifficultyLevel">
+                        <i class="fas fa-lock"></i> @difficulty.Description
+                        <p>Please log in or create an account to access these levels.</p>
+                    </div>
                 </li>
             }
             else
             {
-                <li class="quiz-option text-center" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
-                    @difficulty.Description
+                <li>
+                    <div class="quiz-option text-center" id="@difficulty.DifficultyLevel" onclick="selectOption('@difficulty.DifficultyLevel', 'quiz-option')">
+                        @difficulty.Description
+                    </div>
                 </li>
             }
         }
