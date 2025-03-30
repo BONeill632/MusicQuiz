@@ -1034,68 +1034,73 @@ namespace MusicQuiz.Web.Controllers
                 // Get total count for pagination
                 var totalCount = await baseQuery.CountAsync();
 
-                // Fetch results with pagination
-                var resultsQuery = await baseQuery
-                    .OrderByDescending(q => q.DateOfSubmission)
+                // Fetch the results with all necessary joins for the current page
+                var results = await baseQuery
+                    .Join(
+                        context.Users,
+                        result => result.UserID,
+                        user => user.Id,
+                        (result, user) => new { Result = result, User = user }
+                    )
+                    .Join(
+                        context.Assessments,
+                        joined => joined.Result.AssessmentId,
+                        assessment => assessment.ID,
+                        (joined, assessment) => new AssessmentResultModel
+                        {
+                            Id = joined.Result.Id,
+                            UserID = joined.Result.UserID,
+                            Forename = joined.User.FirstName,
+                            Surname = joined.User.LastName,
+                            StudentID = joined.User.StudentID,
+                            StudentAcademicYear = joined.User.AcademicYear,
+                            UserScore = joined.Result.UserScore,
+                            DateOfSubmission = joined.Result.DateOfSubmission,
+                            SelectedTopic = (Topic)joined.Result.SelectedTopic,
+                            SelectedDifficulty = (DifficultyLevel)joined.Result.SelectedDifficulty,
+                            AssessmentId = joined.Result.AssessmentId,
+                            AssessmentAcademicYear = assessment.AcademicYear,
+                        }
+                    )
+                    .OrderByDescending(result => result.DateOfSubmission)
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
 
-                // Get user details for the results
-                var userIds = resultsQuery.Select(r => r.UserID).Distinct().ToList();
-                var usersDict = await context.Users
-                    .Where(u => userIds.Contains(u.Id))
-                    .ToDictionaryAsync(u => u.Id, u => new { u.FirstName, u.LastName });
-
-                // Get assessment details
-                var assessmentIds = resultsQuery.Where(r => r.AssessmentId.HasValue)
-                    .Select(r => r.AssessmentId.Value).Distinct().ToList();
-                var assessmentsDict = await context.Assessments
-                    .Where(a => assessmentIds.Contains(a.ID))
-                    .ToDictionaryAsync(a => a.ID, a => a.AcademicYear);
-
-                // Map to view models
-                var results = resultsQuery.Select(r => new AssessmentResultModel
-                {
-                    UserID = r.UserID,
-                    Forename = usersDict.ContainsKey(r.UserID) ? usersDict[r.UserID].FirstName : "Unknown",
-                    Surname = usersDict.ContainsKey(r.UserID) ? usersDict[r.UserID].LastName : "User",
-                    UserScore = r.UserScore,
-                    DateOfSubmission = r.DateOfSubmission,
-                    SelectedTopic = (Topic)r.SelectedTopic,
-                    AssessmentId = r.AssessmentId,
-                    AcademicYear = r.AssessmentId.HasValue && assessmentsDict.ContainsKey(r.AssessmentId.Value)
-                        ? assessmentsDict[r.AssessmentId.Value] : "Unknown"
-                }).ToList();
-
-                // Get academic years for dropdown
+                // Get list of academic years for the filter dropdown
                 var academicYears = await context.Assessments
                     .Select(a => a.AcademicYear)
                     .Distinct()
                     .OrderByDescending(y => y)
                     .ToListAsync();
 
-                // Get students for dropdown
-                var students = await context.Users
-                    .Where(u => context.UsersPracticeQuizResults.Any(r => r.UserID == u.Id && r.AssessmentId != null))
-                    .Select(u => new { Id = u.Id, FullName = $"{u.FirstName} {u.LastName}" })
+                // Get list of students for the filter dropdown - Fixed version with proper client-side evaluation
+                var studentsQuery = context.Users
+                    .Where(u => context.UsersPracticeQuizResults.Any(r => r.UserID == u.Id && r.AssessmentId != null));
+
+                // Fetch the data first
+                var userData = await studentsQuery.ToListAsync();
+
+                // Then do the string formatting on the client side
+                var students = userData
+                    .Select(u => new { u.Id, FullName = $"{u.FirstName} {u.LastName} ({u.StudentID})" })
                     .OrderBy(u => u.FullName)
-                    .ToListAsync();
+                    .ToList();
 
                 // Calculate statistics
                 var allScores = await baseQuery.Select(r => r.UserScore).ToListAsync();
-                decimal? averageScore = allScores.Any() ? allScores.Average() : null;
-                decimal? highestScore = allScores.Any() ? allScores.Max() : null;
-                decimal? passRate = allScores.Any() ? (decimal)allScores.Count(s => s >= 50) / allScores.Count * 100 : null;
+                decimal? averageScore = allScores.Count != 0 ? allScores.Average() : null;
+                decimal? highestScore = allScores.Count != 0 ? allScores.Max() : null;
+                decimal? passRate = allScores.Count != 0 ? (decimal)allScores.Count(s => s >= 50) / allScores.Count * 100 : null;
 
-                // Chart data
+                // Prepare data for charts
                 var scoreData = results.Select(q => q.UserScore).ToList();
                 var userNames = results
                     .Select(q => $"{q.Forename} {q.Surname} ({q.DateOfSubmission:dd/MM/yyyy})")
                     .ToList();
                 var topicColors = results.Select(q => GetTopicColor((int)q.SelectedTopic)).ToList();
 
-                // Create topic color map for legend
+                // Create a color mapping for legend
                 var topicColorMap = new Dictionary<string, string>
         {
             { nameof(Topic.SineWave), GetTopicColor(1) },
@@ -1125,7 +1130,7 @@ namespace MusicQuiz.Web.Controllers
                 ViewBag.SelectedStudent = studentFilter;
 
                 // Statistics data
-                ViewBag.TotalAssessments = assessmentIds.Count;
+                ViewBag.TotalAssessments = await context.Assessments.CountAsync();
                 ViewBag.AverageScore = averageScore;
                 ViewBag.HighestScore = highestScore;
                 ViewBag.PassRate = passRate;
@@ -1134,10 +1139,12 @@ namespace MusicQuiz.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Handle errors gracefully
-                TempData["ErrorMessage"] = "An error occurred while processing the results: " + ex.Message;
+                // Log the error
+                Console.WriteLine(ex.Message);
 
-                // Return view with empty data
+                // Handle errors gracefully
+                TempData["ErrorMessage"] = "An error occurred while processing the assessment results.";
+
                 ViewBag.AcademicYears = await context.Assessments
                     .Select(a => a.AcademicYear)
                     .Distinct()
@@ -1145,10 +1152,6 @@ namespace MusicQuiz.Web.Controllers
                     .ToListAsync();
 
                 ViewBag.AllResults = new List<AssessmentResultModel>();
-                ViewBag.ScoreData = new List<decimal>();
-                ViewBag.UserNames = new List<string>();
-                ViewBag.TopicColors = new List<string>();
-                ViewBag.TopicColorMap = new Dictionary<string, string>();
                 ViewBag.TotalPages = 1;
                 ViewBag.PageNumber = 1;
 
