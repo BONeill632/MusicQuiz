@@ -31,17 +31,25 @@
             </tr>
         </thead>
         <tbody>
+            @{
+                DateTime now = DateTime.UtcNow;
+                DateTime thisWeekStart = now.AddDays(-(int)now.DayOfWeek + (int)DayOfWeek.Monday);
+                DateTime lastWeekStart = thisWeekStart.AddDays(-7);
+                DateTime twoWeeksAgoStart = thisWeekStart.AddDays(-14);
+                DateTime threeWeeksAgoStart = thisWeekStart.AddDays(-21);
+            }
+
             @foreach (var user in Model)
             {
                 string rowClass = "";
 
-                if (user.LastLoginDate >= DateTime.UtcNow.AddDays(-7))
+                if (user.LastLoginDate >= thisWeekStart)
                     rowClass = "recent";
-                else if (user.LastLoginDate >= DateTime.UtcNow.AddDays(-14))
+                else if (user.LastLoginDate >= lastWeekStart)
                     rowClass = "last-week";
-                else if (user.LastLoginDate >= DateTime.UtcNow.AddDays(-21))
+                else if (user.LastLoginDate >= twoWeeksAgoStart)
                     rowClass = "two-weeks";
-                else if (user.LastLoginDate >= DateTime.UtcNow.AddDays(-28))
+                else if (user.LastLoginDate >= threeWeeksAgoStart)
                     rowClass = "three-weeks";
                 else
                     rowClass = "older";

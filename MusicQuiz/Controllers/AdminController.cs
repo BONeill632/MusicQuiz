@@ -725,9 +725,12 @@ namespace MusicQuiz.Web.Controllers
                 .Select(r => r.Id)
                 .FirstOrDefault();
 
+            // Get the current academic year
+            var currentAcademicYear = GetCurrentAcademicYear();
+
             // Get all non-admin users with a valid last login date and their login dates
             var userLogins = context.Users
-                .Where(u => u.LastLoggedIn != DateTime.MinValue && !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
+                .Where(u => u.LastLoggedIn != DateTime.MinValue && u.AcademicYear == currentAcademicYear && !context.UserRoles.Any(ur => ur.UserId == u.Id && ur.RoleId == adminRoleId))
                 .OrderByDescending(u => u.LastLoggedIn)
                 .Select(u => new UserLoginsViewModel
                 {
@@ -769,6 +772,19 @@ namespace MusicQuiz.Web.Controllers
             }
 
             return View(userLogins);
+        }
+
+        private static string GetCurrentAcademicYear()
+        {
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
+
+            // Adjust the logic to consider the current academic year as 24/25 for Sept - Aug
+            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12)
+                ? currentYear
+                : (currentMonth >= 1 && currentMonth <= 8) ? currentYear - 1 : currentYear;
+
+            return $"{currentAcademicYear % 100}/{(currentAcademicYear + 1) % 100}";
         }
 
         [HttpGet]

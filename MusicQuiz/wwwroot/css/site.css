@@ -128,24 +128,24 @@ h1 {
     background-color: blue;
 }
 
-    .custom-navbar-red .navbar-brand,
-    .custom-navbar-red .nav-link {
-        color: white;
-    }
+.custom-navbar-red .navbar-brand,
+.custom-navbar-red .nav-link {
+    color: white;
+}
 
-    .custom-navbar-red .navbar-nav .nav-item:last-child {
-        border-right: none;
-    }
+.custom-navbar-red .navbar-nav .nav-item:last-child {
+    border-right: none;
+}
 
-    .custom-navbar-red .navbar-nav .nav-link {
-        font-size: 0.9rem;
-        padding-left: 0.1rem;
-        padding-right: 0.1rem;
-    }
+.custom-navbar-red .navbar-nav .nav-link {
+    font-size: 0.9rem;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+}
 
-    .custom-navbar-red .navbar-nav .nav-item {
-        border-right: 1px solid #fff;
-    }
+.custom-navbar-red .navbar-nav .nav-item {
+    border-right: 1px solid #fff;
+}
 
 @media (max-width: 576px) {
     .custom-navbar-red .navbar-nav .nav-link {
@@ -452,6 +452,7 @@ a {
     .level-text-lg.gold {
         color: #8B6914; /* Dark gold with 7.84:1 contrast ratio */
     }
+
 .progress-text-lg {
     font-size: 32px;
     color: white;
@@ -950,22 +951,25 @@ form {
     max-width: 300px;
 }
 
+.table-modern tbody tr.recent {
+    background-color: rgba(76, 175, 80, 0.2); /* #4CAF50 */
+}
 
-    .table-modern tbody tr.recent {
-        background-color: rgba(76, 175, 80, 0.2);
-    }
-    .table-modern tbody tr.last-week {
-        background-color: rgba(255, 193, 7, 0.2);
-    }
-    .table-modern tbody tr.two-weeks {
-        background-color: rgba(255, 152, 0, 0.2);
-    }
-    .table-modern tbody tr.three-weeks {
-        background-color: rgba(255, 87, 34, 0.2);
-    }
-    .table-modern tbody tr.older {
-        background-color: rgba(244, 67, 54, 0.2);
-    }
+.table-modern tbody tr.last-week {
+    background-color: rgba(255, 193, 7, 0.2); /* #FFC107 */
+}
+
+.table-modern tbody tr.two-weeks {
+    background-color: rgba(255, 152, 0, 0.2); /* #FF9800 */
+}
+
+.table-modern tbody tr.three-weeks {
+    background-color: rgba(255, 87, 34, 0.2); /* #FF5722 */
+}
+
+.table-modern tbody tr.older {
+    background-color: rgba(244, 67, 54, 0.2); /* #F44336 */
+}
 
 .gold-rank {
     background-color: palegoldenrod !important;
