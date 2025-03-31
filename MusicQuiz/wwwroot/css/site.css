@@ -278,7 +278,7 @@ a {
     max-width: 600px;
     margin: 10px 0;
     background-color: #f8f8f8;
-    padding: 15px;
+    padding: 5px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -659,7 +659,7 @@ a {
 .center-content {
     text-align: center;
     font-family: Arial, sans-serif;
-    padding: 20px;
+    padding: 8px 20px;
     max-width: 800px;
     margin: 0 auto;
     background-color: #f9f9f9;
