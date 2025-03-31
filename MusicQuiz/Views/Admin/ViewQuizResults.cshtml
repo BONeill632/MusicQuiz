@@ -16,8 +16,8 @@
 </div>
 
 <!-- Filter Form -->
-<form asp-action="ViewQuizResults" method="get" class="text-center mb-4">
-    <div class="form-group">
+<form asp-action="ViewQuizResults" method="get" class="form">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label for="topicFilter">Topic:</label>
         <select id="topicFilter" name="topicFilter" class="form-control form-select" autocomplete="off">
             <option value="">All</option>
@@ -28,7 +28,7 @@
         </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label for="difficultyFilter">Difficulty:</label>
         <select id="difficultyFilter" name="difficultyFilter" class="form-control form-select" autocomplete="off">
             <option value="">All</option>
@@ -38,7 +38,7 @@
             }
         </select>
     </div>
-    <div class="form-group">
+    <div class="form-group" style="width: 100%; max-width: 100%;">
         <label for="dateFilter">Month:</label>
         <select id="dateFilter" name="dateFilter" class="form-control form-select" autocomplete="off">
             <option value="">All</option>

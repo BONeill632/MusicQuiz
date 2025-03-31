@@ -8,8 +8,9 @@
 }
 
 @section Scripts {
-    <script src="~/js/selectAnswerAssessment.js"></script>
+    <script src="~/js/selectAnswerAssessment.js?v=@DateTime.Now.Ticks"></script>
     <script src="~/js/enableButtons.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/js/playSingleAudio.js?v=@DateTime.Now.Ticks"></script>
 }
 
 <h1>@Model.SelectedTopic Assessment</h1>
