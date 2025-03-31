@@ -193,6 +193,16 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                // Check if the email is already in use
+                var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+                if (existingUser != null)
+                {
+                    // Email is already in use, add a custom error message
+                    ModelState.AddModelError(string.Empty,
+                        "This email is already taken. If it's your account, please use the 'Forgot your password?' link.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
