@@ -7,62 +7,88 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="modern-body">
     <!-- Add skip link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-md navbar-light border-bottom box-shadow mb-3 custom-navbar-red @(ViewData["ActiveNav"] as string == "Admin" ? "custom-navbar-admin" : "")">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/img/Queens White Logo - Landscape.png" alt="MusicQuiz Logo" style="height: 40px;">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm custom-navbar-red @(ViewData["ActiveNav"] as string == "Admin" ? "custom-navbar-admin" : "")">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/Queens White Logo - Landscape.png" alt="MusicQuiz Logo" class="me-2" style="height: 40px;">
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item @(ViewData["ActiveNav"] as string == "Quiz" ? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Quiz" asp-action="Index">Quiz</a>
+                            <a class="nav-link px-3" asp-area="" asp-controller="Quiz" asp-action="Index">
+                                <i class="fas fa-music me-1"></i> Quiz
+                            </a>
                         </li>
                         <li class="nav-item @(ViewData["ActiveNav"] as string == "Assessment" ? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Assessment" asp-action="Index">Assessment</a>
+                            <a class="nav-link px-3" asp-area="" asp-controller="Assessment" asp-action="Index">
+                                <i class="fas fa-clipboard-check me-1"></i> Assessment
+                            </a>
                         </li>
                         <li class="nav-item @(ViewData["ActiveNav"] as string == "Leaderboards" ? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Leaderboards" asp-action="Index">Leaderboards</a>
+                            <a class="nav-link px-3" asp-area="" asp-controller="Leaderboards" asp-action="Index">
+                                <i class="fas fa-trophy me-1"></i> Leaderboards
+                            </a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item @(ViewData["ActiveNav"] as string == "Admin" ? "active" : "")">
-                                <a class="nav-link admin" asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
+                                <a class="nav-link admin px-3" asp-area="" asp-controller="Admin" asp-action="Index">
+                                    <i class="fas fa-user-shield me-1"></i> Admin
+                                </a>
                             </li>
                         }
                         <li class="nav-item @(ViewData["ActiveNav"] as string == "Privacy" ? "active" : "")">
-                            <a class="nav-link" asp-area="" asp-controller="Privacy" asp-action="Index">Privacy</a>
+                            <a class="nav-link px-3" asp-area="" asp-controller="Privacy" asp-action="Index">
+                                <i class="fas fa-shield-alt me-1"></i> Privacy
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-2">
+                            <partial name="_LoginPartial" />
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+        <span id="timer" class="timer-display"></span>
     </header>
-    <div class="container">
+
+    <div class="page-content">
         <!-- Add id and tabindex for skip link target -->
-        <main id="main-content" role="main" class="pb-3" tabindex="-1">
+        <main id="main-content" role="main" class="pb-5 container" tabindex="-1">
             @RenderBody()
         </main>
     </div>
 
-    <div class="@(ViewData["ActiveNav"] as string == "Admin" ? "blue-bar" : "red-bar")"></div> <!-- Red bar above the footer -->
+    <div class="@(ViewData["ActiveNav"] as string == "Admin" ? "blue-bar-modern" : "red-bar-modern")"></div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer py-4 mt-auto">
         <div class="container">
-            &copy; 2025 - MusicQuiz
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <span>&copy; 2025 - MusicQuiz</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-decoration-none me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-decoration-none"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/GoBack.js"></script>

@@ -6,121 +6,209 @@
 @inject UserManager<UserData> UserManager
 @inject UserExpService UserExpService
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Music Quiz - Test Your Knowledge";
 }
 
-<div class="container">
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        var user = UserManager.GetUserAsync(User).Result;
-        var userName = user?.FirstName ?? "User";
+@if (User.Identity?.IsAuthenticated == true)
+{
+    var user = UserManager.GetUserAsync(User).Result;
+    var userName = user?.FirstName ?? "User";
 
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Welcome back, @userName!</h1>
-            <p class="lead">Ready for your next challenge?</p>
-            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
+    <section class="hero-section">
+        <div class="container text-center">
+            <i class="fas fa-music music-icon floating" aria-hidden="true"></i>
+            <h1 class="display-3 fw-bold mb-4">Welcome back, @userName!</h1>
+            <p class="lead mb-4">Ready to test your music knowledge and rise to the top of the leaderboards?</p>
+            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
+                <i class="fas fa-play me-2" aria-hidden="true"></i>Start a Quiz
+            </a>
         </div>
+    </section>
 
-        <div class="row my-4">
-            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <h2 class="text-center">Your Progress</h2>
-                @if (user != null)
-                {
-                    var progressData = UserExpService.CalculateExpProgress(user);
-                    var isMaxLevel = (user.GetLevel() == 5);
-                    var progressText = isMaxLevel
-                    ? $"{user.EXP}EXP"
-                    : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
-
-                    <div class="progress-container-lg d-flex flex-column align-items-center text-center">
-                        <div class="circular-progress-lg"
-                             style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "#8B6914" : "#002E9E")">
-                            <span class="level-text-lg @(isMaxLevel ? "gold" : "")">@user.GetLevel()</span>
-                        </div>
-                        <span class="progress-text mt-2"><strong>@progressText!</strong></span>
-                        @if (isMaxLevel)
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <div class="card-body text-center">
+                        <h2 class="card-title mb-4">Your Progress</h2>
+                        @if (user != null)
                         {
-                            <p>You've reached max level!</p>
+                            var progressData = UserExpService.CalculateExpProgress(user);
+                            var isMaxLevel = (user.GetLevel() == 5);
+                            var progressText = isMaxLevel
+                            ? $"{user.EXP}EXP"
+                            : $"{progressData.expProgress}/{progressData.expNeeded}EXP";
+
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="circular-progress-lg mb-4"
+                                     style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "#D4AF37" : "#DC3545")">
+                                    <span class="level-text-lg @(isMaxLevel ? "gold" : "")">@user.GetLevel()</span>
+                                </div>
+                                <h4 class="progress-text mt-2 mb-3"><strong>@progressText</strong></h4>
+                                @if (isMaxLevel)
+                                {
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-trophy me-2" aria-hidden="true"></i>You've reached max level! Legendary status achieved!
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fas fa-arrow-up me-2" aria-hidden="true"></i>Keep going, you're making great progress!
+                                    </div>
+                                }
+                            </div>
                         }
                         else
                         {
-                            <p>Keep going, you're almost there!</p>
+                            <p class="text-danger">
+                                <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>Unable to load user progress.
+                            </p>
                         }
                     </div>
-                }
-                else
-                {
-                    <p class="text-center text-danger">Unable to load user progress.</p>
-                }
+                </div>
             </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <h2 class="text-center">Your Last Quiz Attempt</h2>
-                @if (Model != null && Model.LatestAttemptDate.HasValue)
-                {
-                    <p class="text-center">
-                        Last attempt: @Model.LatestAttemptDate.Value.ToString("dd MMM yyyy") at @Model.LatestAttemptDate.Value.ToString("hh:mm tt").
-                    </p>
-                    <p class="text-center">Your score: @Model.LatestUserScore.GetValueOrDefault().ToString("F2")%</p>
-                    <div class="text-center">
-                        <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try again!</a>
+            <div class="col-md-6">
+                <div class="card p-4">
+                    <div class="card-body text-center">
+                        <h2 class="card-title mb-4">Your Last Quiz Attempt</h2>
+                        @if (Model != null && Model.LatestAttemptDate.HasValue)
+                        {
+                            <div class="mb-4">
+                                <i class="fas fa-calendar-alt me-2" aria-hidden="true"></i>
+                                <span>@Model.LatestAttemptDate.Value.ToString("dd MMM yyyy")</span>
+                                <span class="mx-2">at</span>
+                                <span>@Model.LatestAttemptDate.Value.ToString("hh:mm tt")</span>
+                            </div>
+
+                            <div class="mb-4">
+                                <h3 class="mb-2">Your Score</h3>
+                                <div class="display-4 fw-bold">@Model.LatestUserScore.GetValueOrDefault().ToString("F2")%</div>
+                            </div>
+
+                            <a class="btn btn-danger" asp-area="" asp-controller="Quiz" asp-action="Index">
+                                <i class="fas fa-redo me-2" aria-hidden="true"></i>Try again!
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="mb-4">
+                                <i class="fas fa-exclamation-circle text-red-bold fa-3x mb-3" aria-hidden="true"></i>
+                                <h3 class="text-red-bold">No Quizzes Yet!</h3>
+                                <p>Take your first quiz and start your journey to musical mastery!</p>
+                            </div>
+                            <a class="btn btn-danger" asp-area="" asp-controller="Quiz" asp-action="Index">
+                                <i class="fas fa-play me-2" aria-hidden="true"></i>Start Now
+                            </a>
+                        }
                     </div>
-                }
-                else
-                {
-                    <h3 class="text-center text-red-bold">OOPS!</h3>
-                    <p class="text-center">No quiz attempts yet? Start now!</p>
-                    <div class="text-center">
-                        <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="wave-divider" aria-hidden="true"></div>
+
+        <div class="text-center mb-5">
+            <h2 class="mb-4">Ready to Compete?</h2>
+            <p class="lead mb-4">See how you stack up against your classmates on the leaderboards!</p>
+            <a class="btn btn-secondary btn-lg" asp-area="" asp-controller="Leaderboards" asp-action="Index">
+                <i class="fas fa-trophy me-2" aria-hidden="true"></i>View Leaderboards
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <section class="hero-section">
+        <div class="container text-center">
+            <i class="fas fa-music music-icon floating" aria-hidden="true"></i>
+            <h1 class="display-3 fw-bold mb-4">Test Your Music Knowledge</h1>
+            <p class="lead mb-4">Challenge yourself, compete with friends, and become a music master!</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
+                    <i class="fas fa-play me-2" aria-hidden="true"></i>Try a Quiz
+                </a>
+                <a class="btn btn-secondary btn-lg" asp-area="" asp-controller="Account" asp-action="Register">
+                    <i class="fas fa-user-plus me-2" aria-hidden="true"></i>Join Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card p-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-graduation-cap feature-icon" aria-hidden="true"></i>
+                        <h3 class="card-title mb-3">Level Up</h3>
+                        <p>Progress through levels as you improve your music knowledge. Can you reach the top level?</p>
                     </div>
-                }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users feature-icon" aria-hidden="true"></i>
+                        <h3 class="card-title mb-3">Compete</h3>
+                        <p>Challenge your classmates and climb to the top of the leaderboards. Show off your music expertise!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-headphones feature-icon" aria-hidden="true"></i>
+                        <h3 class="card-title mb-3">Discover</h3>
+                        <p>Expand your musical horizons while testing your knowledge across different genres and eras.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row my-4 text-center">
-            <div class="col d-flex flex-column justify-content-center align-items-center">
-                <h2>Compare with Friends</h2>
-                <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Leaderboards" asp-action="Index">View Leaderboards</a>
+        <div class="row g-4 mb-5 align-items-center">
+            <div class="col-md-6">
+                <h2 class="section-title">Track Your Progress</h2>
+                <p class="lead">Create an account to track your progress and see how you improve over time. Unlock new levels and challenges as you gain experience points (EXP).</p>
+                <ul class="list-unstyled mt-4">
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Save your quiz history</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Earn experience points (EXP)</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Unlock higher difficulty levels</li>
+                </ul>
             </div>
-        </div>
-    }
-    else
-    {
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Can you reach the top?</h1>
-            <p class="lead">Test your skills and see how far you can go!</p>
-            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
-        </div>
-
-        <div class="row my-4">
-            <div class="col-md-6 d-flex justify-content-center align-items-center">
-                <img src="~/img/LevelHomepage.png" class="img-fluid" alt="Max Quiz Level" style="max-height: 350px; object-fit: contain;"> <!-- Adjusted image size -->
-            </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-                <h3 class="text-center">Test your music knowledge</h3>
-                <p class="text-center">
-                    Test your music knowledge with fun quizzes! Progress through levels as you hone your skills.
-                </p>
+            <div class="col-md-6 order-md-1">
+                <h2 class="section-title">Compete With Friends</h2>
+                <p class="lead">Challenge your classmates and see who has the best music knowledge. Check the leaderboards regularly to see if you're on top!</p>
+                <ul class="list-unstyled mt-4">
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> View global leaderboards</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Compare scores with friends</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Earn bragging rights</li>
+                </ul>
             </div>
         </div>
 
-        <div class="row my-4">
-            <div class="col-md-6 order-md-2 d-flex justify-content-center align-items-center">
-                <img src="~/img/HomeImage2.png" class="img-fluid" alt="Quiz Image 2" style="max-height: 350px; object-fit: contain;"> <!-- Adjusted image size -->
-            </div>
-            <div class="col-md-6 order-md-1 d-flex flex-column justify-content-center align-items-center">
-                <h3 class="text-center">Track your progress</h3>
-                <p class="text-center">
-                    Create an account to track your progress, compete with friends, and unlock more levels.
-                </p>
-            </div>
+        <div class="text-center mb-5">
+            <h2 class="mb-4">Ready to Test Your Knowledge?</h2>
+            <p class="lead mb-4">Try a quiz with no strings attached to see what we offer!</p>
+            <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
+                <i class="fas fa-play me-2" aria-hidden="true"></i>Start a Quiz
+            </a>
         </div>
+    </div>
+}
 
-        <div class="row my-4 text-center">
-            <div class="col d-flex flex-column justify-content-center align-items-center">
-                <h2>Not sure yet?</h2>
-                <p>Try a quiz with no strings attached to see what we offer!</p>
-                <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">Try a Quiz</a>
-            </div>
-        </div>
-    }
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add smooth scrolling (with check for reduced motion preferences)
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        }
+    });
+</script>
