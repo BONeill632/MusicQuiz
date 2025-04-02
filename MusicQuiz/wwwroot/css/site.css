@@ -2608,3 +2608,65 @@ p, li {
     color: rgba(255, 255, 255, 1) !important;
     font-weight: 600;
 }
+
+/* Adjust navbar link text size and padding for better fit */
+.navbar-dark .navbar-nav .nav-link,
+.custom-navbar-red .navbar-nav .nav-link,
+.custom-navbar-admin .navbar-nav .nav-link,
+.admin-link {
+    color: rgba(255, 255, 255, 1) !important;
+    font-weight: 600;
+    font-size: 0.85rem; /* Smaller font size */
+    padding: 0.6rem 0.7rem; /* Reduced padding */
+}
+
+/* Adjust spacing between nav items */
+.navbar-nav .nav-item {
+    margin-right: 0.1rem;
+}
+
+/* Improve navbar brand layout */
+.navbar-brand {
+    padding-right: 0px;
+    margin-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+    .navbar-brand img {
+        height: 35px; /* Slightly smaller logo */
+        max-height: 35px;
+    }
+
+/* Prevent vertical stacking in larger screens */
+@media (min-width: 992px) {
+    .navbar > .container {
+        flex-wrap: nowrap;
+    }
+
+    .navbar-collapse {
+        flex: 0 1 auto;
+    }
+
+    .navbar-brand span {
+        white-space: nowrap;
+    }
+}
+
+/* Adjust icon sizes */
+.navbar .nav-link i {
+    font-size: 0.9rem;
+}
+
+/* For very small screens ensure logo + text don't wrap */
+@media (max-width: 350px) {
+    .navbar-brand span {
+        font-size: 0.9rem;
+    }
+
+    .navbar-brand img {
+        height: 30px;
+        max-height: 30px;
+    }
+}

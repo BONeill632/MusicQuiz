@@ -21,7 +21,7 @@
                 <!-- Logo in navbar -->
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/img/Queens White Logo - Landscape.png" alt="Music Quiz Logo" style="height: 40px; max-height: 40px; margin-top: -5px; margin-bottom: -5px;" />
-                    <span class="ms-2" b-f57w81givp="" style="color: white;">Music Quiz</span>
+                    <span class="ms-2 high-contrast-text">QUB Music Quiz</span>
                 </a>
 
                 <!-- Navbar toggle button for mobile -->
@@ -35,25 +35,33 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Fix contrast on all nav links by ensuring text color -->
                         <li class="nav-item">
-                            <a class="nav-link px-3" style="color: rgba(255,255,255,0.9);" href="/Quiz">
+                            <a class="nav-link px-3 high-contrast-nav-link" href="/Quiz">
                                 <i class="fas fa-play-circle me-1"></i> Quiz
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" style="color: rgba(255,255,255,0.9);" href="/Assessment">
+                            <a class="nav-link px-3 high-contrast-nav-link" href="/Assessment">
                                 <i class="fas fa-tasks me-1"></i> Assessment
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" style="color: rgba(255,255,255,0.9);" href="/Leaderboards">
+                            <a class="nav-link px-3 high-contrast-nav-link" href="/Leaderboards">
                                 <i class="fas fa-trophy me-1"></i> Leaderboards
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link px-3" style="color: rgba(255,255,255,0.9);" href="/Privacy">
+                            <a class="nav-link px-3 high-contrast-nav-link" href="/Privacy">
                                 <i class="fas fa-shield-alt me-1"></i> Privacy
                             </a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 high-contrast-nav-link admin-link" href="/Admin">
+                                    <i class="fas fa-user-shield me-1"></i> Admin
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
