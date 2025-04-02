@@ -453,7 +453,7 @@ namespace MusicQuiz.Web.Controllers
 
             if (questions.Count != 0)
             {
-                decimal percentage = (decimal)CalculatePercentage(questions);
+                decimal percentage = score;
 
                 var firstQuestion = questions.First();
                 resultsService.SaveQuizResults(percentage, model.DateOfSubmission, (int)firstQuestion.SelectedDifficulty, (int)firstQuestion.SelectedTopic, userID);
@@ -470,27 +470,6 @@ namespace MusicQuiz.Web.Controllers
             }
 
             return View(model);
-        }
-
-        /// <summary>
-        /// Calculate the percentage of quiz gained by the user
-        /// </summary>
-        /// <param name="questions"></param>
-        /// <returns></returns>
-        private static decimal CalculatePercentage(List<QuestionViewModel> questions)
-        {
-            decimal percentagePerQuestion = (1 / (decimal)questions.Count) * 100;
-
-            decimal percentage = 0;
-
-            foreach (var question in questions)
-            {
-                if (question.CorrectAnswer.Equals(question.UserAnswer))
-                {
-                    percentage += percentagePerQuestion;
-                }
-            }
-            return percentage;
         }
 
         /// <summary>
