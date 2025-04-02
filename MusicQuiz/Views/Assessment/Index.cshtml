@@ -5,6 +5,33 @@
 }
 
 <div class="quiz-container compact-quiz">
+    <!-- Add email verification warning at the top -->
+    @if (Model.Any() && !Model.First().IsUserVerified)
+    {
+        <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3 fa-2x"></i>
+                <div>
+                    <h5 class="mb-1">Email Verification Required</h5>
+                    <p class="mb-0">Your email address has not been verified. Please check your inbox for a verification link to access assessments.</p>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Add any error messages from TempData -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-circle me-3"></i>
+                <div><strong>Error:</strong> @TempData["ErrorMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="section-header mb-4">
         <h1 class="text-center">@ViewData["Title"]</h1>
         <hr class="mb-4" />
@@ -48,7 +75,13 @@
                                     <td>@assessment.OpenFrom.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td>@assessment.OpenTo.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td class="text-center">
-                                        @if (assessment.IsCompleted)
+                                        @if (!assessment.IsUserVerified)
+                                        {
+                                            <button class="btn btn-outline-warning" disabled>
+                                                <i class="fas fa-exclamation-circle me-2"></i> Verify Email
+                                            </button>
+                                        }
+                                        else if (assessment.IsCompleted)
                                         {
                                             <button class="btn btn-outline-success" disabled>
                                                 <i class="fas fa-check-circle me-2"></i> Completed
@@ -90,6 +123,14 @@
                         <span class="status-icon locked"><i class="fas fa-lock"></i></span>
                         <span>Locked Assessment</span>
                     </div>
+                    <!-- Add the email verification legend item -->
+                    @if (Model.Any() && !Model.First().IsUserVerified)
+                    {
+                        <div class="legend-item">
+                            <span class="status-icon warning"><i class="fas fa-exclamation-circle"></i></span>
+                            <span>Email Verification Required</span>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

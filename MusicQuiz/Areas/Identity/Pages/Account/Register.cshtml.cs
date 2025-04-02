@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Core.Entities;
-using MusicQuiz.Core.Migrations;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using MusicQuiz.Application.Interfaces;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text.Encodings.Web;
+using System.Text;
+using MusicQuiz.Core.Migrations;
 
 namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 {
@@ -17,21 +21,24 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<UserData> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userManager"></param>
-        /// <param name="userStore"></param>
-        /// <param name="signInManager"></param>
-        /// <param name="logger"></param>
-        /// <param name="context"></param>
+        /// <param name="userManager">User manager service</param>
+        /// <param name="userStore">User store service</param>
+        /// <param name="signInManager">Sign-in manager service</param>
+        /// <param name="logger">Logger</param>
+        /// <param name="context">Database context</param>
+        /// <param name="emailSender">Email sender service</param>
         public RegisterModel(
             UserManager<UserData> userManager,
             IUserStore<UserData> userStore,
             SignInManager<UserData> signInManager,
             ILogger<RegisterModel> logger,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -39,6 +46,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _context = context;
+            _emailSender = emailSender;
         }
 
         /// <summary>
@@ -79,43 +87,46 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             /// <summary>
             /// Forename
             /// </summary>
-            [Required]
-            [Display(Name = "Forename")]
+            [Required(ErrorMessage = "First name is required")]
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "First name cannot exceed 50 characters")]
             public required string FirstName { get; set; }
 
             /// <summary>
             /// Surname
             /// </summary>
-            [Required]
-            [Display(Name = "Surname")]
+            [Required(ErrorMessage = "Last name is required")]
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "Last name cannot exceed 50 characters")]
             public required string LastName { get; set; }
 
             /// <summary>
             /// Student ID
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Student ID is required")]
             [Display(Name = "Student ID")]
+            [StringLength(20, ErrorMessage = "Student ID cannot exceed 20 characters")]
             public required string StudentID { get; set; }
 
             /// <summary>
             /// Academic year
             /// </summary>
-            [Required]
-            [Display(Name = "Academic year")]
+            [Required(ErrorMessage = "Please select an academic year")]
+            [Display(Name = "Academic Year")]
             public string? AcademicYear { get; set; }
 
             /// <summary>
             /// Email
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Email address is required")]
+            [EmailAddress(ErrorMessage = "Invalid email address")]
             [Display(Name = "Email")]
             public required string Email { get; set; }
 
             /// <summary>
             /// Password
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Password is required")]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -125,8 +136,8 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
             /// Confirm password
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirm Password")]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match")]
             public required string ConfirmPassword { get; set; }
         }
 
@@ -137,14 +148,14 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// They will need to change this in the user section if they use this application
         /// for more than an academic year as this will be used for leaderboards and assessments
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of academic year options</returns>
         public List<string> GetAcademicYearOptions()
         {
             var currentYear = DateTime.Now.Year;
             var currentMonth = DateTime.Now.Month;
 
             // Adjust the logic to consider the current academic year as 24/25 for Sept - Aug
-            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12) 
+            var currentAcademicYear = (currentMonth >= 9 && currentMonth <= 12)
                 ? currentYear
                 : (currentMonth >= 1 && currentMonth <= 8) ? currentYear - 1 : currentYear;
 
@@ -167,8 +178,8 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// <summary>
         /// On get async
         /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
+        /// <param name="returnUrl">Return URL after registration</param>
+        /// <returns>Task</returns>
         public async Task OnGetAsync(string? returnUrl = null)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
@@ -181,97 +192,128 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// <summary>
         /// On post async
         /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
+        /// <param name="returnUrl">Return URL after registration</param>
+        /// <returns>Task with IActionResult</returns>
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = [.. (await _signInManager.GetExternalAuthenticationSchemesAsync())];
-
-            // Repopulate the AcademicYearOptions in case of errors
             AcademicYearOptions = GetAcademicYearOptions();
 
             if (ModelState.IsValid)
             {
-                // Check if the email is already in use
-                var existingUser = await _userManager.FindByEmailAsync(Input.Email);
-                if (existingUser != null)
+                try
                 {
-                    // Email is already in use, add a custom error message
-                    ModelState.AddModelError(string.Empty,
-                        "This email is already taken. If it's your account, please use the 'Forgot your password?' link.");
-                    return Page();
-                }
-
-                var user = CreateUser();
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-
-                // Set the Forename, Surname, StudentID, and AcademicYear
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.StudentID = Input.StudentID;
-                user.AcademicYear = Input.AcademicYear ?? "Unknown";
-
-                // Increment the UserID
-                var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
-                if (lastUserID == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Failed to retrieve the last assigned user ID.");
-                    return Page();
-                }
-
-                // Set the new UserID and update the LastAssignedUserID
-                user.IntID = lastUserID.LastUserID + 1;
-                lastUserID.LastUserID = user.IntID;
-
-                //Used to bypass email verification for password reset.
-                //Proving tricky to implement verification
-                user.EmailConfirmed = true;
-
-                // Save the updated student ID
-                _context.LastAssignedUserID.Update(lastUserID);
-                await _context.SaveChangesAsync();
-
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    // Assign the "User" role to the new user
-                    var roleResult = await _userManager.AddToRoleAsync(user, "User");
-                    if (!roleResult.Succeeded)
+                    // Check if the email is already in use
+                    var existingUser = await _userManager.FindByEmailAsync(Input.Email);
+                    if (existingUser != null)
                     {
-                        foreach (var error in roleResult.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
+                        ModelState.AddModelError(string.Empty,
+                            "This email is already taken. If it's your account, please use the 'Forgot your password?' link.");
                         return Page();
                     }
+
+                    var user = CreateUser();
+
+                    await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                    await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                    // Set the Forename, Surname, StudentID, and AcademicYear
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+                    user.StudentID = Input.StudentID;
+                    user.AcademicYear = Input.AcademicYear ?? "Unknown";
+
+                    // Increment the UserID
+                    var lastUserID = await _context.LastAssignedUserID.FirstOrDefaultAsync();
+                    if (lastUserID == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Failed to retrieve the last assigned user ID.");
+                        return Page();
+                    }
+
+                    // Set the new UserID and update the LastAssignedUserID
+                    user.IntID = lastUserID.LastUserID + 1;
+                    lastUserID.LastUserID = user.IntID;
 
                     // Set LastLoggedIn field to DateTime.Now
                     user.LastLoggedIn = DateTime.Now;
 
-                    // Update the user in the database
-                    _context.Update(user);
+                    // Save the updated LastAssignedUserID
+                    _context.LastAssignedUserID.Update(lastUserID);
                     await _context.SaveChangesAsync();
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    // Create the user with password
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+
+                    if (result.Succeeded)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
+                        _logger.LogInformation("User {Email} created a new account with password.", Input.Email);
+
+                        // Assign the "User" role to the new user
+                        var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                        if (!roleResult.Succeeded)
+                        {
+                            _logger.LogWarning("Failed to assign User role to user {Email}.", Input.Email);
+                            foreach (var error in roleResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            return Page();
+                        }
+
+                        // Generate the email confirmation token AFTER the user is created
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId, code, returnUrl },
+                            protocol: Request.Scheme);
+
+                        try
+                        {
+                            await _emailSender.SendEmailAsync(
+                                Input.Email,
+                                "Confirm your Music Quiz account",
+                                $"<h2>Welcome to Music Quiz!</h2>" +
+                                $"<p>Thank you for registering. Please confirm your account by " +
+                                $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.</p>" +
+                                $"<p>If you did not create this account, you can ignore this email.</p>"
+                            );
+
+                            _logger.LogInformation("Verification email sent to {Email}", Input.Email);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to send confirmation email to {Email}", Input.Email);
+                            // Continue with registration even if email fails
+                        }
+
+                        // Update the user in the database
+                        await _context.SaveChangesAsync();
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else
+
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-
-                foreach (var error in result.Errors)
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    _logger.LogError(ex, "Error during user registration");
+                    ModelState.AddModelError(string.Empty, "An unexpected error occurred during registration. Please try again.");
                 }
             }
 
@@ -284,8 +326,8 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// <summary>
         /// Create a new instance of UserData
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>New UserData instance</returns>
+        /// <exception cref="InvalidOperationException">Thrown if UserData cannot be created</exception>
         private UserData CreateUser()
         {
             try
@@ -301,9 +343,9 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// <summary>
         /// Get the email store
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotSupportedException"></exception>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>Email store instance</returns>
+        /// <exception cref="NotSupportedException">Thrown if email store is not supported</exception>
+        /// <exception cref="InvalidOperationException">Thrown if user store cannot be cast to email store</exception>
         private IUserEmailStore<UserData> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
@@ -314,3 +356,4 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         }
     }
 }
+

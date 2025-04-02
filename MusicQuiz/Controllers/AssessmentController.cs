@@ -22,6 +22,8 @@ namespace MusicQuiz.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userID = await GetUserIdAsync();
+            var user = await userManager.GetUserAsync(User);
+            var isUserVerified = user != null && await userManager.IsEmailConfirmedAsync(user);
             var userAcademicYear = await GetCurrentUserAcademicYearAsync();
 
             string year = userAcademicYear;
@@ -46,32 +48,19 @@ namespace MusicQuiz.Web.Controllers
                 OpenFrom = a.OpenFrom,
                 OpenTo = a.OpenTo,
                 TopicName = (Topic)a.TopicId,
-                IsUnlocked = DateTime.Now >= a.OpenFrom && DateTime.Now <= a.OpenTo,
-                IsCompleted = completedAssessments.Contains(a.ID)
+                // Lock assessments if user is not verified, regardless of dates
+                IsUnlocked = isUserVerified && DateTime.Now >= a.OpenFrom && DateTime.Now <= a.OpenTo,
+                IsCompleted = completedAssessments.Contains(a.ID),
+                IsUserVerified = isUserVerified
             }).ToList();
 
-            return View(viewModel);
-        }
-
-        /// <summary>
-        /// Fetch the current user's academic year to fetch assessment data.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        private async Task<string> GetCurrentUserAcademicYearAsync()
-        {
-            var userName = User.Identity?.Name;
-
-            if (string.IsNullOrEmpty(userName))
+            // Set notification for unverified users
+            if (!isUserVerified)
             {
-                throw new InvalidOperationException("User is not logged in.");
+                ViewBag.VerificationMessage = "Your email address has not been verified. Please check your email for a verification link to access assessments.";
             }
 
-            // Query the database for the current user's academic year.
-            var user = await context.Users
-                .FirstOrDefaultAsync(u => u.UserName == userName);
-
-            return user == null ? throw new InvalidOperationException("User not found in the database.") : user.AcademicYear;
+            return View(viewModel);
         }
 
         /// <summary>
@@ -81,6 +70,16 @@ namespace MusicQuiz.Web.Controllers
         /// <returns></returns>
         public async Task<IActionResult> StartAssessment(int id)
         {
+            // Check if user is verified
+            var user = await userManager.GetUserAsync(User);
+            var isUserVerified = user != null && await userManager.IsEmailConfirmedAsync(user);
+
+            if (!isUserVerified)
+            {
+                TempData["ErrorMessage"] = "You must verify your email address before accessing assessments. Please check your email for a verification link.";
+                return RedirectToAction("Index");
+            }
+
             // Find the assessment by ID.
             var assessment = await context.Assessments.FindAsync(id);
 
@@ -90,7 +89,7 @@ namespace MusicQuiz.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Save AssessmentID in session
+            // Rest of the method remains unchanged...
             HttpContext.Session.SetInt32("AssessmentID", id);
 
             var questions = context.QuizQuestions
@@ -128,6 +127,27 @@ namespace MusicQuiz.Web.Controllers
             HttpContext.Session.SetInt32("CurrentQuestionIndex", 0);
 
             return RedirectToAction("ShowQuestion");
+        }
+
+        /// <summary>
+        /// Fetch the current user's academic year to fetch assessment data.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        private async Task<string> GetCurrentUserAcademicYearAsync()
+        {
+            var userName = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new InvalidOperationException("User is not logged in.");
+            }
+
+            // Query the database for the current user's academic year.
+            var user = await context.Users
+                .FirstOrDefaultAsync(u => u.UserName == userName);
+
+            return user == null ? throw new InvalidOperationException("User not found in the database.") : user.AcademicYear;
         }
 
         /// <summary>
