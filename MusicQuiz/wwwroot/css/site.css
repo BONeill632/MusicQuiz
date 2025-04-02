@@ -86,30 +86,30 @@ h1 {
 /* Feedback text styling with improved contrast */
 .feedback-text {
     margin-left: 10px;
-    color: #9B0000; /* Darker red for better contrast */
+    color: #9B0000;
     font-weight: 700;
 }
 
 /* When inside a selected option */
 .quiz-option.selected .feedback-text {
-    color: #800000; /* Even darker red when on gray background */
+    color: #800000;
 }
 
 /* Alternative styles for correct/incorrect feedback */
 .feedback-text.correct {
-    color: #006400; /* Dark green */
+    color: #006400;
 }
 
 .feedback-text.incorrect {
-    color: #800000; /* Dark red */
+    color: #800000;
 }
 
 .quiz-option.selected .feedback-text.correct {
-    color: #005000; /* Darker green on gray background */
+    color: #005000;
 }
 
 .quiz-option.selected .feedback-text.incorrect {
-    color: #600000; /* Darker red on gray background */
+    color: #600000;
 }
 
 /* Disables user interaction and dims opacity */
@@ -287,12 +287,12 @@ a {
     .audio-player audio {
         width: 100%;
         border-radius: 5px;
-        background-color: #f8f8f8; /* Match container background */
+        background-color: #f8f8f8;
     }
 
         /* Webkit (Chrome, Safari, Edge) specific styles */
         .audio-player audio::-webkit-media-controls-panel {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-webkit-media-controls-current-time-display,
@@ -301,19 +301,19 @@ a {
         }
 
         .audio-player audio::-webkit-media-controls-timeline {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-webkit-media-controls-timeline-container {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-webkit-media-controls-volume-slider {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-webkit-media-controls-volume-slider-container {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-webkit-media-controls-play-button,
@@ -323,7 +323,7 @@ a {
 
         /* Firefox specific styles */
         .audio-player audio::-moz-range-track {
-            background-color: #f8f8f8; /* Match container background */
+            background-color: #f8f8f8;
         }
 
         .audio-player audio::-moz-range-thumb {
@@ -393,21 +393,21 @@ a {
     position: absolute;
     font-size: 14px;
     font-weight: bold;
-    color: #002E9E; /* Dark blue - 8.85:1 contrast ratio */
+    color: #002E9E;
     background-color: #FFFFFF;
     padding: 2px;
     border-radius: 2px;
 }
 
     .level-text.gold {
-        color: #8B6914; /* Dark gold - 7.84:1 contrast ratio */
+        color: #8B6914;
     }
 
 .progress-info {
     font-size: 14px;
-    color: #FFFFFF; /* White text on navbar background */
+    color: #FFFFFF;
     margin-right: 0.2rem;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* Optional: adds slight shadow for better readability */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Larger circular progress */
@@ -444,14 +444,14 @@ a {
     position: absolute;
     font-size: 28px;
     font-weight: bold;
-    color: #002E9E; /* Dark blue with 8.85:1 contrast ratio */
+    color: #002E9E;
     background-color: #FFFFFF;
     padding: 4px 8px;
     border-radius: 4px;
 }
 
     .level-text-lg.gold {
-        color: #8B6914; /* Dark gold with 7.84:1 contrast ratio */
+        color: #8B6914;
     }
 
 .progress-text-lg {
@@ -480,7 +480,7 @@ a {
         border-bottom: 2px solid #dee2e6;
         padding: 10px;
         white-space: nowrap;
-        color: #000000; /* Ensure black text for headers */
+        color: #000000;
     }
 
     .table-modern tbody tr {
@@ -491,18 +491,18 @@ a {
 
         /* Result row styles with improved contrast */
         .table-modern tbody tr.row-success {
-            color: #155724; /* Dark green text */
-            background-color: #d4edda; /* Light green background */
+            color: #155724;
+            background-color: #d4edda;
         }
 
         .table-modern tbody tr.row-warning {
-            color: #856404; /* Dark yellow/brown text */
-            background-color: #fff3cd; /* Light yellow background */
+            color: #856404;
+            background-color: #fff3cd;
         }
 
         .table-modern tbody tr.row-danger {
-            color: #721c24; /* Dark red text */
-            background-color: #f8d7da; /* Light red background */
+            color: #721c24;
+            background-color: #f8d7da;
         }
 
         /* Hover states with maintained contrast */
@@ -519,15 +519,15 @@ a {
 
     /* Ensure contrast is maintained in all states */
     .table-modern tbody tr.row-success:hover {
-        background-color: #c3e6cb; /* Slightly darker on hover */
+        background-color: #c3e6cb;
     }
 
     .table-modern tbody tr.row-warning:hover {
-        background-color: #ffeeba; /* Slightly darker on hover */
+        background-color: #ffeeba;
     }
 
     .table-modern tbody tr.row-danger:hover {
-        background-color: #f5c6cb; /* Slightly darker on hover */
+        background-color: #f5c6cb;
     }
 
 
@@ -771,8 +771,8 @@ a {
 @media (max-width: 576px) {
     .table-modern thead th,
     .table-modern tbody td {
-        font-size: 0.8125rem; /* Slightly smaller font for better fit */
-        padding: 6px; /* Reduce padding to avoid excessive width */
+        font-size: 0.8125rem;
+        padding: 6px;
     }
 
     .table-modern {
@@ -780,13 +780,13 @@ a {
     }
 
         .table-modern tbody td {
-            white-space: normal !important; /* Allow text to wrap */
-            word-break: break-word; /* Ensure long words wrap properly */
+            white-space: normal !important;
+            word-break: break-word;
         }
 
     .table-responsive {
-        overflow-x: auto; /* Ensure horizontal scrolling if necessary */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
@@ -904,23 +904,23 @@ form {
 }
 
 .table-modern tbody tr.recent {
-    background-color: rgba(76, 175, 80, 0.2); /* #4CAF50 */
+    background-color: rgba(76, 175, 80, 0.2);
 }
 
 .table-modern tbody tr.last-week {
-    background-color: rgba(255, 193, 7, 0.2); /* #FFC107 */
+    background-color: rgba(255, 193, 7, 0.2);
 }
 
 .table-modern tbody tr.two-weeks {
-    background-color: rgba(255, 152, 0, 0.2); /* #FF9800 */
+    background-color: rgba(255, 152, 0, 0.2);
 }
 
 .table-modern tbody tr.three-weeks {
-    background-color: rgba(255, 87, 34, 0.2); /* #FF5722 */
+    background-color: rgba(255, 87, 34, 0.2);
 }
 
 .table-modern tbody tr.older {
-    background-color: rgba(244, 67, 54, 0.2); /* #F44336 */
+    background-color: rgba(244, 67, 54, 0.2);
 }
 
 .gold-rank {
@@ -947,7 +947,6 @@ form {
     gap: 5px;
 }
 
-/* Skip link styling */
 .skip-link {
     position: absolute;
     left: -9999px;
@@ -965,7 +964,6 @@ form {
         top: 0;
     }
 
-/* Ensure the main content area is properly focused */
 #main-content {
     outline: none;
 }
@@ -1057,15 +1055,15 @@ form {
 
 
 :root {
-    --primary-color: #6C757D; /* Grey */
-    --secondary-color: #DC3545; /* Danger (red) */
-    --accent-color: #0D6EFD; /* Blue accent for some elements */
-    --dark-color: #343A40; /* Dark grey */
-    --light-color: #FFFFFF; /* White */
-    --background-color: #F8F9FA; /* Light grey background */
-    --text-color: #212529; /* Dark text for contrast */
-    --card-background: #FFFFFF; /* White card background */
-    --border-color: #DEE2E6; /* Light grey border */
+    --primary-color: #6C757D;
+    --secondary-color: #DC3545;
+    --accent-color: #0D6EFD;
+    --dark-color: #343A40;
+    --light-color: #FFFFFF;
+    --background-color: #F8F9FA;
+    --text-color: #212529;
+    --card-background: #FFFFFF;
+    --border-color: #DEE2E6;
 }
 
 body {
@@ -1082,6 +1080,45 @@ body {
     border-radius: 0 0 20px 20px;
     margin-bottom: 40px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero section with contrast-enhancing overlay */
+.hero-section {
+    position: relative;
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+}
+
+    /* Semi-transparent overlay for better text contrast */
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    /* Position content above overlay */
+    .hero-section .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Style text in hero section for better contrast */
+    .hero-section h1,
+    .hero-section p,
+    .hero-section .lead {
+        color: white;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+/* Logo styles */
+.hero-logo {
+    max-height: 70px;
+    margin-bottom: 1.5rem;
 }
 
 .card {
@@ -1165,10 +1202,12 @@ body {
         background: var(--secondary-color);
     }
 
+/* Update the card-title color for better contrast */
 .card-title {
-    color: var(--secondary-color);
+    color: #b91d2e;
     font-weight: 700;
 }
+
 
 .circular-progress-lg {
     width: 160px;
@@ -1262,7 +1301,7 @@ p, li {
 
 /* Ensure sufficient contrast */
 .text-muted {
-    color: #6C757D !important; /* Darker than default Bootstrap muted */
+    color: #6C757D !important;
 }
 
 /* Improved alert styling for readability */
@@ -1937,6 +1976,18 @@ p, li {
         margin: 0;
     }
 
+    /* Fix contrast issues with text */
+    .lock-notice p {
+        color: #505a64 !important; /* Darker gray with better contrast */
+    }
+
+/* Ensure links are still visible */
+.accessible-link {
+    color: #0056b3;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
 .accessible-link {
     color: var(--primary-color);
     text-decoration: underline;
@@ -1996,7 +2047,7 @@ p, li {
     padding: 1.25rem;
 }
 
-.audio-header h5 {
+.audio-header h2 {
     font-weight: 600;
     font-size: 1.1rem;
     color: var(--primary-color);
@@ -2239,30 +2290,30 @@ p, li {
 .equal-width-audio {
     flex: 1;
     min-width: 250px;
-    max-width: none !important; /* Remove the max-width constraint */
-    width: calc(50% - 1rem); /* Each audio container takes up half the width minus the gap */
+    max-width: none !important;
+    width: calc(50% - 1rem);
 }
 
 /* Wider buttons for feedback */
 .wide-button {
     min-width: 120px;
-    width: 30%; /* Make buttons wider */
+    width: 30%;
     max-width: 250px;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     white-space: nowrap;
-    height: auto; /* Allow buttons to grow vertically if needed */
+    height: auto;
 }
 
 /* Ensure feedback container has enough space */
 .feedback-container {
-    min-height: 60px; /* Increased height for feedback */
+    min-height: 60px;
     padding: 0.75rem;
     text-align: center;
     margin: 0.5rem 0;
     font-weight: 500;
     color: #333;
-    word-wrap: break-word; /* Ensure long feedback wraps */
+    word-wrap: break-word;
 }
 
 /* Control buttons layout */
@@ -2348,14 +2399,14 @@ p, li {
         /* Results-specific styling - use right border instead of changing entire selection style */
         .quiz-option.correct-answer,
         .quiz-option.selected.correct-answer {
-            border-right: 6px solid #28a745 !important; /* Green right border indicator */
-            border-left: 2px solid #6c757d !important; /* Keep consistent with other borders */
+            border-right: 6px solid #28a745 !important;
+            border-left: 2px solid #6c757d !important;
         }
 
         .quiz-option.incorrect-answer,
         .quiz-option.selected.incorrect-answer {
-            border-right: 6px solid #dc3545 !important; /* Red right border indicator */
-            border-left: 2px solid #6c757d !important; /* Keep consistent with other borders */
+            border-right: 6px solid #dc3545 !important;
+            border-left: 2px solid #6c757d !important;
         }
 
         /* Reset any primary-color usage on selected items */
@@ -2432,11 +2483,11 @@ p, li {
 
 /* Results-specific styling (subtle indicators) */
 .quiz-option.correct-answer {
-    border-left: 6px solid #28a745; /* Green left border indicator */
+    border-left: 6px solid #28a745;
 }
 
 .quiz-option.incorrect-answer {
-    border-left: 6px solid #dc3545; /* Red left border indicator */
+    border-left: 6px solid #dc3545;
 }
 
 /* Feedback message styling */
@@ -2460,12 +2511,12 @@ p, li {
 
 /* Locked assessment styling */
 .row-locked {
-    color: #6c757d; /* Grey text */
-    background-color: #e9ecef; /* Light grey background */
+    color: #6c757d;
+    background-color: #e9ecef;
 }
 
     .row-locked:hover {
-        background-color: #dee2e6; /* Slightly darker on hover */
+        background-color: #dee2e6;
     }
 
 .status-icon.locked {
@@ -2532,4 +2583,28 @@ p, li {
         background-color: transparent;
         box-shadow: none;
     }
+}
+
+/* Fix contrast issues with links */
+.link-dark {
+    color: #6c1d1d;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+    .link-dark:hover {
+        color: #8a0000;
+        text-decoration: underline;
+    }
+
+/* Add spacing between form elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.navbar-dark .navbar-nav .nav-link,
+.custom-navbar-red .navbar-nav .nav-link,
+.custom-navbar-admin .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 1) !important;
+    font-weight: 600;
 }

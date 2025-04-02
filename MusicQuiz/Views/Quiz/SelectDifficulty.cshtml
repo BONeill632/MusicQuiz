@@ -5,6 +5,7 @@
 @section Scripts {
     <script src="~/js/selectDifficulty.js"></script>
 
+    @* Won't work in its own script. unsure why' *@
     <script>
         function selectOption(difficulty, className) {
             document.getElementById("selectedDifficulty").value = difficulty;
@@ -35,7 +36,7 @@
 
     <div class="card shadow mb-5">
         <div class="card-body p-md-5 p-4">
-            <h2 class="section-title text-center mb-4">Before You Proceed</h2>
+            <h2 class="section-title mb-4">Before You Proceed</h2>
 
             <div class="info-card mb-5">
                 <div class="info-icon">
@@ -44,7 +45,7 @@
                 <div class="info-content">
                     <p>This is the practice quiz section. Here, you can try all the questions we have to offer.</p>
 
-                    <h5 class="mt-4 mb-3">Important Information:</h5>
+                    <h3 class="mt-4 mb-3">Important Information:</h3>
                     <div class="fact-list">
                         <div class="fact-item">
                             <div class="fact-icon"><i class="fas fa-random"></i></div>
@@ -88,7 +89,7 @@
 
             <div class="divider-wave my-5"></div>
 
-            <h2 class="section-title text-center mb-4">Select a Difficulty</h2>
+            <h2 class="section-title mb-4">Select a Difficulty</h2>
 
             <form method="post" action="/Quiz/Start" onsubmit="return validateForm()">
                 <div class="difficulty-grid">

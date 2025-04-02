@@ -8,7 +8,6 @@
 @{
     ViewData["Title"] = "Music Quiz - Test Your Knowledge";
 }
-
 @if (User.Identity?.IsAuthenticated == true)
 {
     var user = UserManager.GetUserAsync(User).Result;
@@ -16,11 +15,11 @@
 
     <section class="hero-section">
         <div class="container text-center">
-            <i class="fas fa-music music-icon floating" aria-hidden="true"></i>
+            <i class="fas fa-music music-icon floating"></i>
             <h1 class="display-3 fw-bold mb-4">Welcome back, @userName!</h1>
             <p class="lead mb-4">Ready to test your music knowledge and rise to the top of the leaderboards?</p>
             <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
-                <i class="fas fa-play me-2" aria-hidden="true"></i>Start a Quiz
+                <i class="fas fa-play me-2"></i>Start a Quiz
             </a>
         </div>
     </section>
@@ -44,17 +43,17 @@
                                      style="--progress:@progressData.progressPercentage; --fill-color:@(isMaxLevel ? "#D4AF37" : "#DC3545")">
                                     <span class="level-text-lg @(isMaxLevel ? "gold" : "")">@user.GetLevel()</span>
                                 </div>
-                                <h4 class="progress-text mt-2 mb-3"><strong>@progressText</strong></h4>
+                                <h3 class="progress-text mt-2 mb-3"><strong>@progressText</strong></h3>
                                 @if (isMaxLevel)
                                 {
                                     <div class="alert alert-warning" role="alert">
-                                        <i class="fas fa-trophy me-2" aria-hidden="true"></i>You've reached max level! Legendary status achieved!
+                                        <i class="fas fa-trophy me-2"></i>You've reached max level! Legendary status achieved!
                                     </div>
                                 }
                                 else
                                 {
                                     <div class="alert alert-info" role="alert">
-                                        <i class="fas fa-arrow-up me-2" aria-hidden="true"></i>Keep going, you're making great progress!
+                                        <i class="fas fa-arrow-up me-2"></i>Keep going, you're making great progress!
                                     </div>
                                 }
                             </div>
@@ -62,7 +61,7 @@
                         else
                         {
                             <p class="text-danger">
-                                <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>Unable to load user progress.
+                                <i class="fas fa-exclamation-triangle me-2"></i>Unable to load user progress.
                             </p>
                         }
                     </div>
@@ -75,7 +74,7 @@
                         @if (Model != null && Model.LatestAttemptDate.HasValue)
                         {
                             <div class="mb-4">
-                                <i class="fas fa-calendar-alt me-2" aria-hidden="true"></i>
+                                <i class="fas fa-calendar-alt me-2"></i>
                                 <span>@Model.LatestAttemptDate.Value.ToString("dd MMM yyyy")</span>
                                 <span class="mx-2">at</span>
                                 <span>@Model.LatestAttemptDate.Value.ToString("hh:mm tt")</span>
@@ -87,18 +86,18 @@
                             </div>
 
                             <a class="btn btn-danger" asp-area="" asp-controller="Quiz" asp-action="Index">
-                                <i class="fas fa-redo me-2" aria-hidden="true"></i>Try again!
+                                <i class="fas fa-redo me-2"></i>Try again!
                             </a>
                         }
                         else
                         {
                             <div class="mb-4">
-                                <i class="fas fa-exclamation-circle text-red-bold fa-3x mb-3" aria-hidden="true"></i>
+                                <i class="fas fa-exclamation-circle text-red-bold fa-3x mb-3"></i>
                                 <h3 class="text-red-bold">No Quizzes Yet!</h3>
                                 <p>Take your first quiz and start your journey to musical mastery!</p>
                             </div>
                             <a class="btn btn-danger" asp-area="" asp-controller="Quiz" asp-action="Index">
-                                <i class="fas fa-play me-2" aria-hidden="true"></i>Start Now
+                                <i class="fas fa-play me-2"></i>Start Now
                             </a>
                         }
                     </div>
@@ -106,13 +105,13 @@
             </div>
         </div>
 
-        <div class="wave-divider" aria-hidden="true"></div>
+        <div class="wave-divider"></div>
 
         <div class="text-center mb-5">
             <h2 class="mb-4">Ready to Compete?</h2>
             <p class="lead mb-4">See how you stack up against your classmates on the leaderboards!</p>
             <a class="btn btn-secondary btn-lg" asp-area="" asp-controller="Leaderboards" asp-action="Index">
-                <i class="fas fa-trophy me-2" aria-hidden="true"></i>View Leaderboards
+                <i class="fas fa-trophy me-2"></i>View Leaderboards
             </a>
         </div>
     </div>
@@ -120,28 +119,31 @@
 else
 {
     <section class="hero-section">
-        <div class="container text-center">
-            <i class="fas fa-music music-icon floating" aria-hidden="true"></i>
-            <h1 class="display-3 fw-bold mb-4">Test Your Music Knowledge</h1>
-            <p class="lead mb-4">Challenge yourself, compete with friends, and become a music master!</p>
+        <div class="hero-overlay"></div> @* Add overlay div *@
+        <div class="container text-center position-relative">
+            @* Add position-relative *@
+            <i class="fas fa-music music-icon floating"></i>
+            <h1 class="display-3 fw-bold mb-4 text-contrast-safe">Test Your Music Knowledge</h1>
+            <p class="lead mb-4 text-contrast-safe">Challenge yourself, compete with friends, and become a music master!</p>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
-                <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
-                    <i class="fas fa-play me-2" aria-hidden="true"></i>Try a Quiz
+                <a class="btn btn-danger btn-lg contrast-safe-btn" asp-area="" asp-controller="Quiz" asp-action="Index">
+                    <i class="fas fa-play me-2"></i>Try a Quiz
                 </a>
-                <a class="btn btn-secondary btn-lg" asp-area="" asp-controller="Account" asp-action="Register">
-                    <i class="fas fa-user-plus me-2" aria-hidden="true"></i>Join Now
+                <a class="btn btn-secondary btn-lg contrast-safe-btn" asp-area="" asp-controller="Account" asp-action="Register">
+                    <i class="fas fa-user-plus me-2"></i>Join Now
                 </a>
             </div>
         </div>
     </section>
+
 
     <div class="container">
         <div class="row g-4 mb-5">
             <div class="col-md-4">
                 <div class="card p-4 h-100">
                     <div class="card-body text-center">
-                        <i class="fas fa-graduation-cap feature-icon" aria-hidden="true"></i>
-                        <h3 class="card-title mb-3">Level Up</h3>
+                        <i class="fas fa-graduation-cap feature-icon"></i>
+                        <h2 class="card-title mb-3">Level Up</h2>
                         <p>Progress through levels as you improve your music knowledge. Can you reach the top level?</p>
                     </div>
                 </div>
@@ -149,7 +151,7 @@ else
             <div class="col-md-4">
                 <div class="card p-4 h-100">
                     <div class="card-body text-center">
-                        <i class="fas fa-users feature-icon" aria-hidden="true"></i>
+                        <i class="fas fa-users feature-icon"></i>
                         <h3 class="card-title mb-3">Compete</h3>
                         <p>Challenge your classmates and climb to the top of the leaderboards. Show off your music expertise!</p>
                     </div>
@@ -158,7 +160,7 @@ else
             <div class="col-md-4">
                 <div class="card p-4 h-100">
                     <div class="card-body text-center">
-                        <i class="fas fa-headphones feature-icon" aria-hidden="true"></i>
+                        <i class="fas fa-headphones feature-icon"></i>
                         <h3 class="card-title mb-3">Discover</h3>
                         <p>Expand your musical horizons while testing your knowledge across different genres and eras.</p>
                     </div>
@@ -171,18 +173,18 @@ else
                 <h2 class="section-title">Track Your Progress</h2>
                 <p class="lead">Create an account to track your progress and see how you improve over time. Unlock new levels and challenges as you gain experience points (EXP).</p>
                 <ul class="list-unstyled mt-4">
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Save your quiz history</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Earn experience points (EXP)</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Unlock higher difficulty levels</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Save your quiz history</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Earn experience points (EXP)</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Unlock higher difficulty levels</li>
                 </ul>
             </div>
             <div class="col-md-6 order-md-1">
                 <h2 class="section-title">Compete With Friends</h2>
                 <p class="lead">Challenge your classmates and see who has the best music knowledge. Check the leaderboards regularly to see if you're on top!</p>
                 <ul class="list-unstyled mt-4">
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> View global leaderboards</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Compare scores with friends</li>
-                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" aria-hidden="true"></i> Earn bragging rights</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2" ></i> View global leaderboards</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Compare scores with friends</li>
+                    <li class="mb-3"><i class="fas fa-check-circle text-success me-2"></i> Earn bragging rights</li>
                 </ul>
             </div>
         </div>
@@ -191,7 +193,7 @@ else
             <h2 class="mb-4">Ready to Test Your Knowledge?</h2>
             <p class="lead mb-4">Try a quiz with no strings attached to see what we offer!</p>
             <a class="btn btn-danger btn-lg" asp-area="" asp-controller="Quiz" asp-action="Index">
-                <i class="fas fa-play me-2" aria-hidden="true"></i>Start a Quiz
+                <i class="fas fa-play me-2"></i>Start a Quiz
             </a>
         </div>
     </div>
