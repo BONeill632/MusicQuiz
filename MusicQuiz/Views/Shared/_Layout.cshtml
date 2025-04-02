@@ -19,7 +19,9 @@
         <nav class="navbar navbar-expand-lg navbar-dark shadow-sm custom-navbar-red @(ViewData["ActiveNav"] as string == "Admin" ? "custom-navbar-admin" : "")">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/img/Queens White Logo - Landscape.png" alt="MusicQuiz Logo" class="me-2" style="height: 40px;">
+                    <!-- Increase the logo size but keep navbar height the same -->
+                    <img src="~/img/Queens White Logo - Landscape.png" alt="Music Quiz Logo" style="height: 40px; max-height: 40px; margin-top: -5px; margin-bottom: -5px;" />
+                    <span class="ms-2">QUB MUSIC QUIZ</span>
                 </a>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
