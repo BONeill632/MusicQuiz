@@ -507,9 +507,11 @@ a {
 
         /* Hover states with maintained contrast */
         .table-modern tbody tr:hover {
-            transform: scale(1.01);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            background-color: rgba(0, 0, 0, 0.03); /* Subtle background change */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Keep the shadow */
+            transform: none; /* Remove scaling to prevent layout shifts */
         }
+
 
     .table-modern tbody td {
         padding: 12px;
@@ -783,17 +785,12 @@ a {
             white-space: normal !important;
             word-break: break-word;
         }
-
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
 }
 
 /* Make the table responsive */
 .table-responsive {
     width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 }
 /* Adjust table styles for small screens */
