@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MusicQuiz/Views/Admin/Assessments.cshtml
+/MusicQuiz/appsettings.Development.json
