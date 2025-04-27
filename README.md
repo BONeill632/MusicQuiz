@@ -1,3 +1,9 @@
+```markdown
+![.NET 9.0](https://img.shields.io/badge/.NET-9.0-blueviolet)
+![MySQL](https://img.shields.io/badge/Database-MySQL-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+```
+
 # 🎵 MusicQuiz
 
 A web application built with ASP.NET Core MVC (.NET 9) and MySQL.
@@ -37,11 +43,33 @@ Make sure your MySQL server is running.
 Check or update the connection string in `appsettings.json`:
 
 ```json
-"ConnectionStrings": {
-  "DefaultConnection": "server=localhost;port=3306;database=MusicQuiz;user=root;password=yourpassword;"
+{
+  "EmailSettings": {
+    "SmtpServer": "smtp.gmail.com",
+    "Port": 587,
+    "SenderEmail": "<YourSenderEmail>", 
+    "SenderPassword": "<YourSenderPassword>", 
+    "EnableSSL": true
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=<YourServer>;Database=MusicQuiz;User=<YourUsername>;Password=<YourPassword>;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
 }
 ```
 
+> ⚠️ Replace `YourSenderEmail` with your actual gmail email.
+> ⚠️ Replace `YourSenderPassword` with your actual gmail app password.
+NOTE: for the purpose of testing this locally, my credentials are saved in the appsettings.production.json if you wish to use them for assessment
+
+> ⚠️ Replace `YourServer` with your actual MySQL local server, or whatever server you're using.
+> ⚠️ Replace `YourUsername` with your actual MySQL username.
 > ⚠️ Replace `yourpassword` with your actual MySQL password.
 
 ### 6. Set Up the Database
@@ -63,13 +91,3 @@ Update-Database
 ## 🚀 You're ready to play MusicQuiz!
 
 ---
-
-## 🏷️ Badges (Optional)
-
-You can add these badges at the top for a professional look:
-
-```markdown
-![.NET 9.0](https://img.shields.io/badge/.NET-9.0-blueviolet)
-![MySQL](https://img.shields.io/badge/Database-MySQL-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-```
