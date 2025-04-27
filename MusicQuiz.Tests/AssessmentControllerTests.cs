@@ -59,14 +59,13 @@ namespace MusicQuiz.Tests.Controllers
             var user = new UserData
             {
                 Id = "1",
-                UserName = "TestUser", // Ensure this matches the Name claim
+                UserName = "TestUser",
                 AcademicYear = "22/23",
                 FirstName = "John",
                 LastName = "Doe",
                 StudentID = "12345678"
             };
 
-            // Add the user to the in-memory database
             _context.Users.Add(user);
             _context.SaveChanges();
 
@@ -76,8 +75,8 @@ namespace MusicQuiz.Tests.Controllers
 
             var claims = new[]
             {
-        new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "TestUser") // Matches UserName
-    };
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "TestUser")
+            };
 
             var identity = new System.Security.Claims.ClaimsIdentity(claims, "TestAuthType");
             var principal = new System.Security.Claims.ClaimsPrincipal(identity);
