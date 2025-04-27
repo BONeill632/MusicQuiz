@@ -58,7 +58,7 @@ if (environment.IsProduction())
     string mysqlPassword = mysqlPasswordSecret.Value;
 
     // Replace the password in the connection string with the value from Key Vault
-    connectionString = connectionString.Replace("{MySqlPassword}", mysqlPassword);
+    connectionString = connectionString.Replace("{MySQLDbPassword}", mysqlPassword);
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
