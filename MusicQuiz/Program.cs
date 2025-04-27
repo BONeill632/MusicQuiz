@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Application.Services;
@@ -5,6 +7,7 @@ using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Data;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Migrations;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +43,24 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("Connection string not found.");
 }
 
+// Check if we are in the Production environment
+if (environment.IsProduction())
+{
+    // Add Key Vault integration only for Production environment
+    string keyVaultUrl = builder.Configuration["KeyVault:Url"];
+    string secretName = builder.Configuration["KeyVault:SecretName"];
+
+    // Set up Key Vault client
+    var secretClient = new SecretClient(new Uri(keyVaultUrl), new DefaultAzureCredential());
+
+    // Retrieve the MySQL password from Azure Key Vault
+    KeyVaultSecret mysqlPasswordSecret = secretClient.GetSecret(secretName);
+    string mysqlPassword = mysqlPasswordSecret.Value;
+
+    // Replace the password in the connection string with the value from Key Vault
+    connectionString = connectionString.Replace("{MySqlPassword}", mysqlPassword);
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21))));
 
@@ -56,7 +77,6 @@ builder.Services.AddDefaultIdentity<UserData>(options =>
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedAccount = true;
     options.SignIn.RequireConfirmedEmail = true;
-
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
