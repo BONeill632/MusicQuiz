@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /MusicQuiz/Views/Admin/Assessments.cshtml
 /MusicQuiz/appsettings.Development.json
+/MusicQuiz/appsettings.json
