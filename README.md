@@ -1,12 +1,10 @@
-```markdown
-![.NET 9.0](https://img.shields.io/badge/.NET-9.0-blueviolet)
-![MySQL](https://img.shields.io/badge/Database-MySQL-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-```
-
 # 🎵 MusicQuiz
 
 A web application built with ASP.NET Core MVC (.NET 9) and MySQL.
+
+![.NET 9.0](https://img.shields.io/badge/.NET-9.0-blueviolet)
+![MySQL](https://img.shields.io/badge/Database-MySQL-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
