@@ -6,7 +6,6 @@
 <hr />
 <p class="text-center">Explore quiz performance and trends.</p>
 
-<!-- Buttons to Toggle Between Logged-In and Not Logged-In Results and a Back Button -->
 <div class="text-center mb-4">
     <div class="btn-group-vertical" style="display: flex; flex-direction: column; align-items: center; gap: 10px; flex-wrap: wrap;">
         <button id="loggedInBtn" class="btn btn-primary" onclick="showLoggedIn()">Logged In Results</button>
@@ -15,7 +14,6 @@
     </div>
 </div>
 
-<!-- Filter Form -->
 <form asp-action="ViewQuizResults" method="get" class="form">
     <div class="form-group" style="width: 100%; max-width: 100%;">
         <label for="topicFilter">Topic:</label>
@@ -92,7 +90,6 @@
         const userNames = dataType === "loggedIn" ? JSON.parse(document.getElementById('userNamesLoggedIn').value) : JSON.parse(document.getElementById('userNamesNotLoggedIn').value);
         const barColors = dataType === "loggedIn" ? JSON.parse(document.getElementById('topicColorsLoggedIn').value) : JSON.parse(document.getElementById('topicColorsNotLoggedIn').value);
 
-        // Update Score Distribution Chart
         if (scoreChart) {
             scoreChart.data.labels = userNames;
             scoreChart.data.datasets[0].data = scoreData;
@@ -123,19 +120,16 @@
         }
     }
 
-    // Initial render for logged-in results
     document.addEventListener("DOMContentLoaded", function () {
         renderCharts("loggedIn");
     });
 </script>
 
-<!-- Create placeholders for the charts -->
 <div class="mt-4">
     <h2 class="text-center">Quiz Score Distribution</h2>
     <canvas id="scoreChart" width="400" height="200"></canvas>
 </div>
 
-<!-- Topic Color Legend -->
 @if (ViewBag.TopicColorMap != null)
 {
     <div class="d-flex justify-content-center mt-3 flex-wrap">
@@ -149,10 +143,8 @@
     </div>
 }
 
-<!-- Quiz Results Section for Logged In Users -->
 <div id="loggedInResults" style="display:block;">
     <h3 class="centered mt-4">Logged In User Quiz Attempts</h3>
-    <!-- Pagination Controls for Logged In Users -->
     <div id="loggedInPagination" style="display:block;">
         <div class="d-flex justify-content-center">
             <div class="pagination">
@@ -181,7 +173,6 @@
         </div>
     </div>
 
-    <!-- Pagination Controls for Not Logged In Users -->
     <div id="notLoggedInPagination" style="display:none;">
         <div class="d-flex justify-content-center">
             <div class="pagination">
@@ -246,7 +237,6 @@
     }
 </div>
 
-<!-- Quiz Results Section for Not Logged In Users -->
 <div id="notLoggedInResults" style="display:none;">
     <h3 class="centered mt-4">Not Logged In User Quiz Attempts</h3>
     @if (ViewBag.NotLoggedInResults != null && ((List<MusicQuiz.Web.Models.Admin.QuizResultModel>)ViewBag.NotLoggedInResults).Any())

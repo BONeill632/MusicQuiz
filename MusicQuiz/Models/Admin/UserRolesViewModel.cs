@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace MusicQuiz.Web.Models.Admin
 {
     public class UserRolesViewModel

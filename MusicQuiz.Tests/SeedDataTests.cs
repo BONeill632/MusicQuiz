@@ -1,14 +1,16 @@
-using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using MusicQuiz.Core.Data;
 using MusicQuiz.Core.Entities;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
     public class SeedDataTests
     {
+        /// <summary>
+        /// Test to check if SeedUserData creates the admin and "NotLoggedIn" users correctly.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SeedUserData_ShouldCreateAdminAndNotLoggedInUsers()
         {

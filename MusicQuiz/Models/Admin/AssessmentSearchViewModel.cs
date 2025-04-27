@@ -1,6 +1,3 @@
-using MusicQuiz.Core.Entities;
-using MusicQuiz.Core.Enums;
-
 namespace MusicQuiz.Web.Models.Admin
 {
     public class AssessmentSearchViewModel

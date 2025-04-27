@@ -22,6 +22,10 @@ namespace MusicQuiz.Tests
             _assessmentService = new AssessmentService(_context);
         }
 
+        /// <summary>
+        /// Test to check if the assessment is returned when a valid ID is provided
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task GetAssessmentByIdAsync_ShouldReturnAssessment_WhenIdIsValid()
         {
@@ -44,6 +48,10 @@ namespace MusicQuiz.Tests
             result?.AcademicYear.Should().Be("24/25");
         }
 
+        /// <summary>
+        /// Test to check if null is returned when an invalid ID is provided
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task GetAssessmentByIdAsync_ShouldReturnNull_WhenIdIsInvalid()
         {

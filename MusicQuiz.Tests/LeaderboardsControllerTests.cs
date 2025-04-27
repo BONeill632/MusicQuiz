@@ -7,13 +7,9 @@ using Moq;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Web.Controllers;
 using MusicQuiz.Web.Models.Leaderboards;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 using MusicQuiz.Core.Migrations;
 
-namespace MusicQuiz.Tests.Controllers
+namespace MusicQuiz.Tests
 {
     public class LeaderboardsControllerTests
     {
@@ -40,9 +36,9 @@ namespace MusicQuiz.Tests.Controllers
                 },
                 ViewModel = new LeaderboardViewModel
                 {
-                    TopUsers = new List<UserData>(),
+                    TopUsers = [],
                     SelectedAcademicYear = string.Empty,
-                    AcademicYearOptions = new List<string>()
+                    AcademicYearOptions = []
                 }
             };
 
@@ -55,6 +51,10 @@ namespace MusicQuiz.Tests.Controllers
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Test the Index action of the LeaderboardsController
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Index_ShouldReturnViewResultWithViewModel()
         {
@@ -71,6 +71,10 @@ namespace MusicQuiz.Tests.Controllers
             viewModel?.SelectedAcademicYear.Should().Be("2022/23");
         }
 
+        /// <summary>
+        /// Test the Index action of the LeaderboardsController with "All Time" option
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task IndexPost_ShouldCallIndexWithProvidedAcademicYear()
         {

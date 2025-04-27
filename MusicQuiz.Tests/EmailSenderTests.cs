@@ -1,7 +1,5 @@
 using Moq;
 using MusicQuiz.Application.Interfaces;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
@@ -14,6 +12,10 @@ namespace MusicQuiz.Tests
             _mockEmailSender = new Mock<IEmailSender>();
         }
 
+        /// <summary>
+        /// Test to check if the SendEmailAsync method is called with the correct parameters.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SendEmailAsync_ShouldSendEmailSuccessfully()
         {

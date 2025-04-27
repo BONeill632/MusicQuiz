@@ -8,10 +8,8 @@ using MusicQuiz.Core.Entities;
 using MusicQuiz.Web.Controllers;
 using MusicQuiz.Web.Models.Home;
 using MusicQuiz.Web.Models;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace MusicQuiz.Tests.Controllers
+namespace MusicQuiz.Tests
 {
     public class HomeControllerTests
     {
@@ -35,6 +33,10 @@ namespace MusicQuiz.Tests.Controllers
             };
         }
 
+        /// <summary>
+        /// Test the Index action of the HomeController
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Index_ShouldClearSessionAndReturnViewWithModel()
         {
@@ -52,6 +54,9 @@ namespace MusicQuiz.Tests.Controllers
             model.Should().NotBeNull();
         }
 
+        /// <summary>
+        /// Test the Error action of the HomeController
+        /// </summary>
         [Fact]
         public void Error_ShouldReturnViewWithErrorViewModel()
         {

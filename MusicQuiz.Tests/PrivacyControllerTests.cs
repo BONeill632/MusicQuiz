@@ -1,12 +1,14 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using MusicQuiz.Web.Controllers;
-using Xunit;
 
-namespace MusicQuiz.Tests.Controllers
+namespace MusicQuiz.Tests
 {
     public class PrivacyControllerTests
     {
+        /// <summary>
+        /// Test to ensure that the Index action returns a ViewResult.
+        /// </summary>
         [Fact]
         public void Index_ShouldReturnViewResult()
         {

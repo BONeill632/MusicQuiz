@@ -1,5 +1,4 @@
-﻿using MusicQuiz.Core.Entities;
-using MusicQuiz.Core.Enums;
+﻿using MusicQuiz.Core.Enums;
 
 namespace MusicQuiz.Web.Models.Home
 {
@@ -48,21 +47,19 @@ namespace MusicQuiz.Web.Models.Home
         /// </summary>
         public MusicQuizViewModel()
         {
-            Topics = ((Topic[])Enum.GetValues(typeof(Topic)))
+            Topics = [.. ((Topic[])Enum.GetValues(typeof(Topic)))
                 .Select(t => new TopicModel
                 {
                     Topic = t,
                     Description = t.GetDescription()
-                })
-                .ToList();
+                })];
 
-            Difficulty = ((DifficultyLevel[])Enum.GetValues(typeof(DifficultyLevel)))
+            Difficulty = [.. ((DifficultyLevel[])Enum.GetValues(typeof(DifficultyLevel)))
                 .Select(d => new DifficultyModel
                 {
                     DifficultyLevel = d,
                     Description = d.GetDescription()
-                })
-                .ToList();
+                })];
         }
     }
 }

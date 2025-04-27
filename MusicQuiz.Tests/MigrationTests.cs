@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using MusicQuiz.Core.Migrations;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
     public class MigrationTests
     {
+        /// <summary>
+        /// Test to ensure that the database schema matches the expected schema.
+        /// </summary>
         [Fact]
         public void Database_ShouldMatchExpectedSchema()
         {

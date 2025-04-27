@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class MockHttpSession : ISession
 {
-    private readonly Dictionary<string, byte[]> _sessionStorage = new();
+    private readonly Dictionary<string, byte[]> _sessionStorage = [];
 
     public IEnumerable<string> Keys => _sessionStorage.Keys;
 
@@ -30,12 +27,22 @@ public class MockHttpSession : ISession
         return false;
     }
 
+    /// <summary>
+    /// Asynchronously loads the session data.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public Task LoadAsync(CancellationToken cancellationToken = default)
     {
         // Simulate loading session data (no-op for mock)
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Asynchronously commits the session data.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public Task CommitAsync(CancellationToken cancellationToken = default)
     {
         // Simulate committing session data (no-op for mock)

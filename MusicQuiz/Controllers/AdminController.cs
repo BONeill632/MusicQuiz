@@ -7,8 +7,6 @@ using MusicQuiz.Core.Enums;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Models.Admin;
 using MusicQuiz.Web.Models.Quiz;
-using MySqlX.XDevAPI.CRUD;
-using System.ComponentModel;
 using QuestionViewModel = MusicQuiz.Web.Models.Quiz.QuestionViewModel;
 
 namespace MusicQuiz.Web.Controllers
@@ -453,14 +451,14 @@ namespace MusicQuiz.Web.Controllers
                     OpenFrom = model.OpenFrom,
                     OpenTo = model.OpenTo,
                     TopicId = (int)model.SelectedTopic,
-                    DateSubmitted = DateTime.Now // Auto-set submission date
+                    DateSubmitted = DateTime.Now
                 };
 
                 context.Assessments.Add(assessment);
                 await context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Assessment created successfully!";
-                return RedirectToAction("Index"); // Redirect to a list page or wherever you need
+                return RedirectToAction("Index");
             }
 
             return View(model);
@@ -725,7 +723,6 @@ namespace MusicQuiz.Web.Controllers
                 .Select(r => r.Id)
                 .FirstOrDefault();
 
-            // Get the current academic year
             var currentAcademicYear = GetCurrentAcademicYear();
 
             // Get all non-admin users with a valid last login date and their login dates
@@ -774,6 +771,10 @@ namespace MusicQuiz.Web.Controllers
             return View(userLogins);
         }
 
+        /// <summary>
+        /// Get current academic year
+        /// </summary>
+        /// <returns></returns>
         private static string GetCurrentAcademicYear()
         {
             var currentYear = DateTime.Now.Year;
@@ -787,12 +788,21 @@ namespace MusicQuiz.Web.Controllers
             return $"{currentAcademicYear % 100}/{(currentAcademicYear + 1) % 100}";
         }
 
+        /// <summary>
+        /// Manage music files
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult ManageMusicFiles()
         {
             return View();
         }
 
+        /// <summary>
+        /// Delete music file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteMusicFile(string fileName)
         {
@@ -822,6 +832,15 @@ namespace MusicQuiz.Web.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// View quiz results
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="topicFilter"></param>
+        /// <param name="difficultyFilter"></param>
+        /// <param name="dateFilter"></param>
+        /// <returns></returns>
         public async Task<IActionResult> ViewQuizResults(
             int pageNumber = 1,
             int pageSize = 20,
@@ -873,7 +892,7 @@ namespace MusicQuiz.Web.Controllers
                 }
                 catch (Exception)
                 {
-                    // Handle parsing exception silently - just don't apply filter
+                    // Should probably handle this better
                 }
             }
 

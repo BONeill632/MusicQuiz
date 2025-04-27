@@ -8,16 +8,12 @@ using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Web.Controllers;
 using MusicQuiz.Web.Models.Assessment;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Xunit;
 using MusicQuiz.Web.Models.Quiz;
 using MusicQuiz.Core.Migrations;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace MusicQuiz.Tests.Controllers
+namespace MusicQuiz.Tests
 {
     public class AssessmentControllerTests
     {
@@ -52,6 +48,11 @@ namespace MusicQuiz.Tests.Controllers
             // Configure session
             _controller.ControllerContext.HttpContext.Session = new MockHttpSession();
         }
+
+        /// <summary>
+        /// Test to check if the Index action returns a view with assessments
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Index_ShouldReturnViewWithAssessments()
         {
@@ -105,7 +106,10 @@ namespace MusicQuiz.Tests.Controllers
             model[0].IsUnlocked.Should().BeTrue();
         }
 
-
+        /// <summary>
+        /// Test to check if the StartAssessment action redirects to the quiz page
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task StartAssessment_ShouldRedirectIfUserNotVerified()
         {
@@ -137,6 +141,10 @@ namespace MusicQuiz.Tests.Controllers
             tempData.VerifySet(t => t["ErrorMessage"] = "You must verify your email address before accessing assessments. Please check your email for a verification link.", Times.Once);
         }
 
+        /// <summary>
+        /// Test to check if the StartAssessment action redirects if the assessment is not found
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task StartAssessment_ShouldRedirectIfAssessmentNotFound()
         {
@@ -168,6 +176,10 @@ namespace MusicQuiz.Tests.Controllers
             tempData.VerifySet(t => t["ErrorMessage"] = "You cannot start this assessment at this time.", Times.Once);
         }
 
+        /// <summary>
+        /// Test to check if the StartAssessment action redirects to the quiz page
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task QuizFinished_ShouldSaveResultsAndReturnView()
         {

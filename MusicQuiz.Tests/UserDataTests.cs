@@ -1,11 +1,13 @@
 using FluentAssertions;
 using MusicQuiz.Core.Entities;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
     public class UserDataTests
     {
+        /// <summary>
+        /// Test to check if GetLevel returns the correct level based on the EXP value.
+        /// </summary>
         [Fact]
         public void GetLevel_ShouldReturnCorrectLevelBasedOnExp()
         {
@@ -19,6 +21,9 @@ namespace MusicQuiz.Tests
             level.Should().Be(1);
         }
 
+        /// <summary>
+        /// Test to check if GetLevel returns the correct level when EXP is at the threshold for level 2.
+        /// </summary>
         [Fact]
         public void GetLevel_ShouldReturnMaxLevel_WhenExpExceedsMaxThreshold()
         {

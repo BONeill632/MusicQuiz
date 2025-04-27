@@ -8,14 +8,10 @@ using Moq;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Migrations;
 using MusicQuiz.Web.Controllers;
-using MusicQuiz.Web.Models.Admin;
 using MusicQuiz.Web.Models.Quiz;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace MusicQuiz.Tests.Controllers
+
+namespace MusicQuiz.Tests
 {
     public class AdminControllerTests
     {
@@ -43,13 +39,15 @@ namespace MusicQuiz.Tests.Controllers
                 ControllerContext = new ControllerContext
                 {
                     HttpContext = new DefaultHttpContext()
-                }
+                },
+                // Configure TempData
+                TempData = new Mock<ITempDataDictionary>().Object
             };
-
-            // Configure TempData
-            _controller.TempData = new Mock<ITempDataDictionary>().Object;
         }
 
+        /// <summary>
+        /// Test to check if the Index action returns a ViewResult
+        /// </summary>
         [Fact]
         public void Index_ShouldReturnViewResult()
         {
@@ -60,6 +58,10 @@ namespace MusicQuiz.Tests.Controllers
             result.Should().BeOfType<ViewResult>();
         }
 
+        /// <summary>
+        /// Test to check if the EditQuestion action returns a ViewResult with the correct model
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task EditQuestion_Get_ShouldReturnQuestion()
         {

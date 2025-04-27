@@ -7,8 +7,6 @@ using MusicQuiz.Core.Entities;
 using MusicQuiz.Web.Controllers;
 using MusicQuiz.Web.Models.Home;
 using MusicQuiz.Web.Models.Quiz;
-using MusicQuiz.Core.Enums;
-using Xunit;
 using Microsoft.AspNetCore.Identity;
 using MusicQuiz.Core.Migrations;
 using System.Text.Json;
@@ -70,8 +68,9 @@ namespace MusicQuiz.Tests
             _context.SaveChanges();
         }
 
-
-
+        /// <summary>
+        /// Test to ensure that the Index action clears the session and returns a ViewResult with a MusicQuizViewModel.
+        /// </summary>
         [Fact]
         public void Index_ShouldClearSessionAndReturnView()
         {
@@ -85,6 +84,9 @@ namespace MusicQuiz.Tests
             viewResult?.Model.Should().BeOfType<MusicQuizViewModel>();
         }
 
+        /// <summary>
+        /// Test to ensure that the SelectTopic action stores the selected topic in TempData and redirects to the SelectDifficulty action.
+        /// </summary>
         [Fact]
         public void SelectDifficulty_ShouldStoreTopicAndRedirect()
         {
@@ -98,6 +100,9 @@ namespace MusicQuiz.Tests
             redirectResult?.ActionName.Should().Be("SelectDifficulty");
         }
 
+        /// <summary>
+        /// Test to ensure that the SelectDifficulty action returns a BadRequestObjectResult when the topic is invalid.
+        /// </summary>
         [Fact]
         public void SelectDifficulty_ShouldReturnBadRequest_WhenTopicIsInvalid()
         {
@@ -111,6 +116,9 @@ namespace MusicQuiz.Tests
             result.Should().BeOfType<BadRequestObjectResult>();
         }
 
+        /// <summary>
+        /// Test to ensure that the SelectDifficulty action returns a ViewResult with a MusicQuizViewModel.
+        /// </summary>
         [Fact]
         public void ShowQuestion_ShouldReturnViewWithQuestion()
         {

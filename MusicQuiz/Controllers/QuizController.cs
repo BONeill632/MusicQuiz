@@ -4,10 +4,8 @@ using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
 using MusicQuiz.Core.Enums;
 using MusicQuiz.Core.Migrations;
-using MusicQuiz.Web.Models;
 using MusicQuiz.Web.Models.Home;
 using MusicQuiz.Web.Models.Quiz;
-using System.ComponentModel;
 using System.Text.Json;
 
 namespace MusicQuiz.Web.Controllers
@@ -75,7 +73,6 @@ namespace MusicQuiz.Web.Controllers
         [HttpGet]
         public IActionResult SelectDifficulty(MusicQuizViewModel model)
         {
-            // Retrieve the selected topic from TempData
             if (TempData["SelectedTopic"] != null)
             {
                 var selectedTopicString = TempData["SelectedTopic"]?.ToString() ?? string.Empty;
@@ -85,7 +82,6 @@ namespace MusicQuiz.Web.Controllers
                 }
                 else
                 {
-                    // Handle the case where the topic could not be parsed
                     return BadRequest("Invalid topic selected.");
                 }
             }
@@ -376,7 +372,10 @@ namespace MusicQuiz.Web.Controllers
             return RedirectToAction("ShowQuestion");
         }
 
-
+        /// <summary>
+        /// Display the quiz results
+        /// </summary>
+        /// <returns></returns>
         public IActionResult QuizResults()
         {
             var questionsJson = HttpContext.Session.GetString("QuizQuestions");

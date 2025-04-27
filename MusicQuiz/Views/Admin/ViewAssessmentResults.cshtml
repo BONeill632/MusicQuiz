@@ -14,14 +14,12 @@
     </div>
 }
 
-<!-- Back Button -->
 <div class="text-center mb-4">
     <div class="btn-group-vertical" style="display: flex; flex-direction: column; align-items: center; gap: 10px; flex-wrap: wrap;">
         <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 </div>
 
-<!-- Filter Form -->
 <form asp-action="ViewAssessmentResults" method="get" class="text-center mb-4">
     <div class="form-group mb-3" style="width: 100%; max-width: 100%;">
         <label for="academicYearFilter" class="form-label">Academic Year:</label>
@@ -65,7 +63,6 @@
     </div>
 </form>
 
-<!-- Statistics Panel -->
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="card text-center h-100 shadow-sm">
@@ -101,18 +98,15 @@
     </div>
 </div>
 
-<!-- Hidden Inputs for Chart Data -->
 <input type="hidden" id="scoreData" value='@Html.Raw(Json.Serialize(ViewBag.ScoreData))' />
 <input type="hidden" id="userNames" value='@Html.Raw(Json.Serialize(ViewBag.UserNames))' />
 <input type="hidden" id="topicColors" value='@Html.Raw(Json.Serialize(ViewBag.TopicColors))' />
 
-<!-- Chart Section -->
 <h2 class="text-center">Assessment Score Distribution</h2>
 <div id="chartContainer" class="mt-4 mx-auto" style="width: 90%; max-width: 1200px; position: relative;">
     <canvas id="scoreChart"></canvas>
 </div>
 
-<!-- Topic Color Legend -->
 @if (ViewBag.TopicColorMap != null && ViewBag.TopicColorMap.Count > 0)
 {
     <div class="d-flex justify-content-center mt-3 flex-wrap">
@@ -126,7 +120,6 @@
     </div>
 }
 
-<!-- Results Table -->
 <h3 class="text-center mt-5">Assessment Results</h3>
 <div class="text-center mb-2">
     <span class="badge bg-primary">Total: @ViewBag.TotalCount</span>
@@ -163,7 +156,6 @@
         </table>
     </div>
 
-    <!-- Pagination -->
     @if (ViewBag.TotalPages > 1)
     {
         <div class="d-flex justify-content-center">
@@ -218,10 +210,8 @@ else
     </div>
 }
 
-<!-- Chart.js Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 <script>
-    // Make sure any existing chart is destroyed when the page unloads
     window.addEventListener('beforeunload', function() {
         if (window.scoreChartInstance) {
             window.scoreChartInstance.destroy();
@@ -230,7 +220,6 @@ else
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Clear the canvas container first
         const chartContainer = document.getElementById('chartContainer');
         chartContainer.innerHTML = '<canvas id="scoreChart"></canvas>';
 
@@ -238,7 +227,6 @@ else
         const userNames = JSON.parse(document.getElementById('userNames').value);
         const barColors = JSON.parse(document.getElementById('topicColors').value);
 
-        // If a previous chart exists, destroy it
         if (window.scoreChartInstance) {
             window.scoreChartInstance.destroy();
             window.scoreChartInstance = null;

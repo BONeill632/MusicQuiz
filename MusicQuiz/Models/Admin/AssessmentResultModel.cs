@@ -1,5 +1,4 @@
 ﻿using MusicQuiz.Core.Enums;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MusicQuiz.Web.Models.Admin

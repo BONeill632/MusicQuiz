@@ -36,6 +36,12 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
         /// </summary>
         public string EmailConfirmationUrl { get; set; }
 
+        /// <summary>
+        ///       This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
             if (email == null)
@@ -52,8 +58,6 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
 
             Email = email;
 
-            // Since you have a real email sender configured with Gmail, 
-            // we should set this to false - no need to display the confirmation link on the page
             DisplayConfirmAccountLink = false;
 
             return Page();

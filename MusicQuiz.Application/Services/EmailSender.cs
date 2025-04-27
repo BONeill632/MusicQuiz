@@ -8,6 +8,14 @@ namespace MusicQuiz.Application.Services
 {
     public class EmailSender(IConfiguration configuration, ILogger<EmailSender> logger) : IEmailSender
     {
+        /// <summary>
+        /// Send an email asynchronously.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="subject"></param>
+        /// <param name="htmlMessage"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var smtpServer = configuration["EmailSettings:SmtpServer"];

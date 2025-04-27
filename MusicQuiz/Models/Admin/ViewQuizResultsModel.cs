@@ -1,31 +1,62 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MusicQuiz.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MusicQuiz.Web.Models.Admin
 {
     public class ViewQuizResultsModel : PageModel
     {
+        /// <summary>
+        /// Filter for the topic
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string Topic { get; set; }
 
+        /// <summary>
+        /// Filter for the difficulty
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string Difficulty { get; set; }
 
+        /// <summary>
+        /// Filter for the month
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string Month { get; set; }
 
+        /// <summary>
+        /// List of quiz results for logged-in users
+        /// </summary>
         public List<QuizResultModel> LoggedInResults { get; set; }
+
+        /// <summary>
+        /// List of quiz results for not logged-in users
+        /// </summary>
         public List<QuizResultModel> NotLoggedInResults { get; set; }
 
+        /// <summary>
+        /// Data for the chart
+        /// </summary>
         public List<decimal> ScoreDataLoggedIn { get; set; }
+
+        /// <summary>
+        /// List of user names for logged-in users
+        /// </summary>
         public List<string> UserNamesLoggedIn { get; set; }
+
+        /// <summary>
+        /// Data for the chart
+        /// </summary>
         public List<decimal> ScoreDataNotLoggedIn { get; set; }
+
+        /// <summary>
+        /// List of user names for not logged-in users
+        /// </summary>
         public List<string> UserNamesNotLoggedIn { get; set; }
 
+        /// <summary>
+        /// Handles the GET request for the page
+        /// </summary>
+        /// <returns></returns>
         public IActionResult OnGet()
         {
             // Fetch data from the database
@@ -45,16 +76,32 @@ namespace MusicQuiz.Web.Models.Admin
             return Page();
         }
 
+        /// <summary>
+        /// Fetches quiz results for logged-in users from the database
+        /// </summary>
+        /// <returns></returns>
         private static List<QuizResultModel> GetLoggedInResultsFromDatabase()
         {
             return [];
         }
 
+        /// <summary>
+        /// Fetches quiz results for not logged-in users from the database
+        /// </summary>
+        /// <returns></returns>
         private static List<QuizResultModel> GetNotLoggedInResultsFromDatabase()
         {
             return [];
         }
 
+        /// <summary>
+        /// Filters the quiz results based on the selected topic, difficulty, and month
+        /// </summary>
+        /// <param name="results"></param>
+        /// <param name="topic"></param>
+        /// <param name="difficulty"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         private static List<QuizResultModel> FilterResults(List<QuizResultModel> results, string topic, string difficulty, string month)
         {
             if (topic != "all")

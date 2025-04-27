@@ -2,9 +2,6 @@ using FluentAssertions;
 using Moq;
 using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
@@ -17,6 +14,10 @@ namespace MusicQuiz.Tests
             _mockQuestionService = new Mock<IQuestionService>();
         }
 
+        /// <summary>
+        /// Test to ensure that the GetQuestionsAsync method returns a list of questions.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task GetQuestionsAsync_ShouldReturnListOfQuestions_WhenCalled()
         {
@@ -37,6 +38,10 @@ namespace MusicQuiz.Tests
             result.Should().Contain(q => q.Question == "What is the capital of France?");
         }
 
+        /// <summary>
+        /// Test to ensure that the GetQuestionByIdAsync method returns a question when a valid ID is provided.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task GetQuestionByIdAsync_ShouldReturnQuestion_WhenIdIsValid()
         {
@@ -52,6 +57,10 @@ namespace MusicQuiz.Tests
             result?.Question.Should().Be("What is the capital of France?");
         }
 
+        /// <summary>
+        /// Test to ensure that the AddQuestionAsync method adds a question when called.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task AddQuestionAsync_ShouldAddQuestion_WhenCalled()
         {
@@ -66,6 +75,10 @@ namespace MusicQuiz.Tests
             _mockQuestionService.Verify(q => q.AddQuestionAsync(question), Times.Once);
         }
 
+        /// <summary>
+        /// Test to ensure that the UpdateQuestionAsync method updates a question when called.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task UpdateQuestionAsync_ShouldUpdateQuestion_WhenCalled()
         {
@@ -80,6 +93,10 @@ namespace MusicQuiz.Tests
             _mockQuestionService.Verify(q => q.UpdateQuestionAsync(question), Times.Once);
         }
 
+        /// <summary>
+        /// Test to ensure that the DeleteQuestionAsync method deletes a question when a valid ID is provided.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DeleteQuestionAsync_ShouldDeleteQuestion_WhenIdIsValid()
         {

@@ -6,6 +6,9 @@ namespace MusicQuiz.Tests
 {
     public class DifficultyLevelTests
     {
+        /// <summary>
+        /// Test to check if the DifficultyLevel enum has the expected values.
+        /// </summary>
         [Fact]
         public void DifficultyLevel_ShouldHaveExpectedValues()
         {

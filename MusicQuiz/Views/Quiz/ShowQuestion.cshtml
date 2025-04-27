@@ -82,7 +82,6 @@
                 <div class="quiz-options-grid-2x2">
                     @foreach (var option in Model.OptionsForQuiz)
                     {
-                        // Generate a valid ID by replacing invalid characters
                         var validId = "option_" + option.Replace(" ", "_").Replace(".", "p").Replace(",", "c").Replace("(", "").Replace(")", "").Replace("/", "_").Replace("\\", "_").Replace(":", "_");
 
                         <div class="quiz-option-container">

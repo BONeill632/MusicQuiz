@@ -2,7 +2,6 @@ using FluentAssertions;
 using Moq;
 using MusicQuiz.Application.Interfaces;
 using MusicQuiz.Core.Entities;
-using Xunit;
 
 namespace MusicQuiz.Tests
 {
@@ -15,6 +14,10 @@ namespace MusicQuiz.Tests
             _mockResultsService = new Mock<IResultsService>();
         }
 
+        /// <summary>
+        /// Test to check if GetMostRecentQuizResultAsync returns a result when a valid user ID is provided.
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task GetMostRecentQuizResultAsync_ShouldReturnResult_WhenUserIdIsValid()
         {
@@ -36,6 +39,9 @@ namespace MusicQuiz.Tests
             quizResult?.UserScore.Should().Be(85.5m);
         }
 
+        /// <summary>
+        /// Test to check if GetMostRecentQuizResultAsync returns null when an invalid user ID is provided.
+        /// </summary>
         [Fact]
         public void SaveQuizResults_ShouldSaveResultsSuccessfully()
         {
