@@ -17,10 +17,6 @@ A web application built with ASP.NET Core MVC (.NET 9) and MySQL.
 ### 1. Clone the Repository
 Download or clone the project files:
 
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-```
-
 ### 2. Open in Visual Studio
 - Open the `.sln` file in Visual Studio 2022 (or newer).
 
@@ -61,25 +57,6 @@ Update-Database
 ### 7. Run the Application
 - Press `F5` or click **Start Debugging** in Visual Studio.
 - The application should build and launch automatically.
-
----
-
-## ℹ️ Additional Notes
-
-- If frontend issues occur, make sure `npm install` completed without errors.
-- Ensure MySQL port `3306` is open and accessible.
-- If migrations are missing, you can re-create them using:
-
-```bash
-dotnet ef migrations add InitialCreate
-```
-and then run:
-
-```bash
-Update-Database
-```
-
-- **Security Tip:** Don't upload sensitive credentials (like database passwords) to public repositories!
 
 ---
 
