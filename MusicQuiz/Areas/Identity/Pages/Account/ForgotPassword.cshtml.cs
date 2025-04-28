@@ -50,8 +50,7 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
+                // Generate the password reset token and callback URL
                 var code = await userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
@@ -60,15 +59,28 @@ namespace MusicQuiz.Web.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                try
+                {
+                    // Attempt to send the email
+                    await emailSender.SendEmailAsync(
+                        Input.Email,
+                        "Reset Password",
+                        $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception (optional)
+                    // Example: _logger.LogError(ex, "Failed to send email to {Email}", Input.Email);
 
+                    // Do not reveal the failure to the user
+                }
+
+                // Always redirect to the confirmation page
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
             return Page();
         }
+
     }
 }
