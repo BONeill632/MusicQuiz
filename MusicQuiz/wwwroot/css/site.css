@@ -507,16 +507,15 @@ a {
 
         /* Hover states with maintained contrast */
         .table-modern tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.03); /* Subtle background change */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Keep the shadow */
-            transform: none; /* Remove scaling to prevent layout shifts */
+            background-color: rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
 
     .table-modern tbody td {
         padding: 12px;
         text-align: left;
-        font-weight: 500; /* Slightly bolder for better readability */
+        font-weight: 500;
     }
 
     /* Ensure contrast is maintained in all states */
@@ -787,10 +786,22 @@ a {
         }
 }
 
+.table {
+    table-layout: fixed; /* Force fixed column widths */
+    width: 100%; /* Ensure the table takes up the full width */
+    word-wrap: break-word; /* Allow text to wrap within cells */
+}
+
+    .table th, .table td {
+        white-space: normal; /* Allow text to wrap */
+        overflow: hidden; /* Prevent overflow */
+        text-overflow: ellipsis; /* Add ellipsis for long text */
+    }
+
 /* Make the table responsive */
 .table-responsive {
     width: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 /* Adjust table styles for small screens */
